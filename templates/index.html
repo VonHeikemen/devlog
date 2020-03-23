@@ -1,0 +1,89 @@
+{% import "macros.html" as macros %}
+
+{% if lang %}
+  {% set current_lang = lang %}
+{% elif taxonomy.lang %}
+  {% set current_lang = taxonomy.lang %}
+{% else %}
+  {% set current_lang = config.default_language %}
+{% endif %}
+
+{% if current_lang == config.default_language %}
+  {% set other_lang = config.languages[1].code %}
+  {% set real_base_url =  config.base_url %}
+  {% set change_base_url = config.base_url ~ other_lang ~ '/' %}
+{% else %}
+  {% set other_lang = config.default_language %}
+  {% set real_base_url = config.base_url ~ current_lang ~ '/' %}
+  {% set change_base_url = config.base_url %}
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <!-- viewport-fit=cover is to support iPhone X rounded corners and notch in landscape-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+
+      <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+
+      <!-- CSS -->
+      <link rel="stylesheet" href="{{ get_url(path="print.css", trailing_slash=false) }}" media="print">
+      <link rel="stylesheet" href="{{ get_url(path="poole.css", trailing_slash=false) }}">
+      <link rel="stylesheet" href="{{ get_url(path="hyde.css", trailing_slash=false) }}">
+      <link rel="stylesheet" href="{{ get_url(path="custom.css", trailing_slash=false) }}">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+      {% if config.generate_rss %}
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ get_url(path="rss.xml", trailing_slash=false) }}">
+      {% endif %}
+
+      {% block extra_head %}
+      {% endblock extra_head %}
+    </head>
+
+    
+    <body class="{{ config.extra.hyde_theme }} {% if config.extra.hyde_reverse %}layout-reverse{% endif %}">
+        {% block sidebar %}
+            <div class="sidebar">
+                <div class="container {% if config.extra.hyde_sticky %}sidebar-sticky{% endif %}">
+                    <div class="sidebar-about">
+                        {% block sidebar_about %}
+                            <a href="{{ real_base_url }}"><h1>{{ config.title }}</h1></a>
+                            {% if config.description %}
+                            <p class="lead">{{config.description}}</p>
+                            {% endif %}
+                        {% endblock sidebar_about %}
+                    </div>
+
+                    <ul class="sidebar-nav">
+                        {% block sidebar_nav %}
+                        {% for link in config.extra.hyde_links %}
+                        <li class="sidebar-nav-item"><a href="{{link.url}}">{{link.name}}</a></li>
+                        {% endfor %}
+                        {% for link in config.taxonomies | filter(attribute="lang", value=current_lang) %}
+                        {% set _taxonomy = get_taxonomy(kind=link.name, lang=current_lang) %}
+                        {% set _href = _taxonomy.items[0].permalink | replace(from=_taxonomy.items[0].slug ~ "/", to="") %}
+                        <li class="sidebar-nav-item"><a href="{{ _href }}">{{ trans(key="title_" ~ link.name, lang=current_lang) }}</a></li>
+                        {% endfor %}
+                        <li class="sidebar-nav-item"><a href="{{ change_base_url }}">{{ trans(key="change_language_link", lang=other_lang) }}</a></li>
+                        {% endblock sidebar_nav %}
+                    </ul>
+                    © 2020 Heiker Curiel
+                </div>
+            </div>
+        {% endblock sidebar %}
+
+        <div class="content container">
+            {% block content %}
+              {% set section = get_section(path="web-development/_index.md") %}
+              {{ macros::posts_list(pages=section.pages) }}  
+            {% endblock content %}
+        </div>
+
+    </body>
+
+</html>

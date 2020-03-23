@@ -1,0 +1,38 @@
+{% extends "index.html" %}
+
+{% block extra_head %}
+  <meta name="keywords" content="{{page.taxonomies.tags | join(sep=', ')}}, software, coding, development">
+
+  {% if page.description %}
+    <meta name="description" content="{{page.description}}">
+  {% endif %}
+
+  {% if page.extra.canonical_url %}
+    <link rel="canonical" href="{{page.extra.canonical_url}}">
+  {% endif %}
+{% endblock extra_head %}
+
+
+{% block content %}
+
+{% set translation = page.translations | nth(n=0)  %}
+
+<div class="post">
+  <h1 class="post-title">{{ page.title }}</h1>
+  <span class="post-date">{{ page.date | date(format="%Y-%m-%d") }}
+    {% if page.extra.canonical_url %}
+    | {{ trans(key="published_in", lang=page.lang) }} 
+    <a href="{{page.extra.canonical_url}}">
+      {{ page.extra.canonical_url | split(pat="/") | nth(n=2)  }}
+    </a>
+    {% endif %}
+    {% if translation %}
+    | <a href="{{ translation.permalink }}"> 
+        {{ trans(key="read_in", lang=translation.lang) }}
+      </a>
+    {% endif %}
+  </span>
+  {{ page.content | safe }}
+</div>
+{% endblock content %}
+
