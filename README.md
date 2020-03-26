@@ -57,3 +57,9 @@ zola build --output-dir /path-to/public-folder
 
 If you want to modify the theme make sure to visit the [zola documentation](https://www.getzola.org/documentation/) and the [tera site](https://tera.netlify.com/docs/) (tera is the template engine).
 
+About that `Taskfile.yml`, that's the configuration file for [task](https://github.com/go-task/task) ([documentation](https://taskfile.dev/#/)). In order to use every task you'll have to download the following dependencies:
+  - [task](https://github.com/go-task/task/releases): the task runner
+  - [zola](https://www.getzola.org/documentation/getting-started/installation/): The static site generator.
+  - [minify](https://github.com/tdewolff/minify): CSS and HTML minifier.
+  - [serve](https://www.npmjs.com/package/serve): HTTP server. I know zola has one but this is one is just to really check everything is alright.
+

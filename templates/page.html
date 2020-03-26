@@ -1,7 +1,11 @@
 {% extends "index.html" %}
 
+{% block title %}
+  {{ config.title }} | {{ page.title }}
+{% endblock title %}
+
 {% block extra_head %}
-  <meta name="keywords" content="{{page.taxonomies.tags | join(sep=', ')}}, software, coding, development">
+  <meta name="keywords" content="{{page.taxonomies.tags | join(sep=', ')}}, {{ config.extra.site_keywords | join(sep=', ')}}">
 
   {% if page.description %}
     <meta name="description" content="{{page.description}}">

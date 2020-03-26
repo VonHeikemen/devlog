@@ -1,5 +1,7 @@
 {% import "macros.html" as macros %}
 
+{% set env = get_env(name="ENV", default="development") %}
+
 {% if lang %}
   {% set current_lang = lang %}
 {% elif taxonomy.lang %}
@@ -32,9 +34,13 @@
 
       <!-- CSS -->
       <link rel="stylesheet" href="{{ get_url(path="print.css", trailing_slash=false) }}" media="print">
-      <link rel="stylesheet" href="{{ get_url(path="poole.css", trailing_slash=false) }}">
-      <link rel="stylesheet" href="{{ get_url(path="hyde.css", trailing_slash=false) }}">
-      <link rel="stylesheet" href="{{ get_url(path="custom.css", trailing_slash=false) }}">
+      {% if env == "development" %}
+        <link rel="stylesheet" href="{{ get_url(path="poole.css", trailing_slash=false) }}">
+        <link rel="stylesheet" href="{{ get_url(path="hyde.css", trailing_slash=false) }}">
+        <link rel="stylesheet" href="{{ get_url(path="custom.css", trailing_slash=false) }}">
+      {% else%}
+        <link rel="stylesheet" href="{{ get_url(path="styles.css", trailing_slash=false) }}">
+      {% endif%}
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
 
       {% if config.generate_rss %}
@@ -42,6 +48,10 @@
       {% endif %}
 
       {% block extra_head %}
+        <meta name="keywords" content="{{ config.extra.site_keywords | join(sep=', ') }}">
+        {% if config.extra.meta_description %}
+          <meta name="description" content="{{ config.extra.meta_description }}">
+        {% endif %}
       {% endblock extra_head %}
     </head>
 
