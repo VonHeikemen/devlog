@@ -1,14 +1,13 @@
 version: '2'
 
-env:
-  OUTPUT_DIR:
-    public/dist
-
 vars: 
   CSS_FILES:
     public/poole.css
     public/hyde.css
     public/custom.css
+
+  OUTPUT_DIR:
+    ./public/dist/
 
 tasks:
   serve:
@@ -30,9 +29,8 @@ tasks:
     desc: Build site with localhost as base url
     cmds:
       - zola build --base-url "http://localhost:5000/"
-      - mkdir public/dist
       - task: prepare
-      - serve public/dist
+      - serve ./public/dist/
     env:
       ENV: production
 
