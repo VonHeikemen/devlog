@@ -19,12 +19,12 @@ It looks like a simple idea, haven't we all at some point in our lives combined 
 
 ### Philosophy
 
-Function composition is more efective if you follow certain principles.
+Function composition is more effective if you follow certain principles.
 
-- The function should only have one purpose, one responsability.
+- The function should only have one purpose, one responsibility.
 - Always think the returned value will be consumed by another function.
 
-You've probably heard this before, it's a fragment of the [unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy#Origin). Ever wondered how come `bash`, despite having a weird syntax and many limitations, is so popular? Those two principle are a big part. A lot of the software designed for that environment is specially made to be a reusable component, and when you "connect" two or more the result is another program that can be conected with other unknown programs.
+You've probably heard this before, it's a fragment of the [unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy#Origin). Ever wondered how come `bash`, despite having a weird syntax and many limitations, is so popular? Those two principle are a big part. A lot of the software designed for that environment is specially made to be a reusable component, and when you "connect" two or more the result is another program that can be connected with other unknown programs.
 
 For some it might seem silly or even excessive to have many little functions that do just one thing, specially if what they do looks useless, but I can prove to you that every function can be valuable in the right context.
 
@@ -65,7 +65,7 @@ That should give us.
 http://locahost:5000
 ```
 
-If we put that chain of commands in a script or a function inside our `.bashrc` we will efectively have a command that can be used in the same way by yet other commands that we don't even know about. That is the kind of flexibility and power that we want to have.
+If we put that chain of commands in a script or a function inside our `.bashrc` we will effectively have a command that can be used in the same way by yet other commands that we don't even know about. That is the kind of flexibility and power that we want to have.
 
 I hope by now you know what kind of things you need to consider when you create a function but there is just one more thing I would like to tell you.
 
