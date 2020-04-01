@@ -4,7 +4,7 @@ description = "Solving the mystery of why sometimes the callback goes first"
 date = 2020-03-10
 lang = "en"
 [taxonomies]
-tags = ["javascript"]
+tags = ["javascript", "functional-programming"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/functional-programming-for-your-everyday-javascript-partial-application-6dm"
 +++

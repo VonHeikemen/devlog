@@ -347,7 +347,7 @@ Our job is done. But is this any useful? Can you do something with it? Well yes,
 
 I think by now you understand really well what functors do, but if you still want to see more examples you can check out this articles. 
 
-- [Handling the absence of a value](@/web-development/functional-programming-for-your-everyday-javascript-using-a-maybe.md)
+- [Handling the absence of a value](@/web-development/fp-in-js/using-a-maybe.md)
 - [Handling side effects](https://jrsinclair.com/articles/2018/how-to-deal-with-dirty-side-effects-in-your-pure-functional-javascript/)
 
 ## Conclusion
