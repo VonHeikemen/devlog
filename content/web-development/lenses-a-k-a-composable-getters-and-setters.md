@@ -15,7 +15,7 @@ Let us first take a step back and ask.
 
 ## What are getters and setters?
 
-This are functions that have one goal, they get or set value. But of course that is not the only thing they are good for. Most use cases I've seen involve triggering a side-effect when a value changes or put some validations to prevent some undesired behavior.
+This are functions that have one goal, they get or set value. But of course that is not the only thing they are good for. Most use cases I've seen involve triggering a side-effect when a value changes or put some validations to prevent undesired behavior.
 
 In javascript you could make them explicit by doing something like this.
 
@@ -111,9 +111,9 @@ function Lens(getter, setter) {
 // That is it.
 ```
 
-You'll notice that `Lens` does absolutly nothing, I'm doing that on purpose. You can already tell that most of the work is in the getter and setter. Your lens are going to be as robust as your getter and setter implementations.
+You'll notice that `Lens` does absolutely nothing, I'm doing that on purpose. You can already tell that most of the work is in the getter and setter. Your lens are going to be as robust as your getter and setter implementations.
 
-Now we need to make them do something we will make three little functions. 
+Now we need to make them do something, we will make three little functions. 
 
 `view`: gets a value
 
@@ -227,7 +227,7 @@ get_name(alice_smith) // => "Alice smith"
 get_name(alice)       // => "Alice Jones"
 ```
 
-That's all nice but the name is just one property, what about nested object keys or arrays? Ah, you see now that is where it gets awkard with our current implementation. Right now you could do the following.
+That's all nice but the name is just one property, what about nested object keys or arrays? Ah, you see now that is where it gets awkward with our current implementation. Right now you could do the following.
 
 ```javascript
 let dog = Lens(
@@ -389,7 +389,7 @@ new_alice = set(dog_lens, 'Joker', alice);
 view(dog_lens, new_alice); // => 'Joker'
 ```
 
-All of this works great but there is just one tiny detail, the lenses that the current constructor creates aren't composable. Imagine that we have three lenses from diferents files or something and we want to combine them like this.
+All of this works great but there is just one tiny detail, the lenses that the current constructor creates aren't composable. Imagine that we have three lenses from differents files or something and we want to combine them like this.
 
 ```javascript
 compose(pet_lens, imaginary_lens, dragon_lens);

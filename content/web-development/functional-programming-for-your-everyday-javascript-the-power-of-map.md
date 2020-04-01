@@ -9,20 +9,20 @@ tags = ["javascript", "functional-programming", "learning"]
 canonical_url = "https://dev.to/vonheikemen/functional-programming-for-your-everyday-javascript-the-power-of-map-4n9m"
 +++
 
-This time we are going to take a look inside the world of `functors` and what makes them so special. Functors is one of those term that you hear every now and then when people talk about functional programming but when the time comes to explain it they either bombard you with more abstract terms or tell you just the details you need to know. Since I have no knowledge of category theory I'm not going to pretend that I know exactly what a functor is, I'm just going show enough for you to know how you can spot them in the wild and how you can use them to your advantage.
+This time we are going to take a look inside the world of `functors` and what makes them so special. Functors is one of those terms that you hear every now and then when people talk about functional programming but when the time comes to explain it they either bombard you with more abstract terms or tell you just the details you need to know. Since I have no knowledge of category theory I'm not going to pretend that I know exactly what a functor is, I'm just going show enough for you to know how you can spot them in the wild and how you can use them to your advantage.
 
-## What is a functor?
+## Seriously, what is a functor?
 
-I'm convinced that the term is dificult to understand because one, you need to some other terms in order to get the whole picture and two, the theory behind it doesn't really translate very well in code. Let's start with the abstract.
+I'm convinced that the term is difficult to understand because one, you need to some other terms in order to get the whole picture and two, the theory behind it doesn't really translate very well in code. But it wouldn't hurt to have at least a clue of what they are.
 
-You can think of them as a relation that exist between two sets of values. Bear with me, this will make sense in a second. Say we have two arrays.
+You can think of them as a relation that exist between two sets of values. I know it's vague, this will make sense in a second. Say we have two arrays.
 
 ```js
 const favorite_numbers  = [42, 69, 73];
 const increased_numbers = [43, 70, 74];
 ```
 
-Nice, we have a set `favorite_numbers` and a set `increased_numbers`, they are two separate arrays in diferent variables but we all know that there is a connection between those two, but more importantly we can express that connection with code. Imagine that the array `increased_numbers` doesn't exist but we still need those numbers, to make them appear again all we need is our good old friend `map`.
+Nice, we have a set `favorite_numbers` and a set `increased_numbers`, they are two separate arrays in different variables but we all know that there is a connection between those two, but more importantly we can express that connection with code. Imagine that the array `increased_numbers` doesn't exist but we still need those numbers, to make them appear again all we need is our good old friend `map`.
 
 ```js
 const increased_numbers = favorite_numbers.map(num => num + 1);
@@ -30,7 +30,7 @@ const increased_numbers = favorite_numbers.map(num => num + 1);
 
 `map` will go through every number, increase it and put it in a new array which brings `increased_numbers` back into existence. Even though `increased_numbers` is something we made, we didn't create it out nowhere, we didn't magically invent `43`, `70` and `74`. All we did was describe a relation between those numbers and our `favorite_numbers`.
 
-Is that the whole history? Are functors just arrays? The answer to that is a big no. Arrays are just a freakishly convenient way to ilustrate a common use of functors. This leaves a question in the air.
+So, is that the whole history? Are functors just arrays? The answer to that is a big no. Arrays are just a freakishly convenient way to illustrate a common use of functors. This leaves a question in the air.
 
 ## How do you recognize them?
 
@@ -76,7 +76,7 @@ For example.
 
 Why is this important? What does this tell us?
 
-Valid questions. This tells us that the `map` function must preserve the shape of the data structure. In our example, if we map an array of three elements we must recieve a new array of three elements. If we had an array of a hundred elements, using `.map(identity)` should return an array of a hundred elements. You get the point.
+Valid questions. This tells us that the `map` function must preserve the shape of the data structure. In our example, if we map an array of three elements we must receive a new array of three elements. If we had an array of a hundred elements, using `.map(identity)` should return an array of a hundred elements. You get the point.
 
 #### Composition
 
@@ -99,7 +99,7 @@ function times_two(num) {
 [1].map(num => times_two(add_one(num))); // => [4]
 ```
 
-If you know how `Array.map` works this feels like 'well duh!'. This actually gives you chance to optimize your code for readability or performance. In the case of arrays, multiple calls to `map` can have a big impact on performance when the number of elements in the list grows.
+If you know how `Array.map` works this feels like 'well duh!'. This actually gives you a chance to optimize your code for readability or performance. In the case of arrays, multiple calls to `map` can have a big impact on performance when the number of elements in the list grows.
 
 And that's it. Those two rules are all you need to know to spot a functor.
 
@@ -127,7 +127,7 @@ Promise.resolve(1).then(num => times_two(add_one(num))); // => 4
 
 To be fair, `Promise.then` behaves more like `Array.flatMap` than `Array.map` but we will ignore that.
 
-Fine, we have `Array` and we have `Promise` both are containers of some sort and both have methods that follow the rules. But what if they didn't have those methods, what if `Array.map` didn't exists? Would that mean that `Array` is no longer a functor? Do we lose all the benefits?
+Fine, we have `Array` and we have `Promise` both are containers of some sort and both have methods that follow the rules. But what if they didn't have those methods, what if `Array.map` didn't exist? Would that mean that `Array` is no longer a functor? Do we lose all the benefits?
 
 Let's take a step back. If `Array.map` doesn't exists then `Array` is no longer a functor? I don't know, I'm not an FP lawyer. Do we lose all the benefits? No, we could still treat arrays as functors, we just lose the super convenient `.map` syntax. We can create our own `map` outside of the structure.
 

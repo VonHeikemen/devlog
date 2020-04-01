@@ -226,7 +226,7 @@ const exclude_falsey = filter(Boolean);
 exclude_falsey([true, '', null, 'that']);
 ```
 
-I'm hoping you can see the posibilities that this kind of pattern can provide. There are libraries (like [Ramda](https://ramdajs.com/docs/)) that use this approach to build complex functions by assembling smaller single purpose utilities. 
+I'm hoping you can see the possibilities that this kind of pattern can provide. There are libraries (like [Ramda](https://ramdajs.com/docs/)) that use this approach to build complex functions by assembling smaller single purpose utilities. 
 
 Enough talking, let's see now how we can do this ourselves.
 
@@ -336,7 +336,7 @@ Notice the extra pair of parenthesis? That's the second function. You'll need on
 
 ### Curry it for me
 
-Going back to subject of magic, you can "automate" the process of currying using a helper function.
+Going back to the subject of magic, you can "automate" the process of currying using a helper function.
 
 ```js
 function curry(fn, arity) {
@@ -350,7 +350,7 @@ function curry(fn, arity) {
   // Omit `fn` and `arity`, gather the rest
   const rest = Array.prototype.slice.call(arguments, 2);
 
-  // Do have what we need?
+  // Do we have what we need?
   if (arity <= rest.length) {
     return fn.apply(fn, rest);
   }

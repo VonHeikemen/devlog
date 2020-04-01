@@ -11,7 +11,7 @@ canonical_url = "https://dev.to/vonheikemen/functional-programming-for-your-ever
 
 Have you ever heard about monads and how great they are? Maybe you have but you still don't get it. Well... I'm not here to tell you what they are, I won't try to sell them to you either, what I will do is show you an example of how would it be if you use them in your javascripts.
 
-We'll do something fun, lets solve a fairly trivial problem in an innecessary complicated way. 
+We'll do something fun, lets solve a fairly trivial problem in an unnecessary complicated way. 
 
 Suppose that we have a dictionary stored in a json file or a plain js object.
 
@@ -93,7 +93,7 @@ So we are going to hide an `if` statement (or maybe a couple), if the value we e
 
 ```js
 // maybe.js
-// (I would like to apologise for the many `thing`s you'll see)
+// (I would like to apologize for the many `thing`s you'll see)
 
 function Maybe(the_thing) {
   if(the_thing === null 
@@ -112,7 +112,7 @@ function Maybe(the_thing) {
 }
 ```
 
-This wrappers are not going to be your standard by the book `Maybe` you see in a proper functional programming language. We will cheat a little in the name of convinience and side effects. Also their methods will be named after the methods in the Option type you find in Rust (I like those names better). Here is where the magic happens.
+This wrappers are not going to be your standard by the book `Maybe` you see in a proper functional programming language. We will cheat a little in the name of convenience and side effects. Also their methods will be named after the methods in the Option type you find in Rust (I like those names better). Here is where the magic happens.
 
 ```js
 // maybe.js
@@ -341,7 +341,7 @@ That works! But lets say we are allergic to `if` statements and not to mention t
    .map(search);
 ```
 
-Something bugs me. I search "accu", the dialog pops in, I confirm the suggestion and the results appears. But "accu" it's still there in the input, it's awkard. Lets update the input with the right word.
+Something bugs me. I search "accu", the dialog pops in, I confirm the suggestion and the results appears. But "accu" it's still there in the input, it's awkward. Lets update the input with the right word.
 
 ```js
 const update_input = val => window.search_form[0].value = val;

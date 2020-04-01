@@ -25,7 +25,7 @@ In our case a data source is something that produces values. And, a consumer is 
 
 #### Observables are lazy
 
-That means that they would not do any kind of work until it's absolutly necessary. Nothing will happen until you subscribe to them.
+That means that they would not do any kind of work until it's absolutely necessary. Nothing will happen until you subscribe to them.
 
 #### They can emit multiple values
 
@@ -37,7 +37,7 @@ It all depends on their internal implementation. You can setup an observable tha
 
 ### Some rules
 
-Remember when I said that observables follow a convention? Well, we are going to make our own arbitrary rules that our implementation will follow. This are important because we are going to build a little ecosystem around our observables.
+Remember when I said that observables follow a convention? Well, we are going to make our own arbitrary rules that our implementation will follow. These will be important because we are going to build a little ecosystem around our observables.
 
 Here we go:
 
@@ -127,9 +127,9 @@ This time we'll create some utility functions, and tweak a little bit our curren
 
 Operators are functions that allow us to extend the behavior of an observable with a chain of functions. Each of this functions can take an observable as a data source and returns a new observable.
 
-Lets keep the array theme in here and create a **map** operator that emulates the native map function of the Array prototype, but for observables. Our operator will do this: take a value, apply to the value a function that will perform some transformation and return a new value.
+Lets keep the array theme in here and create a **map** operator that emulates the native map function of the Array prototype, but for observables. Our operator will do this: take a value, apply a function that will perform some transformation and return a new value.
 
-Lets give a try:
+Lets give it a try:
 
 First step, get the transform function and the data source, then return a new observable that we can use.
 
@@ -242,7 +242,7 @@ function Observable (subscriber) {
 }
 ```
 
-One last thing that we need to do is make sure our operators are compatible with this new pipe function. For example, our current **map** operator expects both **transformFn** and **source** at the same time. That just won't happen inside pipe. Will have to split it into two functions, one that will take the initial necesary parameters to make it work and another one that takes the source observable.
+We need to do one more thing to make sure our operators are compatible with this new pipe function. For example, our current **map** operator expects both **transformFn** and **source** at the same time. That just won't happen inside pipe. Will have to split it into two functions, one that will take the initial necessary parameters to make it work and another one that takes the source observable.
 
 There are a couple of ways we can do this.
 
@@ -353,7 +353,7 @@ function interval(delay) {
 
 This is amazing, we now have really reusable way to set and destroy an interval.
 
-You may have notice that we are passing a number to the observer, we are not calling it _seconds_ because the **delay** can be any arbitrary number. In here we're not keeping track of the time, we are merely counting how many times the callback has been executed. Why? Because we want to make every observable factory as generic as posible. We can always modify the value that it emits by using operators.
+You may have notice that we are passing a number to the observer, we are not calling it _seconds_ because the **delay** can be any arbitrary number. In here we're not keeping track of the time, we are merely counting how many times the callback has been executed. Why? Because we want to make every observable factory as generic as possible. We can always modify the value that it emits by using operators.
 
 This how we could use our new interval function.
 
@@ -374,7 +374,7 @@ var unsubscribe = time$.subscribe(function(timeString) {
 });
 ```
 
-Thats better. But that _if_ bothers me. I feel like that behavior doesn't belong in there. You know what? I'll make an operator that can unsubcribe to the interval after it emits five values.
+That's better. But that _if_ bothers me. I feel like that behavior doesn't belong in there. You know what? I'll make an operator that can unsubscribe to the interval after it emits five values.
 
 ```javascript
 // I'll named "take" because naming is hard.
@@ -416,7 +416,8 @@ time$.subscribe({
   next: timeString => console.log(timeString),
   complete: () => console.info("Time's up")
 });
-```
+``` 
+
 ## Playgrounds
 
 I made a couple of pens so you can play around with this stuff. [This pen](https://codepen.io/VonHeikemen/pen/OwQYxG) contains all the Observable related code that I wrote for this posts and them some more.
@@ -429,9 +430,9 @@ And this is the pen for the exercise.
 
 Observables are a powerful thing, with a little bit of creativity you can turn anything you want into an observable. Really. A promise, an AJAX request, a DOM event, an array, a time interval and anything you can imagine can be a source of data that can be wrapped in an observable.
 
-They are a powerful abstraction. They can let you processs streams of data one chunk at a time. Not only that, but also let you piece together solutions that can be compose by generic functions and custom functions specific to the problem at hand. 
+They are a powerful abstraction. They can let you process streams of data one chunk at a time. Not only that, but also let you piece together solutions that can be compose by generic functions and custom functions specific to the problem at hand. 
 
-Fair warning though. They are not the ultimate solution to every problem. You'll have to decide if the complexity of it is worth it. Like in the exercise, we lose the simplicity of the _startTimer_ in order to gain some flexibility (that we could've achieve some other way).
+Fair warning though. They are not the ultimate solution to every problem. You'll have to decide if the complexity is worth it. Like in the exercise, we lose the simplicity of the _startTimer_ in order to gain some flexibility (that we could've achieve some other way).
 
 ## Sources
  * [Learning Observable By Building Observable](https://medium.com/@benlesh/learning-observable-by-building-observable-d5da57405d87)

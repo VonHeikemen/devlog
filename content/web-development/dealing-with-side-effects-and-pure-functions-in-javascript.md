@@ -17,7 +17,7 @@ Before we start let us just do a little recap on some terms, so we can all be in
 
 ### Pure function
 
-For the sake of simplicity let us say that a pure function is a function whose output is only determined by its input and has no observable effect on the outside world. The main benefit they provide (in my opinion) is predictibility, if you give them the same input values they will always return you the same output. Lets look at some examples.
+For the sake of simplicity let us say that a pure function is a function whose output is only determined by its input and has no observable effect on the outside world. The main benefit they provide (in my opinion) is predictability, if you give them the same input values they will always return you the same output. Lets look at some examples.
 
 This one is pure.
 
@@ -59,7 +59,7 @@ function increment(number) {
 
 ### Side effects
 
-I will call a side effect to anything that compromises the "pureness" of a function. The list includes but is not limited to:
+I will call a side effect to anything that compromises the purity of a function. The list includes but is not limited to:
 
  - Changing (mutate) an external variable in any way.
  - Showing things in the screen.
@@ -110,7 +110,7 @@ function tap(fn) {
 }
 ```
 
-This will allow you place a function with a side effect in the middle of chain of functions while keeping data flow.
+This will allow you to place a function with a side effect in the middle of chain of functions while keeping data flow.
 
 ```js
 const some_process = pipe(
@@ -122,11 +122,13 @@ const some_process = pipe(
 );
 ```
 
-There is argument to be made against these type of things, some people would argue that now all your logic is scattered all over the place and that you have to move around to actually know what the function does. I really don't mind, it's a matter of preference. But enough about that, lets talk about `tap`'s signature, look at it `tap(fn)` it takes a callback as a parameter lets see how we can use that to our advantage.
+There is argument to be made against these type of things, some people would argue that now all your logic is scattered all over the place and that you have to move around to actually know what the function does. I really don't mind, it's a matter of preference.
+
+Let's get back to business, did you see `tap`'s signature? Look at it: `tap(fn)`. It takes a callback as a parameter lets see how we can use that to our advantage.
 
 ### Make someone else handle the problem
 
-As we all know life isn't always so simple, sometimes we just can't make that sweet pipeline of functions. In some situations we need to do some side-effect in the middle of a process and when that happens we can always cheat. In javascript we can treat functions as values which lets us do funny things like passing functions as parameters to other functions. This way the function can have the flexibility to execute a side effect when we need to while maintaining some of the predictibility that we know and love.
+As we all know life isn't always so simple, sometimes we just can't make that sweet pipeline of functions. In some situations we need to do some side-effect in the middle of a process and when that happens we can always cheat. In javascript we can treat functions as values which lets us do funny things like passing functions as parameters to other functions. This way the function can have the flexibility to execute a side effect when we need to while maintaining some of the predictability that we know and love.
 
 Say for example that you have a function that is already pure and does something to a collection of data but now for some reason you need log the original and the transformed values right after the transformation happens. What you can do is add a function as a parameter and call it in the right moment.
 
@@ -142,9 +144,9 @@ function transform(onchange, data) {
 }
 ```
 
-This tecnically fulfills some of the requirements of a pure function, the output (and behavior) of the function is still determined by its input, it just so happens that one of those inputs is a function that can trigger any side effect.  Again, the goal in here is not to fight against the nature of javascript and have everything be 100% pure, we want to control when the side effect happens. So in this case the one who controls whether or not to have side effects is the caller of the function. One extra benefit of this is that if you want to use that function in a unit test to prove that still works as expected the only thing you'll need to do is supply its arguments, you don't have grab any mocking library to test it. 
+This technically fulfills some of the requirements of a pure function, the output (and behavior) of the function is still determined by its input, it just so happens that one of those inputs is a function that can trigger any side effect.  Again, the goal in here is not to fight against the nature of javascript and have everything be 100% pure, we want to control when the side effect happens. So in this case the one who controls whether or not to have side effects is the caller of the function. One extra benefit of this is that if you want to use that function in a unit test to prove that it still works as expected the only thing you'll need to do is supply its arguments, you don't have grab any mocking library to test it. 
 
-You may be wondering why put the callback as the first parameter, this is really about personal preference. If you put the `thing` that changes the most frecuently in the last position you make it easier to do partial application, that is binding the values of the parameters without executing the function. For example you could use `transform.bind` to create a specialized function which already has the `onchange` callback.
+You may be wondering why put the callback as the first parameter, this is really about personal preference. If you put the `thing` that changes the most frequently in the last position you make it easier to do partial application, that is binding the values of the parameters without executing the function. For example you could use `transform.bind` to create a specialized function which already has the `onchange` callback.
 
 ### Lazy effects
 
@@ -152,7 +154,7 @@ The idea here is to delay the inevitable. Instead of performing the side effect 
 
 #### Using function wrappers
 
-As I mentioned before in javascript you can treat functions as values and one thing you can do with values is returning them from functions. I'm talking about functions that return functions. We already saw how usefull that can be and if you think about is not that crazy, how many times have you seen something like this?
+As I mentioned before in javascript you can treat functions as values and one thing you can do with values is returning them from functions. I'm talking about functions that return functions. We already saw how useful that can be and if you think about is not that crazy, how many times have you seen something like this?
 
 ```js
 function Stuff(thing) {
@@ -187,7 +189,7 @@ function some_process(config) {
 }
 ```
 
-This way we give the caller of our function the oportunity to use the side effect when they want, and they can even pass it around and compose it with other functions. Interestingly enough this is not a very common pattern, maybe because there are other ways to achieve the same goal.
+This way we give the caller of our function the opportunity to use the side effect when they want, and they can even pass it around and compose it with other functions. Interestingly enough this is not a very common pattern, maybe because there are other ways to achieve the same goal.
 
 #### Using data structures
 
@@ -229,7 +231,7 @@ function Effect(effect) {
 
 ```
 
-It may not look like much but this is actually enough to be useful. You can start to composing your effects without triggering any changes to the environment. You can now do stuff like this.
+It may not look like much but this is actually enough to be useful. You can start composing your effects without triggering any changes to the environment. You can now do stuff like this.
 
 ```js
 const persist = (data) => {

@@ -123,7 +123,7 @@ send('fetch');
 
 If you send `fetch` (or any other event) while in `end` state will give you `end` every single time. Why? Because you can't go anywhere, `end` doesn't have transitions.
 
-I hope you see why this is useful. If not, I apologise for all the `console.log`ing.
+I hope you see why this is useful. If not, I apologize for all the `console.log`ing.
 
 Going back to our current machine. This what we got so far.
 
@@ -368,7 +368,7 @@ body {
 
 Now the last piece of the puzzle, the side effects. We need to attach another function to our transitions so we can update the DOM. We could use `reduce` again but is just rude to have side effects on something called `reduce` (just don't) We will bring another utility made for that, `action`.
 
-But first we must prepare. Update the context object with the necesary dependencies. (This step is not necesary, this is just me being allergic to global variables)
+But first we must prepare. Update the context object with the necessary dependencies. (This step is not necessary, this is just me being allergic to global variables)
 
 ```diff
  const context = ev => ({
@@ -549,7 +549,7 @@ I hope so. Did you notice we made a bunch of test and created the blueprint of t
 
 Did you try to click the 'loading' button while loading? Did it triggered a bunch of call to `get_quote`? That is because we made (sort of) impossible that a `fetch` event can happen during `loading`. 
 
-Not only that, the behavior of the machine is and the effects on the outside world are separated. Depending on how you like to write code that may be a good or a bad thing.
+Not only that, the behavior of the machine and the effects on the outside world are separated. Depending on how you like to write code that may be a good or a bad thing.
 
 ## Want to know more?
 * [XState (concepts)](https://xstate.js.org/docs/about/concepts.html)
