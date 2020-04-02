@@ -1,6 +1,6 @@
 +++
 title = "Funciones puras y porque son una buena idea" 
-description = "Respondiendo a la pregunta ¿qué ganamos al usar funciones pura?"
+description = "Respondiendo a la pregunta ¿qué ganamos al usar funciones puras?"
 date = 2020-04-02
 lang = "es"
 [taxonomies]

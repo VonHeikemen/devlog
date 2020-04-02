@@ -694,7 +694,7 @@ Pueden ver todo el código aquí: [link](https://gist.github.com/VonHeikemen/0e6
 Hay muchas cosas que no mencioné para no tomar mucho de su tiempo. Si quieren indagar un poco más aquí les dejo más material que he preparado.
 
 - [Aplicacion parcial](@/web-development/fp-in-js/partial-application.es.md)
-- [El poder de map (más sobre functors)](@/web-development/fp-in-js/the-power-of-map.es.md)
+- [Más sobre Functors](@/web-development/fp-in-js/the-power-of-map.es.md)
 - [Usando un Maybe](@/web-development/fp-in-js/using-a-maybe.es.md)
 - [Funciones puras y efectos](@/web-development/fp-in-js/dealing-with-side-effects-and-pure-functions.es.md)
 
