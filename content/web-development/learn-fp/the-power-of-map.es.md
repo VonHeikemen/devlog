@@ -346,7 +346,7 @@ Nuestro trabajo está hecho. ¿Pero de verdad sirve? ¿Se puede hacer algo con e
 
 Ahora ya deben tener un buen entendimiento de los functors, pero si quieren seguir viendo más pueden revisar estos artículos.
 
-- [Manejar ausencia de valores](@/web-development/fp-in-js/using-a-maybe.es.md)
+- [Manejar ausencia de valores](@/web-development/learn-fp/using-a-maybe.es.md)
 - [Manejo de efectos secundarios](https://jrsinclair.com/articles/2018/how-to-deal-with-dirty-side-effects-in-your-pure-functional-javascript/) (inglés)
 
 ## Conclusión

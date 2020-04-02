@@ -57,9 +57,9 @@ If you have created a pure function there is a very strong chance that what you 
 
 As good as pure functions are at some point you need to abandon the idea of purity and cause some effect on the outside world (show something on the screen, make an HTTP request, etc..) Because of that I have prepared more material with more details about this topic.
 
-- [Composition techniques](@/web-development/fp-in-js/composition-techniques.md)
+- [Composition techniques](@/web-development/learn-fp/composition-techniques.md)
 
-- [Dealing with side effects and pure functions in javascript ](@/web-development/fp-in-js/dealing-with-side-effects-and-pure-functions.md)
+- [Dealing with side effects and pure functions in javascript ](@/web-development/learn-fp/dealing-with-side-effects-and-pure-functions.md)
 
 ## Sources
 

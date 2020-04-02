@@ -57,9 +57,9 @@ Si han creado una función pura hay una alta probabilidad de que hayan creado un
 
 Las funciones puras pueden ser buenas pero en algún momento debemos abandonar la idea de la pureza y causar un cambio en el mundo (mostrar algo en pantalla, hacer una petición HTTP, etc...) para eso he preparado otros artículos con más detalles sobre el tema.
 
-- [Técnicas de composición](@/web-development/fp-in-js/composition-techniques.es.md)
+- [Técnicas de composición](@/web-development/learn-fp/composition-techniques.es.md)
 
-- [Cómo combinar efectos y funciones puras en javascript](@/web-development/fp-in-js/dealing-with-side-effects-and-pure-functions.es.md)
+- [Cómo combinar efectos y funciones puras en javascript](@/web-development/learn-fp/dealing-with-side-effects-and-pure-functions.es.md)
 
 ## Fuentes
 

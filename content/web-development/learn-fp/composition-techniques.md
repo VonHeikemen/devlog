@@ -693,10 +693,10 @@ You can check out the whole code here: [link](https://gist.github.com/VonHeikeme
 
 There are many things that I didn't mention because it would take too much time but if you want to learn more about it, I have prepare some material.
 
-- [Partial application](@/web-development/fp-in-js/partial-application.md)
-- [About Functors](@/web-development/fp-in-js/the-power-of-map.md)
-- [Using a Maybe](@/web-development/fp-in-js/using-a-maybe.md)
-- [Pure functions and side effects](@/web-development/fp-in-js/dealing-with-side-effects-and-pure-functions.md)
+- [Partial application](@/web-development/learn-fp/partial-application.md)
+- [About Functors](@/web-development/learn-fp/the-power-of-map.md)
+- [Using a Maybe](@/web-development/learn-fp/using-a-maybe.md)
+- [Pure functions and side effects](@/web-development/learn-fp/dealing-with-side-effects-and-pure-functions.md)
 
 ## Conclusion
 
