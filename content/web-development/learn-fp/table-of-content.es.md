@@ -7,9 +7,9 @@ lang = "es"
 tags = ["javascript", "paradigma-funcional", "aprendizaje"]
 +++
 
-Aprender sobre el paradigma funcional en la programación no es una tarea fácil, sobre todo si buscan material que contenga ejemplos prácticos de cómo usar los conceptos que enseñan. Lo que presento en esta ocasión es una recopilación de las notas que he tomado, y que he transformado en "artículos", así como también enlaces a las fuentes de donde he sacado toda esta informaición.
+Aprender sobre el paradigma funcional en la programación no es una tarea fácil, sobre todo si buscan material que contenga ejemplos prácticos de cómo usar los conceptos que enseñan. Lo que presento en esta ocasión es una recopilación de las notas que he tomado, y que he transformado en "artículos", así como también enlaces a las fuentes de donde he sacado toda esta información.
 
-Aunque todo este material esté relacionado, yo no planifiqué escribir todas esas notas. Entonces aquí intentaré darles una sugerencia en el orden de lectura.
+Aunque todo este material esté relacionado, no planifiqué escribir todas esas notas. Entonces aquí intentaré darles una sugerencia en el orden de lectura.
 
 ## Conceptos básicos
 
@@ -17,7 +17,7 @@ Para empezar quisiera que vieran el video que me convenció de darle una oportun
 
 {{ youtube(id="qtsbZarFzm8") }}
 
-Si no pudieron entender la charla porque no hablan inglés, no se preocupen una búsqueda rápida sobre **funciones puras** y sus beneficios técnicos deben ponerlos al tanto.
+Si no pudieron entender la charla porque no hablan inglés, no se preocupen, una búsqueda rápida sobre **funciones puras** y sus beneficios técnicos debería ponerlos al tanto.
 
 Ahora bien, yo también hice mi propia investigación y escribí un material que complementa lo que se dice en el video.  
 
@@ -33,9 +33,7 @@ Ahora bien, yo también hice mi propia investigación y escribí un material que
 
 Si ya revisaron todo el material anterior ya cuentan con suficiente conocimiento para empezar a incorporar un poco del estilo funcional en su rutina habitual. No tienen que conocer todos los trucos del libro para beneficiarse de este paradigma.
 
-Ahora bien, una cosa es conocer los conceptos y otra es saber utilizarlos de la manera más efectiva posible. Aún necesitan más herramientas.
-
-Quiero que presten una atención especial a la **aplicación parcial**, al igual que las funciones puras este es un que concepto que puede ayudarlos mucho, incluso si deciden no adoptar el paradigma funcional completamente.
+Quiero que presten una atención especial a algo llamado **aplicación parcial**, al igual que las funciones puras este es un que concepto que puede ayudarlos mucho, incluso si deciden no adoptar el paradigma funcional completamente.
 
 Estas son mis notas (con ejemplos prácticos): 
 - [Aplicación parcial](@/web-development/learn-fp/partial-application.es.md).
@@ -46,7 +44,7 @@ Si están convencidos de que la aplicación parcial es útil vean este video par
 
 ## Cómo armar las piezas
 
-Este es un punto crucial, ya tienen las bases y algunas herramientas, pero aún deben estar preguntándose ¿Cómo encaja todo esto? Ese nuestro siguiente paso. 
+Una cosa es conocer los conceptos y otra es saber utilizarlos de la manera más efectiva posible. Ya tienen las bases y algunas herramientas, pero aún deben estar preguntándose ¿Cómo encaja todo esto? Ese nuestro siguiente paso. 
 
 En este artículo veremos cómo podemos usar lo que hemos aprendido:
 
@@ -74,8 +72,8 @@ Ya tienen una idea de cómo manipular funciones y adaptarlas a sus necesidades. 
 
 Si se siguen preguntando qué se puede lograr sólo combinando funciones.
 
-- [Oh Composable World!](https://www.youtube.com/watch?v=SfWR3dKnFIo)
 - [Mary had a little lambda](https://www.youtube.com/watch?v=7BsfMMYvGaU)
+- [Oh Composable World!](https://www.youtube.com/watch?v=SfWR3dKnFIo)
 
 ## Hasta la próxima
 
