@@ -1,5 +1,5 @@
 +++
-title = "What I know about functional programming" 
+title = "Learning functional programming: A roadmap" 
 description = "Table of content for the series: Functional programming for your everyday javascript"
 date = 2020-04-03
 lang = "en"
@@ -63,8 +63,7 @@ By now you must know how to manipulate functions and make them do your bidding. 
 
 ## Extra content
 
-### A curious concept
-
+- [Reduce: how and when](@/web-development/learn-fp/reduce-how-and-when.md)
 - [Lenses: an alternative to getters and setters](@/web-development/learn-fp/lenses-a-k-a-composable-getters-and-setters.es.md)
 
 ### More interesting talks

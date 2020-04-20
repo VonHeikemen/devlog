@@ -1,5 +1,5 @@
 +++
-title = "Lo que sé del paradigma funcional" 
+title = "Aprendiendo sobre el paradigma funcional: un camino a seguir" 
 description = "Guía del contenido creado para la serie: Un poco del paradigma funcional en tu javascript"
 date = 2020-04-03
 lang = "es"
@@ -64,8 +64,7 @@ Ya tienen una idea de cómo manipular funciones y adaptarlas a sus necesidades. 
 
 ## Contenido extra
 
-### Un concepto curioso
-
+- [Reduce: cómo y cuando](@/web-development/learn-fp/reduce-how-and-when.es.md)
 - [Lenses: Una alternativa a los getters y setters](@/web-development/learn-fp/lenses-a-k-a-composable-getters-and-setters.es.md)
 
 ### Más charlas interesantes
