@@ -63,7 +63,6 @@ By now you must know how to manipulate functions and make them do your bidding. 
 
 ## Extra content
 
-- [Reduce: how and when](@/web-development/learn-fp/reduce-how-and-when.md)
 - [Lenses: an alternative to getters and setters](@/web-development/learn-fp/lenses-a-k-a-composable-getters-and-setters.es.md)
 
 ### More interesting talks
