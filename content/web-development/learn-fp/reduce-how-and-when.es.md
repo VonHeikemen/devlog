@@ -7,7 +7,7 @@ lang = "es"
 tags = ["javascript", "paradigma-funcional", "aprendizaje"]
 +++
 
-Vamos a hablar del elefante rosa en el prototipo `Array`, me refiero al a veces odiado método [reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce). Pero no vamos a discutir sobre si esta función es buena o mala, nos mantendremos objetivos (o eso espero). Vamos a descubrir qué es lo que hace internamente, luego intentaremos descubrir las situaciones en las que puede ser una solución efectiva.
+Vamos a hablar del elefante rosa en el prototipo `Array`, me refiero al a veces odiado método [reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) pero no vamos a discutir sobre si esta función es buena o mala. Vamos a descubrir qué es lo que hace internamente, luego intentaremos descubrir las situaciones en las que puede ser una solución efectiva.
 
 Para asegurarnos de entender su funcionamiento vamos a empezar implementando nuestra versión.
 
@@ -21,7 +21,7 @@ function reduce(arr, callback) {
 }
 ```
 
-Ya tenemos algunos valores, y ahora ¿Qué hacemos con ellos? Sabemos que los métodos del prototipo `Array` aplican la función a cada uno de los elementos. Hagamos eso.
+Ya tenemos algunos valores, y ahora ¿Qué hacemos con ellos? Sabemos que los métodos del prototipo `Array` aplican una función a cada uno de sus elementos. Hagamos eso.
 
 ```js
 function reduce(arr, callback) {
@@ -31,7 +31,7 @@ function reduce(arr, callback) {
 }
 ```
 
-Todavía no hace lo que queremos pero se acerca. Ahora falta el ingrediente secreto, el acumulador. Esta será una variable que crearemos para recordar el **estado actual** de nuestra transformación. Cada vez que apliquemos la función `callback` a un valor guardamos ese resultado en el acumulador, y como bono extra también se lo pasaremos a `callback` para que nuestro "usuario" no tenga que hacer ningún esfuerzo extra.
+Todavía no hace lo que queremos pero se acerca. Ahora falta el ingrediente secreto, el acumulador. Esta será una variable que crearemos para recordar el **estado actual** de nuestra transformación. Cada vez que apliquemos la función `callback` a un valor guardamos el resultado en el acumulador. Como bono extra, antes de guardar el nuevo estado en el acumulador le pasamos a `callback` el estado actual para que nuestro "usuario" no tenga que hacer ningún esfuerzo extra.
 
 ```diff
   function reduce(arr, callback) {
@@ -64,7 +64,7 @@ reduce(array1, callback);
 // valor esperado: 10
 ```
 
-¿Ven ese `if`? Está ahí porque en la primera iteración `estado` no tiene un valor, eso parece innecesario, nosotros como autores de `reduce` podemos ayudar a reducir la cantidad de código que necesita `callback`. Al disminuir la carga de responsabilidad que necesita `callback` podemos hacer que `reduce` sea mucho más flexible. Lo que haremos será tomar el primer valor del arreglo y ese se convertirá en el `estado` para nuestra primera iteración.
+¿Ven ese `if`? Está ahí porque en la primera iteración `estado` no tiene un valor, eso parece innecesario. Nosotros como autores de `reduce` podemos ayudar a reducir la cantidad de código que necesita `callback`. Al disminuir la carga de responsabilidad que necesita `callback` podemos hacer que `reduce` sea mucho más flexible. Lo que haremos será tomar el primer valor del arreglo y ese se convertirá en el `estado` para nuestra primera iteración.
 
 ```diff
   function reduce(arr, callback) {
@@ -121,7 +121,7 @@ function reduce(arr) {
   }
 ```
 
-¿Lo notaron? Eso es todo lo que necesitan recordar. Básicamente`reduce` nos da la habilidad de transformar una **operación** que actúa sobre dos valores a una que actúa sobre una cantidad variada.
+¿Lo notaron? Eso es todo lo que necesitan recordar. Básicamente,`reduce` nos da la habilidad de transformar una **operación** que actúa sobre dos valores a una que actúa sobre una cantidad variada.
 
 ## ¿Cuando es útil?
 
@@ -129,7 +129,7 @@ function reduce(arr) {
 
 ### Un caso ideal
 
-El ejemplo anterior ya debería darles una pista. Nuestra función es más efectiva cuando seguimos ciertos patrones. Pensemos un momento en lo que hace `callback` en nuestro ejemplo. Sabemos que necesita dos números, ejecuta una operación matemática  y eso nos devuelve otro número. Entonces hace esto.
+El ejemplo anterior ya debería darles una pista. Nuestra función es más efectiva cuando seguimos ciertos patrones. Pensemos un momento en lo que hace `callback` en nuestro ejemplo. Sabemos que necesita dos números, ejecuta una operación matemática y nos devuelve otro número. Entonces hace esto.
 
 ```
 Número + Número -> Número
@@ -141,7 +141,7 @@ Número + Número -> Número
 TipoA + TipoA -> TipoA
 ```
 
-Hay dos valores del mismo tipo (TipoA), una operación (el signo +) y eso nos devuelve otro valor del mismo tipo (TipoA). Cuando lo vemos de esa manera podemos darnos cuenta que esto puede ser útil más allá de las operaciones matemáticas. Hagamos otro ejemplo con números pero esta vez lo que haremos será una comparación.
+Hay dos valores del mismo tipo (TipoA) y una operación (el signo +) que nos devuelve otro valor del mismo tipo (TipoA). Cuando lo vemos de esa manera podemos darnos cuenta de un patrón que puede ser útil más allá de las operaciones matemáticas. Hagamos otro ejemplo con números pero esta vez lo que haremos será una comparación.
 
 ```js
 function max(un_numero, otro_numero) {
@@ -153,7 +153,7 @@ function max(un_numero, otro_numero) {
 }
 ```
 
-`max` es una operación que actúa sobre dos números, los compara y devuelve el mayor. Es muy general y con una capacidad limitada. Si volvemos a pensar en lo abstracto tenemos que es una función con las siguientes características.
+`max` es una operación que actúa sobre dos números, los compara y devuelve el mayor. Es muy general y con una capacidad limitada. Si volvemos a pensar en lo abstracto vemos ese patrón otra vez.
 
 ```
 TipoA + TipoA -> TipoA
@@ -270,7 +270,7 @@ Obtenemos esto.
 TypeError: uno.concat is not a function
 ```
 
-Esto ocurre porque en la primera iteración `uno` en `concat` es el número `40`, el cual no posee un método `concat`. ¿Qué debemos hacer? Por lo general se considera una buena práctica utilizar un valor inicial fijo para evitar este tipo de errores. Pero ahora tenemos un problema, nuestro `reduce` no acepta un valor inicial, así que deberíamos corregir eso.
+Esto ocurre porque en la primera iteración el valor de `uno` es el número `40`, el cual no posee un método `concat`. ¿Qué debemos hacer? Por lo general se considera una buena práctica utilizar un valor inicial fijo para evitar este tipo de errores. Pero tenemos un problema, nuestro `reduce` no acepta un valor inicial, así que deberíamos corregir eso.
 
 ```diff
 - function reduce(arr, callback) {
@@ -300,7 +300,7 @@ reduce(array5, [], concat);
 // valor esperado: [ 40, 41, 42, 39, 38 ]
 ```
 
-Ya no hay error, pudimos obtener el arreglo que queríamos. Pero fíjense en una cosa, el arreglo vacío no sólo logró evitar el error sino que también dejó intacto el resultado de la operación. Al igual que con los números, con los arreglos tenemos la noción de un elemento vacío que podemos usar en nuestras operaciones sin causar un error en nuestro programa.
+Ya no hay error y pudimos obtener el arreglo que queríamos. Pero fíjense en una cosa, el arreglo vacío no sólo logró evitar el error sino que también dejó intacto el resultado de la operación. Al igual que con los números, con los arreglos tenemos la noción de un elemento vacío que podemos usar en nuestras operaciones sin causar un error en nuestro programa.
 
 El arreglo vacío puede considerarse como un **elemento identidad**, un valor neutro que al aplicarlo a una operación no tiene ningún efecto en el resultado final. Adivinen qué, este comportamiento también tiene un nombre en el paradigma funcional, se le conoce como **Monoid**. Cuando tenemos un semigrupo con un elemento identidad estamos en presencia de un monoid. Entonces, *semigrupo* + *elemento identidad* = *Monoid*.
 
@@ -322,13 +322,56 @@ union_3.join(',') == union_4.join(',');
 // valor esperado: true
 ```
 
-¿Por qué es importante? Piensen en esto: ¿Cuantas veces han tenido que escribir un `if` para resguardar una operación de un valor `null` o `undefined`? Si podemos representar un "valor vacío" de una manera más segura podemos disminuir la cantidad de errores en nuestros programas. Podemos decir que cuando trabajamos con un arreglo de estructuras que siguen las reglas de los monoid podemos estar seguros que `reduce` será una buena opción para procesarlo.
+¿Por qué es importante? Piensen en esto: ¿Cuantas veces han tenido que escribir un `if` para resguardar una operación de un valor `null` o `undefined`? Si podemos representar un "valor vacío" de una manera más segura podemos eliminar toda una categoría de errores en nuestros programas.
+
+Otra situación donde los monoids son útiles es cuando queremos ejecutar una operación "insegura" sobre un valor. Podríamos aplicar esa operación sobre una referencia a un valor vacío y así dejar el resto de los elementos intactos.
+
+Imaginen que tienen fragmentos de información esparcidos en varios objectos y queremos unirlos.
+
+```js
+const array6 = [
+  {name: 'Harold'},
+  {lastname: 'Cooper'},
+  {state: 'wrong'}
+];
+```
+
+Normalmente usarían la [sintaxis de extensión](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) para mezclar todo eso, pero digamos que vivimos en un mundo donde eso no es posible. No teman, tenemos una función que puede hacer el trabajo.
+
+```js
+Object.assign;
+```
+
+Si lo piensan `Object.assign` también sigue el patrón.
+
+```
+TipoA + TipoA -> TipoA
+```
+
+Si le pasamos dos objetos nos devuelve un nuevo objecto. Pero hay algo que deben saber, `Object.assign` modifica el objeto que le pasamos como primer parámetro. Entonces si hacemos esto.
+
+```js
+reduce(array6, Object.assign);
+// Valor esperado: { "name": "Harold", "lastname": "Cooper", "state": "wrong" }
+```
+
+Parecería que todo está bien, pero no es así. Si revisan `array6[0]` verán que ha cambiado, definitivamente no quieren eso. Por suerte para nosotros los objetos en javascript se comportan como monoids, así que podemos usar un "valor vacío". Entonces la manera correcta de usar `reduce` en este caso sería esta. 
+
+```js
+reduce(array6, {}, Object.assign);
+// Valor esperado: { "name": "Harold", "lastname": "Cooper", "state": "wrong" }
+
+array6
+// Valor esperado: [ { "name": "Harold" }, { "lastname": "Cooper" }, { "state": "wrong" } ]
+```
+
+Podemos decir que cuando trabajamos con un arreglo de estructuras que siguen las reglas de los monoid podemos estar seguros que `reduce` será una buena opción para procesarlo.
 
 ## Más allá de los arreglos
 
 Si nosotros pudimos implementar una versión de `reduce` para los arreglos entonces no sería del todo extraño pensar que otras personas hayan incorporado algo similar a otras estructuras. Saber cómo funciona `reduce` puede ser muy útil si utilizan una librería que tenga un método parecido.
 
-Por ejemplo, la librería `mithril-stream` tiene un método llamado `scan` que tiene la siguiente forma.
+Por ejemplo, la librería [mithril-stream](https://mithril.js.org/stream.html) tiene un método llamado `scan` que tiene la siguiente forma.
 
 ```
 Stream.scan(fn, accumulator, stream)
@@ -340,7 +383,7 @@ Esa variable `fn` debe ser una función que debe tener la siguiente firma.
 (accumulator, value) -> result | SKIP
 ```
 
-¿Reconocen eso? Espero que sí. Son los mismos requerimientos de `reduce`. ¿Pero qué hace esa función? Bueno, ejecuta la función `fn` cuando la fuente (`stream`) produce un nuevo dato. Cada vez que llama la función `fn` le pasa como parámetro el nuevo dato producido y el estado actual del acumulador y el resultado se convierte en el nuevo estado del acumulador. ¿Les suena familiar ese comportamiento?
+¿Reconocen eso? Espero que sí. Son los mismos requerimientos de `reduce`. ¿Pero qué hace esa función? Bueno, ejecuta la función `fn` cuando la fuente (`stream`) produce un nuevo dato. Cuando la función `fn` es ejecutada recibe como parámetro el estado actual del acumulador y el nuevo dato producido, luego el resultado retornado por `fn` se convierte en el nuevo estado del acumulador. ¿Les suena familiar ese comportamiento?
 
 Pueden probar el método `scan` con nuestra función `union` y ver cómo se comporta.
 
@@ -367,6 +410,8 @@ Deberían observar cómo la lista sólo agrega elementos que no han sido agregad
 Pueden ver en acción una versión modificada de ese fragmento en codepen.
 
 {{ codepen(id="NWGrozo", title="A different reduce", load_js=true) }}
+
+¿Vieron? nuestro conocimiento de `reduce` (y tal vez algo de semigrupos y monoids) nos puede ayudar a crear funciones auxiliares que podemos reusar con diferentes estructuras. ¿No es genial?
 
 ## Conclusión
 
