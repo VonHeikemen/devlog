@@ -189,7 +189,7 @@ max_1 === max_2
 
 ¿Ven? Ejecutarla con el tipo de dato adecuado en diferente orden no afecta su resultado. Esto nos da la garantía de que funcionará si la combinamos con `reduce` y un arreglo de números.
 
-¿Pero podríamos aplicar estas reglas a una estructura más compleja? Claro que sí. En javascript ya tenemos un par que las cumplen. Piensen en los arreglos, en el prototipo `Array` tenemos el método `concat`, este nos permita mezclar dos arreglos y crear uno nuevo con los elementos de ambos.
+¿Pero podríamos aplicar estas reglas a una estructura más compleja? Claro que sí. En javascript ya tenemos un par que las cumplen. Piensen en los arreglos, en el prototipo `Array` tenemos el método `concat`, este nos permite mezclar dos arreglos y crear uno nuevo con los elementos de ambos.
 
 ```js
 function concat(uno, otro) {

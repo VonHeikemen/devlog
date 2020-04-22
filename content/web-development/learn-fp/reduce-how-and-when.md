@@ -1,6 +1,6 @@
 +++
 title = "Reduce: how and when" 
-description = "Let's identify the best usecase for reduce and maybe learn something else in the way"
+description = "Let's identify the best use case for reduce and maybe learn something else in the way"
 date = 2020-04-21
 lang = "en"
 [taxonomies]
