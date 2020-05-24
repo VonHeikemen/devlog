@@ -66,6 +66,7 @@ Ya tienen una idea de cómo manipular funciones y adaptarlas a sus necesidades. 
 
 - [Reduce: cómo y cuando](@/web-development/learn-fp/reduce-how-and-when.es.md)
 - [Lenses: Una alternativa a los getters y setters](@/web-development/learn-fp/lenses-a-k-a-composable-getters-and-setters.es.md)
+- [Explorando Fantasy Land](@/web-development/learn-fp/discriminated-unions-and-fantasy-land.es.md)
 
 ### Más charlas interesantes
 
