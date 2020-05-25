@@ -7,7 +7,7 @@ lang = "es"
 tags = ["javascript", "paradigma-funcional"]
 +++
 
-Vamos a hacer algo divertido, vamos a explorar una de las ramas de especificación [Fantasy Land](https://github.com/fantasyland/fantasy-land) usando uniones discriminadas como nuestro medio transporte. Para no extendernos más de lo necesario vamos a enfocarnos más que todo en el cómo funcionan las cosas y dejaremos de lado muchos detalles. Entonces, lo que haremos será crear una estructura y ver si podemos seguir las reglas que aparecen en la especificación.
+Vamos a hacer algo divertido, vamos a explorar una de las ramas de la especificación [Fantasy Land](https://github.com/fantasyland/fantasy-land) usando uniones discriminadas como nuestro medio transporte. Para no extendernos más de lo necesario vamos a enfocarnos más que todo en el cómo funcionan las cosas y dejaremos de lado muchos detalles. Entonces, lo que haremos será crear una estructura y ver si podemos seguir las reglas que aparecen en la especificación.
 
 ## Uniones Discriminadas
 
@@ -80,7 +80,7 @@ switch(status.type) {
 }
 ```
 
-Esto se acerca bastante a lo que queremos pero hay problema, no devuelve nada. Queremos hacer lo mismo que hace este `switch/case` pero en una expresión, algo que nos de un resultado. Para recrear este comportamiento en la forma que queremos usaremos objetos y funciones.
+Esto se acerca bastante a lo que queremos pero hay un problema, no devuelve nada. Queremos hacer lo mismo que hace este `switch/case` pero en una expresión, algo que nos de un resultado. Para recrear este comportamiento en la forma que queremos usaremos objetos y funciones.
 
 ```js
 function match(value, patterns) {
@@ -113,7 +113,7 @@ Con esta función a nuestra disposición podemos seguir adelante.
 
 ## La Estructura
 
-Ahora toca crear la estructura que usaremos de aquí en adelante. Lo que haremos será recrear un concepto popular, un posible fallo. Crearemos un tipo de dato que con dos variantes `Ok` y `Err`, a este tipo lo llamaremos `Result`. La idea es simple, la variante `Ok` va a representar una operación exitosa y será usada para transportar un valor, todas nuestras operaciones serán basadas en esta variante. Es decir que en caso de que la variante sea de tipo `Err` queremos ignorar cualquier tipo de transformación, lo único que haremos será "propagar el error."
+Ahora toca crear la estructura que usaremos de aquí en adelante. Lo que haremos será recrear un concepto popular, un posible fallo. Crearemos un tipo de dato con dos variantes `Ok` y `Err`, a este tipo lo llamaremos `Result`. La idea es simple, la variante `Ok` va a representar una operación exitosa y será usada para transportar un valor, todas nuestras operaciones serán basadas en esta variante. Es decir que en caso de que la variante sea de tipo `Err` queremos ignorar cualquier tipo de transformación, lo único que haremos será "propagar el error."
 
 ```js
 const Result = Union(['Ok', 'Err']);
@@ -129,7 +129,7 @@ Result.match = function(err, ok, data) {
 };
 ```
 
-Ya todo está en su lugar podemos. Hoy nos enfocaremos en la rama que va desde `Functor` hasta `Monad`. Por cada una de estas operaciones vamos a implementar un método estático en nuestro objeto `Result` y además intentaré explicar cómo funciona y para qué sirve. 
+Ya todo está en su lugar. Como dije antes, solamente nos enfocaremos en una sola rama de la especificación, exploraremos esa que va desde `Functor` hasta `Monad`. Por cada una de estas operaciones vamos a implementar un método estático en nuestro objeto `Result` y además intentaré explicar cómo funciona y para qué sirve. 
 
 La lógica dicta que deberíamos empezar con Functor pero vamos a tomar otro camino.
 
