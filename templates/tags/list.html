@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+
+{% block title %}
+    {{ config.title }} | Tags
+{% endblock title %}
+
+{% block content %}
+
+<h1 class="container-title">Tags</h1>
+
+<ul class="posts">
+    {% for page in terms | reverse %}
+      <li class="post list">
+        <h2 class="post-title">
+          <a href="{{ page.permalink }}">
+            {{ page.name }}
+          </a>
+        </h2>
+      </li>
+    {% endfor %}
+</ul>
+{% endblock content %}
