@@ -8,13 +8,13 @@ draft = false
 tags = ["javascript", "functional-programming"]
 +++
 
-Let's do something fun, let's explore one branch of the [Fantasy Land](https://github.com/fantasyland/fantasy-land) specification using tagged unions. In order to keep this as short as possible I'll mostly focus on how things work and leave out a lot of details. So, what we'll do is create a data type and see if we can follow the rules on the specification.
+Let's do something fun, let's explore one branch of the [Fantasy Land](https://github.com/fantasyland/fantasy-land) specification using tagged unions. In order to keep this as short as possible I'll mostly focus on how things work and leave out a lot of details. So, what we'll do is create a data structure and see if we can follow the rules on the specification.
 
 ## Tagged Unions
 
-Also known as *variants*, is a data type that can represent diferent states of a single value. At any given time it can only be in one of those states. Other important features include the ability to carry information about themselves as well as an extra "payload" that can hold anything.
+Also known as *variants*, is a data structure that can represent different states of a single type. At any given time it can only be in one of those states. Other important features include the ability to carry information about themselves as well as an extra "payload" that can hold anything.
 
-It sounds cool until we realise we don't have those things in javascript. If we want to use them we'll have to recreate them. Fortunately for us we don't need a bulletproof implementation. We just need to deal with a couple of things, the type of the variant and the payload they should carry. We can handle that. 
+It sounds cool until we realize we don't have those things in javascript. If we want to use them we'll have to recreate them. Fortunately for us we don't need a bulletproof implementation. We just need to deal with a couple of things, the type of the variant and the payload they should carry. We can handle that. 
 
 ```js
 function Union(types) {
@@ -28,7 +28,7 @@ function Union(types) {
 }
 ```
 
-What do we have here? You can think of `Union` as a factory of constructor functions. It takes a list of variants and for each one it will create a constructor. It looks better in an example. Let's say we want to model the states of a task, using `Union` we could create this.
+What do we have here? You can think of `Union` as a factory of constructor functions. It takes a list of variants and for each it will create a constructor. It looks better in an example. Let's say we want to model the states of a task, using `Union` we could create this.
 
 ```js
 const Status = Union(['Success', 'Failed', 'Pending']);
@@ -41,9 +41,9 @@ Status.Success({ some: 'stuff' });
 // { "type": "Success", "data": { "some": "stuff" } }
 ```
 
-As you can see here, we have a function that gives us a plain object. In this object we have a `type` key were we store name of our variant and in the `data` key we can store anything we can think of. You might think that storing just the name of the variant isn't enough, because it may cause colisions with other variants of different types and you would be right. We are only going to use the one data type so this is not an issue for us.
+As you can see here we have a function that returns a plain object. In this object we have a `type` key where we store the name of our variant. The `data` key will hold anything we can think of. You might think that storing just the name of the variant isn't enough, because it may cause collisions with other variants of different types and you would be right. Since we are only going to create one data type this is not an issue for us.
 
-If you find this pattern useful and want to use it you need something reliable, consider using a library like [tagmeme](https://www.npmjs.com/package/tagmeme) or [daggy](https://www.npmjs.com/package/daggy) or something else.
+If you find this pattern useful and want to use it, you'll need something reliable, consider using a library like [tagmeme](https://www.npmjs.com/package/tagmeme) or [daggy](https://www.npmjs.com/package/daggy) or something else.
 
 ## Fantasy Land
 
@@ -53,7 +53,7 @@ The github description says the following.
 
 Algebraic structures? What? I know. The wikipedia definition for that doesn't help much either. Best I can offer is a vague sentence that leaves you with the least amount of questions, here I go: A set of values that have some operations associated with them that follow certain rules.
 
-In our case, you can think the variants is our "set of values" and the functions that we will create will be the "operations," as far as the rules goes we follow the Fantasy Land specification.
+In our case, you can think the variants as our "set of values" and the functions that we create will be the "operations," as far as the rules goes we follow the Fantasy Land specification.
 
 ## The Link
 
@@ -98,7 +98,7 @@ function match(value, patterns) {
 }
 ```
 
-Once again we take advantage of the fact that `type` is a `String` and use it to "choose" the pattern that we want, but this time our patterns are inside an object. Now, each "pattern" will be asociated with a method on the `patterns` object and our function `match` will return what the choosen pattern returns. If it can't find the pattern it will try to call a method with the name `_`, this will mimic the `default` keyword on the `switch/case` and if that fails it just returns `null`. With this we can have the behavior we want. 
+Once again we take advantage of the fact that `type` is a `String` and use it to "choose" the pattern that we want. This time around our patterns are inside an object. Now, each "pattern" will be associated with a method on the `patterns` object and our function `match` will return what the chosen pattern returns. If it can't find the pattern it will try to call a method with the name `_`, this will mimic the `default` keyword on the `switch/case` and if that fails it just returns `null`. With this we can have the behavior we want. 
 
 ```js
 match(status, {
@@ -113,9 +113,9 @@ match(status, {
 With this function at our disposal we can now move on.
 
 
-## The Data Type
+## The Data Structure
 
-This is the part where we create the thing we're going to work with. We are going to model a fairly popular concept, an action that might fail. To do this we'll create a union with two variants `Ok` and `Err`, we will call it `Result`. The idea is simple, `Ok` will represent a success and will be use to carry the "expected" value, all our operations will be based on this variant. On the other hand if we get a variant of type `Err` all we want to do is propagate the error, this means that we'll ignore any kind of transformation on this variant.
+This is the part where we create the thing we're going to work with. We are going to model a fairly popular concept, an action that might fail. To do this we'll create a union with two variants `Ok` and `Err`, we will call it `Result`. The idea is simple, `Ok` will represent a success and we'll use it to carry the "expected" value, all our operations will be based on this variant. On the other hand if we get a variant of type `Err` all we want to do is propagate the error, this means that we'll ignore any kind of transformation on this variant.
 
 ```js
 const Result = Union(['Ok', 'Err']);
@@ -137,7 +137,7 @@ Logic dictates that we start with Functor but we are going to take another road.
 
 ### Chain
 
-The `chain` operation lets us interact with the value that is inside our structure and apply a transformation. Sounds easy, right? We do that all the time, but this time we have rules. May I present to you the first law of the day.
+The `chain` operation lets us interact with the value that's inside our structure and apply a transformation. Sounds easy, right? We do that all the time, but this time we have rules. I present to you the first law of the day.
 
 * Associativity
 
@@ -147,11 +147,11 @@ Val.chain(Fx).chain(Gx);
 Val.chain(v => Fx(v).chain(Gx));
 ```
 
-> Notice that the comment says "equivalent to" although in most cases it should have identical results, this doesn't necessarily means that it should be read like equality, it should read more like "it has the same effect as."
+> Notice that the comment says "equivalent to" although in most cases it should have identical results, this doesn't necessarily means that it should be read like equality, it is more like "it has the same effect as."
 
-This law is about the order of the operations. In the first statement notice that it reads like a sequence, it goes one after the other. In the second statement it's like one operation wraps around the other. And this part is interesting, see this `Fx(value).chain(Gx)`? The second `chain` comes directly from `Fx`. We can tell that `Fx` and `Gx` are functions that return a data type that also follows this law.
+This law is about the order of the operations. In the first statement notice that it reads like a sequence, it goes one after the other. In the second statement it's like one operation wraps around the other. And this part is interesting, `Fx(value).chain(Gx)`. That second `chain` comes directly from `Fx`. We can tell that `Fx` and `Gx` are functions that return a data type that also follows this law.
 
-Let's see this in practice with another data type that everyone is familiar with, arrays. It turns out that arrays follow this law (sorta). I know there is no `chain` in the `Array` prototype but there is a `flatMap` which behaves just the same.
+Let's see this in practice with another data type everyone is familiar with, arrays. It turns out that arrays follow this law (sorta). I know there is no `chain` in the `Array` prototype but there is a `flatMap` which behaves just like it.
 
 ```js
 const to_uppercase = (str) => str.toUpperCase();
@@ -180,7 +180,7 @@ Now let's do the same with our data type. Our implementation will be a static me
 Result.chain = Result.match.bind(null, Result.Err);
 ```
 
-Thanks to the power of convenience `Result.match` has all the logic that we need, the only thing we need to do is provide a value for the `err` parameter and just like that we achieve the effect that we want. So `Result.chain` then is a function that expects the `ok` and the `data` parameters. If the variant is of type `err` the error will just be wrapped again in a variant of the same type, like nothing happened. If the variant is of type `Ok` it will call the function we pass in the first argument. 
+Thanks to the power of convenience `Result.match` has all the logic we need, the only thing we need to do is provide a value for the `err` parameter and just like that we achieve the effect we want. So `Result.chain` is a function that expects the `ok` and the `data` parameters. If the variant is of type `err` the error will just be wrapped again in a variant of the same type, like nothing happened. If the variant is of type `Ok` it will call the function we pass in the first argument. 
 
 ```js
 const Val = Result.Ok('hello');
@@ -198,9 +198,9 @@ one.data === two.data;
 // true
 ```
 
-Since our function follows law we know have a way to compose that return other values of the same type. This is specially useful when creating a function composition where arguments of a function are the result of the last.
+Since our function follows law we now have a way to compose functions that return other values of the same type. This is specially useful when creating a function composition where arguments of a function are the result of a previous function call.
 
-`Result.chain` can also be use to create other utility functions. Let's start be creating one that allows us to "extract" a value from the wrapper structure.
+`Result.chain` can also be use to create other utility functions. Let's start by creating one that allows us to "extract" a value from the wrapper structure.
 
 ```js
 const identity = (arg) => arg;
@@ -208,7 +208,7 @@ const identity = (arg) => arg;
 Result.join = Result.chain.bind(null, identity);
 ```
 
-So, we get `Result.join` a function that only waits for the `data` (this is the power of [partial application](@/web-development/learn-fp/partial-application.md)). Let's see it in action.
+So with this we get `Result.join` a function that only waits for the `data` parameter (this is the power of [partial application](@/web-development/learn-fp/partial-application.md)). Let's see it in action.
 
 ```js
 const good_data = Result.Ok('Hello');
@@ -247,7 +247,7 @@ Val.map(v => v);
 Val;
 ```
 
-It might not look interesting but it is. Pay attention to that function on the first statement, `v => v`, you know this one, right? We've used it before, it is known as the `identity` function. In math an identity element is a neutral value that has no effect on the result of the operation, in this is exactly what this function does. But the interesting part is not on the surface, is what we can't see. If the first statement has the same effect as the second then that means that `.map(v => v)` returns another value of the same type, even if we give it the most useless function we could possibly imagine. Let's show this again using arrays as an example.
+It might not look interesting but it is. Pay attention to that function on the first statement, `v => v`, you know this one, right? We've used it before, it is known as the `identity` function. So, in math an identity element is a neutral value that has no effect on the result of the operation and this is exactly what this function does (nothing). But the interesting part is not on the surface, is what we can't see. If the first statement has the same effect as the second, then it means that `.map(v => v)` returns another value of the same type, it does that even if we give it the most useless function we could possibly imagine. Let's show this again using arrays as an example.
 
 
 ```js
@@ -266,13 +266,13 @@ Val[0] === Id[0];
 // true
 ```
 
-That's nice but how does that help us? The important part to understand here is that `.map` should "preserve the shape" of our structure. In this case with arrays, if we call it with an array with one item we get back another array with one item, if we call it with an array with a hundred items we get back another array with a hundred items. Knowing that the result will always have the same type allows us to do stuff like this.
+That's nice but how does that help us? The important part to understand here is that `.map` should "preserve the shape" of our structure. In this case with arrays, if we call it with an array with one item we get back another array with one item, if we call it with an array with one hundred items we get back another array with one hundred items. Knowing that the result will always have the same type allows us to do stuff like this.
 
 ```js
 Val.map(fx).map(gx).map(hx);
 ```
 
-I know what you're thinking. Using `.map` that way with arrays can have a big impact on performance. Shall not be worried, the second law has that covered.
+I know what you're thinking, using `.map` like that way with arrays can have a big impact on performance. Shall not be worried, the second law has that covered.
 
 * Composition
 
@@ -294,7 +294,7 @@ one[0] === two[0];
 // true
 ```
 
-So `.map` gave us the ability to combine those functions in different ways, this gives us the oportunity to optimize for speed or readability. Function composition is a very complex subject and would like to say more, but we don't have time for that right now. If you're curious about it you can read this: [composition techniques](@/web-development/learn-fp/composition-techniques.es.md). 
+So `.map` gave us the ability to combine those functions in different ways, this gives us the opportunity to optimize for speed or readability. Function composition is a very complex subject and I would like to say more but we don't have time for that right now. If you're curious about it you can read this: [composition techniques](@/web-development/learn-fp/composition-techniques.es.md). 
 
 Now is the time to implement the famous `.map` in our structure. You might have notice that this method is very similar to `.chain`, it has almost the same behavior except for one thing, with `.map` we should the guarantee that the result should be a value of the same type.
 
@@ -304,7 +304,7 @@ Result.map = function(fn, data) {
 };
 ```
 
-If you remember `.chain` only executes the callback function if `data` is a variant of type `Ok`, so the only thing we need to do to keep our structure is wrap the result from  `fn` with `Result.Ok`. 
+If you remember the behavior of `.chain` it only executes the callback function if `data` is a variant of type `Ok`, so the only thing we need to do to keep our structure is wrap the result from  `fn` with `Result.Ok`. 
 
 ```js
 const Val = Result.Ok('hello');
@@ -339,7 +339,7 @@ Val.ap(Gx).ap(Fx);
 
 Yes, my thoughts exactly. That first statement is the most confusing thing we've seen so far. This time it looks like `Fx` and `Gx` are not functions, they are data structures. `Gx` has an `.ap` method so it must be the same type as `Val`. And if go further we can tell that `Fx` has a `map` method, that means is a Functor. So for this to work `Val`, `Fx` and `Gx` must implement the Functor and Apply specification. The last piece of the puzzle is this `Fx.map(fx => ... fx(...))`, there are functions involve but they are inside a data structure.
 
-The name of this law and that second statement suggest this is about function composition. So I'm thinking that this should behave just like `.map` but with a plot twist, the callback we get it's trapped inside a Functor. With this we have enough information to make our method. 
+The name of this law and that second statement suggest this is about function composition. I'm thinking that this should behave just like `.map` but with a plot twist, the callback we get it's trapped inside a Functor. With this we have enough information to make our method. 
 
 ```js
 Result.ap = function(res, data) {
@@ -359,7 +359,7 @@ At this point we have problem, `.chain` doesn't give us any guarantee about the 
 Result.map(fn => ..., res);
 ```
 
-In here `.map` has two jobs, it give us access to the function inside `res` and helps us preserve the shape of our structure. So, `.chain` will return anything that `.map` gives it, with this in place we can now have the confidence to call `.ap` multiple times and that is what creates the composition. 
+In here `.map` has two jobs, it give us access to the function inside `res` and helps us preserve the shape of our structure. So, `.chain` will return anything that `.map` gives it, with this in place we can now have the confidence to call `.ap` multiple times. 
 
 The last stop in our trip is this.
 
@@ -385,7 +385,7 @@ Result.unwrap(one) === Result.unwrap(two);
 
 Fine, but what is it good for? Putting a function inside a `Result.Ok` doesn't seem like common thing, why would somebody do that? All fair questions. I believe this is all confusing because `.ap` is only half of the story.
 
-`.ap` can be used to create a helper function called `liftA2`. The goal of this function is to make another function work with values that are wrapped in a structure. Something like this.
+`.ap` can be used to create a helper function called `liftA2`, the goal of this function is to make another function work with values that are wrapped in a structure. Something like this.
 
 ```js
 const Title = Result.Ok('Dr. ');
@@ -442,7 +442,7 @@ The cycle repeats again and finally we get.
 Result.Ok('HELLO!!');
 ```
 
-This is basically the pattern that `liftA2` follows. The only difference is that instead of taking functions to a value, we take values to a function. You'll see.
+This is basically the pattern that `liftA2` follows, the only difference is that instead of taking functions to a value, we take values to a function. You'll see.
 
 ```js
 Result.liftA2 = function(fn, R1, R2) {
@@ -512,7 +512,7 @@ Result.liftN(
 
 ### Applicative
 
-You might have notice that everything we have built is some sort of extention of the previous methods, this will not be the exception. In order for our data structure to be an applicative it must first implement the Apply specification and then it must add one tiny detail. 
+You might have notice that everything we have built is some sort of extension of the previous methods, this will not be the exception. In order for our data structure to be an applicative it must first implement the Apply specification and then it must add one tiny detail. 
 
 The new contribution will be a method that can help us take a value and convert it into the simplest unit of our data structure. It's kinda like a constructor method in a class, the idea is to take any regular value and take to the "context" of our structure so we can start making any kind of operation.
 
@@ -524,7 +524,7 @@ Promise.resolve('hello').then(to_uppercase).then(console.log);
 // HELLO
 ```
 
-After we call `Promise.resolve` our `'hello'` is "inside" a promise and we inmediately call methods like `then` or `catch`. If we wanted to do the same using the constructor we would have to do this.
+After we call `Promise.resolve` our `'hello'` is "inside" a promise and we can immediately call methods like `then` or `catch`. If we wanted to do the same using the constructor we would have to do this.
 
 ```js
 (new Promise((resolve, reject) => { resolve('hello'); }))
@@ -540,7 +540,7 @@ All that extra effort doesn't look very clean, right? This is why a "shortcut" i
 Result.of = Result.Ok;
 ```
 
-I can assure you that is coincidence, it's not always this easy. But really this is everything we need and we can prove that if check the laws.
+I can assure you that is a coincidence, it's not always this easy. But really this is everything we need and we can prove that if we check the laws.
 
 * Identity
 
@@ -591,7 +591,7 @@ M.of(y).ap(U);
 U.ap(M.of(fx => fx(y)));
 ```
 
-This is a tough one. Honestly, I'm not sure I understand what's to prove here. If I had to guess I would say that it doesn't matter which side of `.ap` we have the `.of` method if can treat its content as a constant.
+This is a tough one. Honestly, I'm not sure I understand what's trying to prove here. If I had to guess I would say that it doesn't matter which side of `.ap` we have the `.of` method, if can treat its content as a constant the result will be the same.
 
 ```js
 const value   = 'hello';
@@ -630,7 +630,7 @@ At this point you may be wondering, couldn't we have done this after implementin
 
 So, what problems does this solve? What do we gain? This solves a very specific problem, one that could happen very often if we use Functors and that is nested structures.
 
-Say we want to retrieve a `config` object that we have in `localStorage`. We know this action can fail that's why create a function that uses our `Result` variant. 
+Say we want to retrieve a `config` object that we have in `localStorage`. We know this action can fail that's why we created a function that uses our `Result` variant. 
 
 ```js
 function get_config() {
@@ -642,7 +642,7 @@ function get_config() {
 }
 ```
 
-This works wonders. Now the problem is that `localStorage.getItem` doesn't return an object, the data we want is in a `String`.
+This works wonders. Now the problem is `localStorage.getItem` doesn't return an object, the data we want is in a `String`.
 
 ```js
 '{"dark-mode":true}'
@@ -660,21 +660,21 @@ function safe_parse(data) {
 }
 ```
 
-We know that `JSON.parse` can also fail but that's why figure we could wrap it in a "safe function" that also uses our variant. Now try to use those two together usign `.map`.
+We know that `JSON.parse` can also fail, that's why we figure we could wrap it in a "safe function" that also uses our variant. Now try to use those two together using `.map`.
 
 ```js
 Result.map(safe_parse, get_config());
 // { "type": "Ok", "data": { "type": "Ok", "data": { "dark-mode": true } } }
 ```
 
-Is it what you expected? If we close our eyes and pretend that `get_config` is always successful we could replace it with this.
+Is that what you expected? If we close our eyes and pretend that `get_config` is always successful we could replace it with this.
 
 ```js
 Result.of('{"dark-mode":true}');
 // { "type": "Ok", "data": "{\"dark-mode\":true}" }
 ```
 
-This law tells me if use `.chain` to apply the function to a structure it's the same as applying that function to the data inside the structure. Let's use that, we the perfect function for this situation. 
+This law tells me that if I use `.chain` to apply the function to a structure it's the same as applying that function to the data inside the structure. Let's use that, we have the perfect function for this situation. 
 
 ```js
 const one = Result.chain(identity, Result.of('{"dark-mode":true}'));
@@ -684,7 +684,7 @@ one === two;
 // true
 ```
 
-I hope by now you what I'm going to do. You've seen it before.
+I hope by now you know what I'm going to do. You've seen it before.
 
 ```js
 Result.join = Result.chain.bind(null, identity);
@@ -697,7 +697,7 @@ Result.join(Result.map(safe_parse, get_config()));
 // { "type": "Ok", "data": { "dark-mode": true } }
 ```
 
-We solve our problem. Now here comes the funny thing, in theory we could implment `.chain` using `.join` and `.map`. Using `.join` and `.map` together is so common that `.chain` was created (also, that's why some people call it `.flatMap`).
+We solved our problem. Now here comes the funny thing, in theory we could implement `.chain` using `.join` and `.map`. Using `.join` and `.map` together is so common that `.chain` was created (also, that's why some people call it `.flatMap`). Let's use it.
 
 ```js
 Result.chain(safe_parse, get_config());
@@ -716,7 +716,7 @@ Val.chain(M.of);
 Val;
 ```
 
-We know we can do this but let's check.
+We know we can do this but let's check anyway.
 
 ```js
 const Val = Result.Ok('hello');
@@ -737,13 +737,13 @@ Result.map = function(fn, data) {
 
 It may not look like much because `.of` and `Ok` are the same thing, but if our constructor was a bit more complex (like `Promise`) this could be a nice way to simplify the implementation of `.map`.
 
-And with this close the cycle and end our journey through Fantasy Land.
+And with this we close the cycle and end our journey through Fantasy Land.
 
 ## Conclusion
 
-If you read all of this but couldn't understand all of it, don't worry you can blame me, maybe I didn't explain as well as I thought. It took me like two year to gather the knowledge to write all of this. Even if it takes like a month to get it you are already doing better than me.
+If you read all of this but couldn't understand all of it, don't worry you can blame me, maybe I didn't explain as well as I thought. It took me like two year to gather the knowledge to write this. Even if it takes you like a month to get it, you are already doing better than me.
 
-A nice way to try to understand how this methods work is try to follow the specification using regular class instances, that should be easier to read.
+A nice way to try understand how this methods work is to follow the specification using regular class instances, that should be easier.
 
 I hope you enjoyed the reading and I hope I didn't cause you a headache. Until next time.
 
