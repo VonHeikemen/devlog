@@ -3,7 +3,6 @@ title = "Tagged unions and Fantasy Land"
 description = "Let's use tagged unions to explore the Fantasy Land specification"
 date = 2020-06-12
 lang = "en"
-draft = false
 [taxonomies]
 tags = ["javascript", "functional-programming"]
 +++
