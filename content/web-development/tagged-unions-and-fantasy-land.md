@@ -1,7 +1,7 @@
 +++
 title = "Tagged unions and Fantasy Land" 
 description = "Let's use tagged unions to explore the Fantasy Land specification"
-date = 2020-06-06
+date = 2020-06-12
 lang = "en"
 draft = false
 [taxonomies]
@@ -512,12 +512,11 @@ Result.liftN(
 
 ### Applicative
 
-<!--
-Como habrán notado a estas alturas todo lo que construimos es una especie de extensión de lo anterior, esta no es la excepción. Para que una estructura sea un Applicative primero debe cumplir con la especificación Apply, luego debe agregar un pequeño detalle extra.
+You might have notice that everything we have built is some sort of extention of the previous methods, this will not be the exception. In order for our data structure to be an applicative it must first implement the Apply specification and then it must add one tiny detail. 
 
-El nuevo aporte será un método que nos ayude a construir la unidad más simple de nuestra estructura a partir de un valor. El concepto es similar al de un constructor de una clase, la idea es tener un método que pueda llevar un valor común al "contexto" de nuestra estructura y poder ejecutar cualquier operación de inmediato.
+The new contribution will be a method that can help us take a value and convert it into the simplest unit of our data structure. It's kinda like a constructor method in a class, the idea is to take any regular value and take to the "context" of our structure so we can start making any kind of operation.
 
-Por ejemplo, con la clase `Promise` podemos hacer esto.
+You've probably used something like this before. With the `Promise` class we can do this.
 
 ```js
 Promise.resolve('hello').then(to_uppercase).then(console.log);
@@ -525,7 +524,7 @@ Promise.resolve('hello').then(to_uppercase).then(console.log);
 // HELLO
 ```
 
-Luego de usar `Promise.resolve` nuestro valor `'hello'` queda "dentro" de una promesa y podemos ejecutar sus métodos `then` o `catch` inmediatamente. Si quisiéramos hacer lo mismo usando el constructor tendríamos que hacer esto.
+After we call `Promise.resolve` our `'hello'` is "inside" a promise and we inmediately call methods like `then` or `catch`. If we wanted to do the same using the constructor we would have to do this.
 
 ```js
 (new Promise((resolve, reject) => { resolve('hello'); }))
@@ -535,15 +534,15 @@ Luego de usar `Promise.resolve` nuestro valor `'hello'` queda "dentro" de una pr
 // HELLO
 ```
 
-¿Ven todo el esfuerzo que hay que hacer para lograr el mismo efecto? Es por eso que resulta útil tener un "atajo" para crear una instancia "simple" de nuestra estructura. Es hora de implementarlo en nuestra estructura.
+All that extra effort doesn't look very clean, right? This is why a "shortcut" is useful, we can make a "simple" unit of our data structure without extra steps. It's time to make this for `Result`.
 
 ```js
 Result.of = Result.Ok;
 ```
 
-Les aseguro que eso sólo es una coincidencia, no siempre es tan fácil. Pero en serio eso es todo lo que necesitamos y podemos probarlo usando las leyes.
+I can assure you that is coincidence, it's not always this easy. But really this is everything we need and we can prove that if check the laws.
 
-* Identidad
+* Identity
 
 ```js
 Val.ap(M.of(v => v));
@@ -551,7 +550,7 @@ Val.ap(M.of(v => v));
 Val;
 ```
 
-Nuestro viejo amigo "identidad" vuelve a presentarse para recordarnos que `.ap` en realidad se parece a `.map`.
+Our old friend "identity" comes back to remind us that `.ap` really does behave like `.map`.
 
 ```js
 const Val = Result.Ok('hello');
@@ -562,7 +561,7 @@ Result.unwrap(Val) === Result.unwrap(Id);
 // true
 ```
 
-* Homomorfismo
+* Homomorphism
 
 ```js
 M.of(val).ap(M.of(fx));
@@ -570,7 +569,7 @@ M.of(val).ap(M.of(fx));
 M.of(fx(val));
 ```
 
-Okey, aquí tenemos un nuevo concepto qué interpretar. Hasta donde pude entender un homomorfismo es una especie de transformación donde se mantiene las capacidades del valor original. Pienso que aquí lo que se quiere probar es que `.of` no tiene ninguna influencia cuando se "aplica" una función a un valor.
+Okay, so here we have a new concept we should learn. As far as I can tell an Homomorphism is some kind of transformation where we keep some of the "abilities" of the original value. I think this law tells us that `.of` doesn't have any effect when you "apply" a function to a value.
 
 ```js
 const value = 'hello';
@@ -582,9 +581,9 @@ Result.unwrap(one) === Result.unwrap(two);
 // true
 ```
 
-Para recapitular, en la primera sentencia estamos aplicando `exclaim` a `value` mientras ambos están envueltos en nuestra estructura. En la segunda aplicamos `exclaim` a `value` directamente y luego envolvemos el resultado. Ambas sentencias nos dan el mismo resultado. Con esto probamos que `.of` no tiene nada de especial, que sólo está ahí para crear una instancia de nuestra estructura.
+To recap, in the first statement we apply `exclaim` to `value` while both of them are wrapped inside a variant. In the second statement we apply `exclaim` to `value` directly. In both cases we get the same result. With this we prove that there is nothing special about `.of`, it's just there to create a unit of our data structure.
 
-* Intercambio
+* Interchange
 
 ```js
 M.of(y).ap(U);
@@ -592,7 +591,7 @@ M.of(y).ap(U);
 U.ap(M.of(fx => fx(y)));
 ```
 
-Esta es la más difícil de leer. Honestamente no estoy seguro de entender qué se intenta probar aquí. Si tuviera que adivinar diría que no importa de qué lado de la operación `.ap` se encuentre `.of` si podemos tratar su contenido como una constante entonces el resultado será el mismo.
+This is a tough one. Honestly, I'm not sure I understand what's to prove here. If I had to guess I would say that it doesn't matter which side of `.ap` we have the `.of` method if can treat its content as a constant.
 
 ```js
 const value   = 'hello';
@@ -607,9 +606,9 @@ Result.unwrap(one) === Result.unwrap(two);
 
 ### Monad
 
-Para crear un Monad debemos cumplir con la especificación Applicative y Chain. Entonces, lo que debemos hacer ahora es... nada. En serio, ya no hay nada qué hacer. Felicitaciones han creado un Monad ¿Quieren ver unas leyes?
+To create a Monad we must implement the Applicative and Chain specifications. So, what we have to do now is... nothing. Really, there is nothing left to do. You have created a Monad, congrats! Want to read some laws?
 
-* Identidad - lado izquierdo
+* Identity - left side
 
 ```js
 M.of(a).chain(f);
@@ -617,7 +616,7 @@ M.of(a).chain(f);
 f(a);
 ```
 
-Verificamos.
+We check.
 
 ```js
 const one = Result.chain(exclaim, Result.of('hello'));
@@ -627,11 +626,11 @@ one === two;
 // true
 ```
 
-En este punto se deben estar preguntando ¿No pudimos haber hecho esto después de implementar `.chain` (ya que `.of` es un alias de `Ok`)? La respuesta es sí, pero no sería divertido. Se habrían perdido de todo el contexto.
+At this point you may be wondering, couldn't we have done this after implementing `.chain` (since` .of` is an alias for `Ok`)? The answer is yes, but that wouldn't be fun.
 
-¿Qué problema resuelve esto? ¿Qué ganamos? Por lo que he visto resuelve un problema muy específico, uno que puede ocurrir con mayor frecuencia si usan Functors, y ese es el de las estructuras anidadas.
+So, what problems does this solve? What do we gain? This solves a very specific problem, one that could happen very often if we use Functors and that is nested structures.
 
-Imaginemos que queremos extraer un objeto `config` que está guardado en el `localStorage` de nuestro navegador. Como sabemos que esta operación puede fallar creamos una función que usa nuestra variante `Result`.
+Say we want to retrieve a `config` object that we have in `localStorage`. We know this action can fail that's why create a function that uses our `Result` variant. 
 
 ```js
 function get_config() {
@@ -639,17 +638,17 @@ function get_config() {
 
   return config 
     ? Result.Ok(config)
-    : Result.Err({ message: 'Configuración no encontrada' });
+    : Result.Err({ message: 'Config not found' });
 }
 ```
 
-Eso funciona de maravilla. Ahora el problema es que `localStorage.getItem` no devuelve un objeto, la información que queremos está en forma de un `String`.
+This works wonders. Now the problem is that `localStorage.getItem` doesn't return an object, the data we want is in a `String`.
 
 ```js
 '{"dark-mode":true}'
 ```
 
-Por suerte tenemos una función que puede transformar ese texto en un objeto.
+We anticipated this so we created a function that can transform this into an object.
 
 ```js
 function safe_parse(data) {
@@ -661,21 +660,21 @@ function safe_parse(data) {
 }
 ```
 
-Sabemos que `JSON.parse` puede fallar por eso se nos ocurrió la brillante idea de envolverlo en una "función segura" que también usa nuestra variante `Result`. Ahora intenten unir estas dos funciones usando `.map`.
+We know that `JSON.parse` can also fail but that's why figure we could wrap it in a "safe function" that also uses our variant. Now try to use those two together usign `.map`.
 
 ```js
 Result.map(safe_parse, get_config());
 // { "type": "Ok", "data": { "type": "Ok", "data": { "dark-mode": true } } }
 ```
 
-¿No es lo que querían, cierto? Si cerramos los ojos e imaginamos que `get_config` siempre nos da un resultado positivo podríamos reemplazarlo con esto.
+Is it what you expected? If we close our eyes and pretend that `get_config` is always successful we could replace it with this.
 
 ```js
 Result.of('{"dark-mode":true}');
 // { "type": "Ok", "data": "{\"dark-mode\":true}" }
 ```
 
-Esta ley me dice que si uso `.chain` para aplicar una función a una estructura, es lo mismo que usar dicha función sobre el contenido dentro de la estructura. Aprovechemos eso, ya tenemos la función ideal para este caso.
+This law tells me if use `.chain` to apply the function to a structure it's the same as applying that function to the data inside the structure. Let's use that, we the perfect function for this situation. 
 
 ```js
 const one = Result.chain(identity, Result.of('{"dark-mode":true}'));
@@ -685,31 +684,31 @@ one === two;
 // true
 ```
 
-Espero que sepan qué haré ahora. Ya lo han visto antes.
+I hope by now you what I'm going to do. You've seen it before.
 
 ```js
 Result.join = Result.chain.bind(null, identity);
 ```
 
-Sí, `.join`. Esto ya empieza a parecerse a una precuela. Vamos a abrir nuestros ojos nuevamente y volvamos a nuestro problema con `.map`.
+Yes, it's `.join`. This is starting to look like a prequel. Let's open our eyes now and go back to our problem with `.map`.
 
 ```js
 Result.join(Result.map(safe_parse, get_config()));
 // { "type": "Ok", "data": { "dark-mode": true } }
 ```
 
-Resolvimos nuestro problema. Aquí viene lo gracioso, en teoría podríamos implementar `.chain` usando `.join` y `.map`. Verán, usar `.join` y `.map` en conjunto es un patrón tan común que por eso existe `.chain` (también es la razón por la que algunos lo llaman `flatMap` en lugar de `chain`).
+We solve our problem. Now here comes the funny thing, in theory we could implment `.chain` using `.join` and `.map`. Using `.join` and `.map` together is so common that `.chain` was created (also, that's why some people call it `.flatMap`).
 
 ```js
 Result.chain(safe_parse, get_config());
 // { "type": "Ok", "data": { "dark-mode": true } }
 ```
 
-¿No es genial cuando todo queda en un bonito ciclo? Pero no se levanten de sus asientos todavía, nos queda la escena post-créditos.
+Isn't it great when everything is wrap in a nice cycle? But don't get up your seats just yet, we still have a post-credit scene.
 
-* Identidad - lado derecho
+* Identity - right side
 
-Se veía venir. Bien, ¿Qué dice esta ley?
+So predictable. Alright, what does it say?
 
 ```js
 Val.chain(M.of);
@@ -717,7 +716,7 @@ Val.chain(M.of);
 Val;
 ```
 
-Sabemos que podemos cumplirla pero sólo por si acaso, vamos a verificar.
+We know we can do this but let's check.
 
 ```js
 const Val = Result.Ok('hello');
@@ -728,7 +727,7 @@ Result.unwrap(Val) === Result.unwrap(Id);
 // true
 ```
 
-¿Qué podemos hacer con esto? Bueno, lo único que se me ocurre por ahora es hacer una implementación más genérica de `.map`.
+Nice, what can we do with this? Well, the only thing I can think of right now is making a more generic version of `.map`.
 
 ```js
 Result.map = function(fn, data) {
@@ -736,21 +735,19 @@ Result.map = function(fn, data) {
 };
 ```
 
-Puede que no parezca muy útil en nuestra estructura porque `.of` y `Ok` tienen la misma funcionalidad, pero si nuestro constructor y `.of` tuvieran diferente implementación (como en el caso de la clase `Promise`) esta puede ser una buena manera de simplificar la implementación de `.map`.
+It may not look like much because `.of` and `Ok` are the same thing, but if our constructor was a bit more complex (like `Promise`) this could be a nice way to simplify the implementation of `.map`.
 
-Y con esto completamos el ciclo y terminamos nuestro viaje por Fantasy Land.
+And with this close the cycle and end our journey through Fantasy Land.
 
-## Conclusión
+## Conclusion
 
-Si leyeron todo esto y aún así no pudieron entender todo, no se preocupen, puede ser porque no me expliqué bien. A mí me tomó cerca de dos años acumular el conocimiento necesario para escribir esto. Incluso si les toma un mes entenderlo, van por mejor camino que yo.
+If you read all of this but couldn't understand all of it, don't worry you can blame me, maybe I didn't explain as well as I thought. It took me like two year to gather the knowledge to write all of this. Even if it takes like a month to get it you are already doing better than me.
 
-Un buen ejercicio que pueden hacer para entender mejor es tratar de cumplir con la especificación usando clases. Debería ser más fácil de esa manera.
+A nice way to try to understand how this methods work is try to follow the specification using regular class instances, that should be easier to read.
 
-Espero que hayan disfrutado la lectura y no les haya dado dolor de cabeza. Hasta la próxima.
+I hope you enjoyed the reading and I hope I didn't cause you a headache. Until next time.
 
-## Fuentes
+## Sources
 - [Fantasy Land](https://github.com/fantasyland/fantasy-land)
 - [Fantas, Eel, and Specification](http://www.tomharding.me/fantasy-land/)
 - [Algebraic Structures Explained - Part 1 - Base Definitions](https://dev.to/macsikora/algebraic-structures-explained-part-1-base-definitions-2576)
-
--->
