@@ -65,6 +65,7 @@ By now you must know how to manipulate functions and make them do your bidding. 
 
 - [Reduce: how and when](@/web-development/learn-fp/reduce-how-and-when.md)
 - [Lenses: an alternative to getters and setters](@/web-development/learn-fp/lenses-a-k-a-composable-getters-and-setters.es.md)
+- [Exploring Fantasy Land](@/web-development/tagged-unions-and-fantasy-land.md)
 
 ### More interesting talks
 
