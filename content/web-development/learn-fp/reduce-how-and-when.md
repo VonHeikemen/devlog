@@ -180,10 +180,10 @@ Turns out the pattern we've been following to create the `callback` for `reduce`
 You can prove you have a function that follows the rules of a semigroup, all you need to do is make sure it is associative. For example with our `max` function we can do.
 
 ```js
-const max_1 = max(max(40, 42), 41); // => 42
-const max_2 = max(40, max(42, 41)); // => 42
+const max_1 = max(max(40, 42), 41);
+const max_2 = max(40, max(42, 41));
 
-max_1 === max_2
+max_1 === max_2;
 // Expected output: true
 ```
 
@@ -359,10 +359,12 @@ Looks like everything is good, but it's not. If check you `array6[0]` you'll see
 
 ```js
 reduce(array6, {}, Object.assign);
-// Expected value: { "name": "Harold", "lastname": "Cooper", "state": "wrong" }
+// Expected value: 
+// { "name": "Harold", "lastname": "Cooper", "state": "wrong" }
 
-array6
-// Expected value: [ { "name": "Harold" }, { "lastname": "Cooper" }, { "state": "wrong" } ]
+array6;
+// Expected value: 
+// [ { "name": "Harold" }, { "lastname": "Cooper" }, { "state": "wrong" } ]
 ```
 
 We can say that when we work with an array of values that follow the rules of the monoids we can be certain that `reduce` will be a good choice to process that.

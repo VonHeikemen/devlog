@@ -57,14 +57,14 @@ Just in case you missed it. In this talk (the source of the previous article) yo
 
 By now you must know how to manipulate functions and make them do your bidding. But I bet there are still things you want to know in more detail, two in particular: Functors and Monads. So, I'll try my best to tell you how you can use them to your advantage.
 
-- [Have you met Functors?](@/web-development/learn-fp/the-power-of-map.es.md)
+- [Have you met Functors?](@/web-development/learn-fp/the-power-of-map.md)
 
-- [Using a Maybe](@/web-development/learn-fp/using-a-maybe.es.md)
+- [Using a Maybe](@/web-development/learn-fp/using-a-maybe.md)
 
 ## Extra content
 
 - [Reduce: how and when](@/web-development/learn-fp/reduce-how-and-when.md)
-- [Lenses: an alternative to getters and setters](@/web-development/learn-fp/lenses-a-k-a-composable-getters-and-setters.es.md)
+- [Lenses: an alternative to getters and setters](@/web-development/learn-fp/lenses-a-k-a-composable-getters-and-setters.md)
 - [Exploring Fantasy Land](@/web-development/tagged-unions-and-fantasy-land.md)
 
 ### More interesting talks

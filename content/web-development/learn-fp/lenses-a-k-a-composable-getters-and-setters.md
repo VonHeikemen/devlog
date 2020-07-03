@@ -212,7 +212,6 @@ const uppercase_alice = over(Lprop('name'), upper, alice);
 // see?
 get_name(uppercase_alice) // => "ALICE JONES"
 
-// sanity check
 get_name(alice)           // => "Alice Jones"
 ```
 
@@ -223,7 +222,6 @@ const alice_smith = set(Lprop('name'), 'Alice smith', alice);
 
 get_name(alice_smith) // => "Alice smith"
 
-// sanity check
 get_name(alice)       // => "Alice Jones"
 ```
 

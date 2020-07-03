@@ -13,7 +13,7 @@ tasks:
   serve:
     desc: Start development server
     cmds:
-      - zola serve --port 3000
+      - zola serve --drafts --port 3000
 
   build:
     desc: Build site on current directory
