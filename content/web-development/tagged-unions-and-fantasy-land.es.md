@@ -189,7 +189,7 @@ const Exclaim   = (str) => Result.Ok(exclaim(str));
 const one = Result.chain(Exclaim, Result.chain(Uppercase, Val));
 const two = Result.chain(v => Result.chain(Exclaim, Uppercase(v)), Val);
 
-one.type === two.type
+one.type === two.type;
 // true
 
 one.data === two.data;
@@ -297,7 +297,7 @@ Es hora de implementar el famoso `.map` para nuestra estructura. Como habrán no
 
 ```js
 Result.map = function(fn, data) { 
-  return Result.chain(v => Result.Ok(fn(v)), data)
+  return Result.chain(v => Result.Ok(fn(v)), data);
 };
 ```
 
@@ -408,9 +408,9 @@ Result.map(composition, Exclaim);
 Esta expresión extrae la función dentro de `Exclaim` y la aplica a `composition`.
 
 ```js
-fx => gx => arg => fx(gx(arg));
+fx => gx => arg => fx(gx(arg))
 // se transforma en
-gx => arg => exclaim(gx(arg));
+gx => arg => exclaim(gx(arg))
 ```
 
 Esa transformación queda en una variante de tipo `Ok` que es lo que `.ap` espera como primer argumento. Entonces lo siguiente que tenemos es esto.
@@ -522,8 +522,9 @@ Promise.resolve('hello').then(to_uppercase).then(console.log);
 Luego de usar `Promise.resolve` nuestro valor `'hello'` queda "dentro" de una promesa y podemos ejecutar sus métodos `then` o `catch` inmediatamente. Si quisiéramos hacer lo mismo usando el constructor tendríamos que hacer esto.
 
 ```js
-(new Promise((resolve, reject) => { resolve('hello'); }))
-  .then(to_uppercase)
+const promise = new Promise((resolve, reject) => { resolve('hello'); });
+
+promise.then(to_uppercase)
   .then(console.log);
 // Promise { <state>: "pending" }
 // HELLO
@@ -631,9 +632,11 @@ Imaginemos que queremos extraer un objeto `config` que está guardado en el `loc
 function get_config() {
   const config = localStorage.getItem('config');
 
-  return config 
-    ? Result.Ok(config)
-    : Result.Err({ message: 'Configuración no encontrada' });
+  if(config) {
+    return Result.Ok(config); 
+  }
+
+  return Result.Err({ message: 'Configuración no encontrada' });
 }
 ```
 

@@ -190,7 +190,7 @@ const Exclaim   = (str) => Result.Ok(exclaim(str));
 const one = Result.chain(Exclaim, Result.chain(Uppercase, Val));
 const two = Result.chain(v => Result.chain(Exclaim, Uppercase(v)), Val);
 
-one.type === two.type
+one.type === two.type;
 // true
 
 one.data === two.data;
@@ -299,7 +299,7 @@ Now is the time to implement the famous `.map` in our structure. You might have 
 
 ```js
 Result.map = function(fn, data) { 
-  return Result.chain(v => Result.Ok(fn(v)), data)
+  return Result.chain(v => Result.Ok(fn(v)), data);
 };
 ```
 
@@ -406,7 +406,7 @@ Result.ap(Result.ap(Result.map(composition, Exclaim), Uppercase), Val);
 Let's see what happens here. It all begins with `.map`.
 
 ```js
-Result.map(composition, Exclaim)
+Result.map(composition, Exclaim);
 ```
 
 In this expression we extract the function inside `Exclaim` and we apply it to `composition`.
@@ -526,8 +526,9 @@ Promise.resolve('hello').then(to_uppercase).then(console.log);
 After we call `Promise.resolve` our `'hello'` is "inside" a promise and we can immediately call methods like `then` or `catch`. If we wanted to do the same using the constructor we would have to do this.
 
 ```js
-(new Promise((resolve, reject) => { resolve('hello'); }))
-  .then(to_uppercase)
+const promise = new Promise((resolve, reject) => { resolve('hello'); });
+
+promise.then(to_uppercase)
   .then(console.log);
 // Promise { <state>: "pending" }
 // HELLO
@@ -635,9 +636,11 @@ Say we want to retrieve a `config` object that we have in `localStorage`. We kno
 function get_config() {
   const config = localStorage.getItem('config');
 
-  return config 
-    ? Result.Ok(config)
-    : Result.Err({ message: 'Config not found' });
+  if(config) {
+    return Result.Ok(config);
+  }
+    
+  return Result.Err({ message: 'Config not found' });
 }
 ```
 

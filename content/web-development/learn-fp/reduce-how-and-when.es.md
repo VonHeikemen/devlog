@@ -180,10 +180,10 @@ Resulta que el patrón que hemos estado siguiendo para crear el `callback` que n
 Una manera de probar que tienen una operación que sigue las reglas de un semigrupo es asegurarse de que la función cumple con la propiedad asociativa. Nuestra función `max` por ejemplo.
 
 ```js
-const max_1 = max(max(40, 42), 41); // => 42
-const max_2 = max(40, max(42, 41)); // => 42
+const max_1 = max(max(40, 42), 41);
+const max_2 = max(40, max(42, 41));
 
-max_1 === max_2
+max_1 === max_2;
 // valor esperado: true
 ```
 
@@ -359,10 +359,12 @@ Parecería que todo está bien, pero no es así. Si revisan `array6[0]` verán q
 
 ```js
 reduce(array6, {}, Object.assign);
-// Valor esperado: { "name": "Harold", "lastname": "Cooper", "state": "wrong" }
+// Valor esperado: 
+// { "name": "Harold", "lastname": "Cooper", "state": "wrong" }
 
-array6
-// Valor esperado: [ { "name": "Harold" }, { "lastname": "Cooper" }, { "state": "wrong" } ]
+array6;
+// Valor esperado: 
+// [ { "name": "Harold" }, { "lastname": "Cooper" }, { "state": "wrong" } ]
 ```
 
 Podemos decir que cuando trabajamos con un arreglo de estructuras que siguen las reglas de los monoid podemos estar seguros que `reduce` será una buena opción para procesarlo.
