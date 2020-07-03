@@ -1,6 +1,7 @@
 {% import "macros.html" as macros %}
 
 {% set env = get_env(name="ENV", default="development") %}
+{% set payment_pointer = get_env(name="PAYMENT_POINTER", default=false) %}
 
 {% if lang %}
   {% set current_lang = lang %}

@@ -7,6 +7,10 @@
 {% block extra_head %}
   <meta name="keywords" content="{{page.taxonomies.tags | join(sep=', ')}}, {{ config.extra.site_keywords | join(sep=', ')}}">
 
+  {% if payment_pointer %}
+    <meta name="monetization" content="{{ payment_pointer | trim }}">
+  {% endif %}
+
   {% if page.description %}
     <meta name="description" content="{{page.description}}">
   {% endif %}
