@@ -340,24 +340,21 @@ filter (Boolean) ([true, '', null, 'that']);
 Volviendo al tema de la magia, pueden "automatizar" el proceso de curry usando una función.
 
 ```js
-function curry(fn, arity) {
+function curry(fn, arity, ...rest) {
   if (arguments.length === 1) {
-    // Adivina cuantos parámetros se necesitan
+    // Adivina cuantos argumentos se necesitan
     // Esto no funciona todo el tiempo.
     arity = fn.length;
   }
 
-  // Ignora `fn` y `arity`, pon el resto es `rest``
-  const rest = Array.prototype.slice.call(arguments, 2);
-
   // ¿Tenemos lo que necesitamos?
   if (arity <= rest.length) {
-    return fn.apply(fn, rest);
+    return fn(...rest);
   }
 
-  // Ejecuta `curry.bind` con `fn`, `arity` y `rest` como parámetros
+  // Ejecuta `curry.bind` con `fn`, `arity` y `rest` como argumentos
   // retorna una función que espera el resto
-  return curry.bind.apply(curry, [null, fn, arity, ...rest]);
+  return curry.bind(null, fn, arity, ...rest);
 }
 ```
 

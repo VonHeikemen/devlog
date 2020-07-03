@@ -339,7 +339,7 @@ Notice the extra pair of parenthesis? That's the second function. You'll need on
 Going back to the subject of magic, you can "automate" the process of currying using a helper function.
 
 ```js
-function curry(fn, arity) {
+function curry(fn, arity, ...rest) {
   if (arguments.length === 1) {
     // Guess how many arguments
     // the function needs.
@@ -347,17 +347,14 @@ function curry(fn, arity) {
     arity = fn.length;
   }
 
-  // Omit `fn` and `arity`, gather the rest
-  const rest = Array.prototype.slice.call(arguments, 2);
-
   // Do we have what we need?
   if (arity <= rest.length) {
-    return fn.apply(fn, rest);
+    return fn(...rest);
   }
 
   // Execute `curry.bind` with `fn`, `arity` and `rest` as arguments
   // it will return a function waiting for more arguments
-  return curry.bind.apply(curry, [null, fn, arity, ...rest]);
+  return curry.bind(null, fn, arity, ...rest);
 }
 ```
 
