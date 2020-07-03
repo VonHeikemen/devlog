@@ -53,5 +53,5 @@ hyde_theme = "theme-base-custom"
 hyde_sticky = true
 hyde_reverse = false
 hyde_links = [
-  {url = "/", name = "Portfolio"},
+  {url = "/", name = "Whoami"},
 ]
