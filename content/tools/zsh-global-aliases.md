@@ -11,7 +11,7 @@ If you have spend a significant amount of time writing commands in a shell chanc
 
 ## A quick recap
 
-The tipical situation where find you yourself in need of an alias is when you have a command you use often, like very often, so much that you are kinda tired of typing that thing over and over again. Let's take this command as an example:
+The typical situation where find you yourself in need of an alias is when you have a command you use often, like very often, so much that you are kinda tired of typing that thing over and over again. Let's take this command as an example:
 
 ```sh
 tmux new-session -A -D -s work
@@ -71,7 +71,7 @@ du --max-depth=1 L
 
 > [This is what it does](https://explainshell.com/explain?cmd=du+--max-depth%3D1+%7C+less). It may take a while if you have bunch of stuff in your current working directory.
 
-See? This is convenient, useful and dangerous at the same time. Now everytime a lonely `L` appears without quotes in any part of your command it will get replaced by `| less`. Sometimes that's not what you want. If you try to remove the alias using the `unalias` command like this.
+See? This is convenient, useful and dangerous at the same time. Now every time a lonely `L` appears without quotes in any part of your command it will get replaced by `| less`. Sometimes that's not what you want. If you try to remove the alias using the `unalias` command like this.
 
 ```sh
 unalias L
@@ -85,7 +85,7 @@ You are actually running this command.
 unalias | less
 ```
 
-To minimize the risk of confusion it is adviced that your global alias is in all caps, that is to make it standout from the rest of the command.
+To minimize the risk of confusion it is advised that your global alias is in all caps, that is to make it standout from the rest of the command.
 
 By now you probably think this is stupid and a very bad idea but there is hope.
 
@@ -102,9 +102,9 @@ bindkey | grep expand_alias
 
 You should get: `"^Xa" _expand_alias`. That means it's bound to `ctrl+x a`.
 
-With this new found knowledge we can create an alias for something that is very dificult to remember (or just too damn long to type) and then expand it before running the command.
+With this new found knowledge we can create an alias for something that is very difficult to remember (or just too damn long to type) and then expand it before running the command.
 
-Do you remember exactly how is it that you can supress the stderr messages in a command? No? Well, there you go, there is your alias.
+Do you remember exactly how is it that you can suppress the stderr messages in a command? No? Well, there you go, there is your alias.
 
 ```sh
 alias -g @noerr="2> /dev/null"
