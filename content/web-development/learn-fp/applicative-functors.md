@@ -27,9 +27,9 @@ numbers.map(plus_one);
 
 What happens here?
 
-We have a number wrapped in an array, we use `map` to gain access to it and transform it using a callback function, and then the new value of the number gets wrapped in another array. That's it. That's basically the behavior you want in a functor.
+We have a number wrapped in an array, we use `map` to gain access to it and transform it using a callback function, and then the new value of the number gets wrapped in another array. That's it. That's basically the behaviour you want in a functor.
 
-Now, arrays are not the only ones that have this behavior, there is another data type that acts like this, `Promise`. In a `Promise` we don't have a `map` but we have a `then` which is close enough.
+Now, arrays are not the only ones that have this behaviour, there is another data type that acts like this, `Promise`. In a `Promise` we don't have a `map` but we have a `then` which is close enough.
 
 ```js
 const number = Promise.resolve(1);
@@ -72,7 +72,7 @@ Good question. The answer is, you wouldn't. I mean in the context of javascript 
 
 Back to our definition. Normally if you have a function and a value you would be able to apply the function using this syntax: `some_function(some_value)`. That doesn't work if both are inside another structure. To "fix" this, applicatives have a method called `ap` (short for apply) which takes care of unwrapping each functor and applying the function to the value.
 
-At this point I would love to show an example of a built-in data type that follows the rules of applicatives but I don't know of any. But do not fear, let's take this as an oportunity to do something else.
+At this point I would love to show an example of a built-in data type that follows the rules of applicatives but I don't know of any. But do not fear, let's take this as an opportunity to do something else.
 
 ## Building an Applicative from scratch
 
@@ -130,7 +130,7 @@ Now that we have what we want, let's go to the next step.
 
 As you know applicatives are functors, it means that now we need a `map`.
 
-Let's go over one more time. What is expected behavior of `map`?
+Let's go over one more time. What is expected behaviour of `map`?
 
 1. It should give us access to the inner value through a callback function.
 2. It should return a new container of the same type. In our case it should return another `Task`.
@@ -264,7 +264,7 @@ I have a good news and bad news. The good news is that we totally can. The bad n
 
 Let's keep going with the `Task` theme we got going on. Let's say that we want to use `map` and `ap` with a `Promise` but we don't want create a new data type. What do we do? Some good old functions will do.
 
-If you know the patterns and behaviors you should be looking for, writing some static functions in an object will be enough. This what our `Task` would look like as static functions (minus the "lazy" part).
+If you know the patterns and behaviours you should be looking for, writing some static functions in an object will be enough. This what our `Task` would look like as static functions (minus the "lazy" part).
 
 ```js
 const Task = {
@@ -298,9 +298,9 @@ Task.ap(Task.of(exclaim), Task.of('hello'))
   .then(console.log);
 ```
 
-I can feel your skepticism from here. Be patient, this will be good. Now, `map` looks kinda useful but `ap` not so much, right? Don't worry, we can still use `ap` for a greater good. What if I told you we can have like an "enhanced" version of `map`? Our `map` just works with functions that recieve one argument and that's good but sometimes we need more.
+I can feel your scepticism from here. Be patient, this will be good. Now, `map` looks kinda useful but `ap` not so much, right? Don't worry, we can still use `ap` for a greater good. What if I told you we can have like an "enhanced" version of `map`? Our `map` just works with functions that receive one argument and that's good but sometimes we need more.
 
-Say that we have a function that needs two arguments but everytime we use it those arguments come from two different promises. In our imaginary situation we have these functions. 
+Say that we have a function that needs two arguments but every time we use it those arguments come from two different promises. In our imaginary situation we have these functions. 
 
 ```js
 function get_username() {
@@ -322,7 +322,7 @@ function format_message(name, place) {
 }
 ```
 
-When we use `format_message` its arguments almost everytime come from those other functions `get_username` and `get_location`. They are asynchronous, so you might be tempted to use `Async/await` but that wouldn't be the best idea. Those two don't depend on each other, we will be wasting time if we make them run sequentially when they could be running concurrently. One solution can be found in the form of `Promise.all`, and it looks like this.
+When we use `format_message` its arguments almost every time come from those other functions `get_username` and `get_location`. They are asynchronous, so you might be tempted to use `Async/await` but that wouldn't be the best idea. Those two don't depend on each other, we will be wasting time if we make them run sequentially when they could be running concurrently. One solution can be found in the form of `Promise.all`, and it looks like this.
 
 ```js
 Promise.all([get_username(), get_location()])
