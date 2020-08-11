@@ -130,7 +130,7 @@ Now that we have what we want, let's go to the next step.
 
 As you know applicatives are functors, it means that now we need a `map`.
 
-Let's go over one more time. What is expected behaviour of `map`?
+Let's go over one more time. What is the expected behaviour of `map`?
 
 1. It should give us access to the inner value through a callback function.
 2. It should return a new container of the same type. In our case it should return another `Task`.
