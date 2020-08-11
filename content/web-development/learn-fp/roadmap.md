@@ -59,6 +59,8 @@ By now you must know how to manipulate functions and make them do your bidding. 
 
 - [Have you met Functors?](@/web-development/learn-fp/the-power-of-map.md)
 
+- [Something about Applicative Functors](@/web-development/learn-fp/applicative-functors.md)
+
 - [Using a Maybe](@/web-development/learn-fp/using-a-maybe.md)
 
 ## Extra content

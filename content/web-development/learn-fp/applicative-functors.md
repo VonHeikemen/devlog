@@ -4,7 +4,7 @@ description = "let's use javascript to learn some applicatives for a greater goo
 date = 2020-08-11
 lang = "en"
 [taxonomies]
-tags = ["javascript", "functional-progamming"]
+tags = ["javascript", "functional-programming"]
 +++
 
 What are they indeed. Our goal for today will be to learn about applicative functors using javascript. Yes, javascript. Don't judge me, it's what I know. We'll cover things like how to create them, how you can spot them in the wild and a somewhat useful use case.
