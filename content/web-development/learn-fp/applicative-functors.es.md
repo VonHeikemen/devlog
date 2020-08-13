@@ -48,7 +48,7 @@ Y ese es el patrón. Ya hemos cubierto todo lo que necesitamos saber sobre los f
 
 ## Applicatives
 
-Resulta que los aplicativos son functors con caraterísticas extras. Ellos nos dan la habilidad de mezclar dos functors. Especificamente, nos permiten aplicar una función dentro de un functor a un valor que también esta dentro de un functor.
+Resulta que los aplicativos son functors con características extras. Ellos nos dan la habilidad de mezclar dos functors. Específicamente, nos permiten aplicar una función dentro de un functor a un valor que también esta dentro de un functor.
 
 Espera... ¿qué? ¿Una función dentro de un functor?
 
