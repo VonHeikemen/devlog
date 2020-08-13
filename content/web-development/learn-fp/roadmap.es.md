@@ -60,6 +60,8 @@ Ya tienen una idea de cómo manipular funciones y adaptarlas a sus necesidades. 
 
 - [Hablando de Functors](@/web-development/learn-fp/the-power-of-map.es.md)
 
+- [Un poco de Functor Aplicativos](@/web-development/learn-fp/applicative-functors.es.md)
+
 - [Usando un Maybe](@/web-development/learn-fp/using-a-maybe.es.md)
 
 ## Contenido extra
