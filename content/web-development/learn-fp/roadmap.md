@@ -61,6 +61,8 @@ By now you must know how to manipulate functions and make them do your bidding. 
 
 - [Something about Applicative Functors](@/web-development/learn-fp/applicative-functors.md)
 
+- [An Introduction to Monads](@/web-development/learn-fp/an-introduction-to-monads-in-js.md)
+
 - [Using a Maybe](@/web-development/learn-fp/using-a-maybe.md)
 
 ## Extra content
