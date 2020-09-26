@@ -62,6 +62,8 @@ Ya tienen una idea de cómo manipular funciones y adaptarlas a sus necesidades. 
 
 - [Un poco de Functor Aplicativos](@/web-development/learn-fp/applicative-functors.es.md)
 
+- [Una Introducción a los Monads](@/web-development/learn-fp/an-introduction-to-monads-in-js.es.md)
+
 - [Usando un Maybe](@/web-development/learn-fp/using-a-maybe.es.md)
 
 ## Contenido extra
