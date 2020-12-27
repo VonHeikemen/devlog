@@ -138,13 +138,13 @@ We want to transform things, what do we do? Add a function.
 + data.filter(is_even).map(add_message);
 ```
 
-See what I mean? I'm not going to claim this is better, let's just say it's more "expresive". In this case when we want to extend our process we compose functions.
+See what I mean? I'm not going to claim this is better, let's just say it's more "expressive". In this case when we want to extend our process we compose functions.
 
 But as we all know this is not a perfect solution. We already came across a problem: not every collection implements these methods. Another problem that may arise has to do with performance. Each method is the equivalent of a `for` loop, so it may not be the best idea to have a long chain of `filter`s and `map`s.
 
 This is where transducers shine, with them we can build a chain of operations in a way that's efficient and declarative. They are not going to be as fast as a `for` loop, but it may be good way to improve performance when you have a long chain of functions and a collection with many, many items.
 
-Unlike array methods transducers are not attached to a prototype, this gives us the oportunity to reuse the exact same function in multiple types of collections. We could for example implement `filter` as a transducer once and use that with arrays, `Set`s, [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and other types. Sound great, right?
+Unlike array methods transducers are not attached to a prototype, this gives us the opportunity to reuse the exact same function in multiple types of collections. We could for example implement `filter` as a transducer once and use that with arrays, `Set`s, [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) and other types. Sound great, right?
 
 ## How do they work?
 
@@ -167,7 +167,7 @@ function compose(...fns) {
 }
 ```
 
-When we combine transducers using `compose` what we get in return is another transducer. But that's not the end of the story, because a transducer returns a `reducer` we need to do something with that, and what other function do you know that needs a `reducer`? Our friend `reduce`, of course. We'll be treating `reduce` like a protocol, it will give us the oportunity to process each item in the collection and also transform the collection itself.
+When we combine transducers using `compose` what we get in return is another transducer. But that's not the end of the story, because a transducer returns a `reducer` we need to do something with that, and what other function do you know that needs a `reducer`? Our friend `reduce`, of course. We'll be treating `reduce` like a protocol, it will give us the opportunity to process each item in the collection and also transform the collection itself.
 
 Enough theory for now, let's do something. Let's make a `filter` transducer.
 
@@ -183,7 +183,7 @@ function filter(predicate) {
 }
 ```
 
-That's a good start but is not enough. We know that at some point we need to compose this with another transducer. So we also need to recieve a `reducer`, this will be the next "step" in the composition.
+That's a good start but is not enough. We know that at some point we need to compose this with another transducer. So we also need to receive a `reducer`, this will be the next "step" in the composition.
 
 ```js
 function filter(predicate, next) {
@@ -309,7 +309,7 @@ data.reduce(transducer(combine), []);
 // Array [ "The number is: 2" ]
 ```
 
-This is good, very good. There is one more detail we need to address, compatilibity. I did mention that transducers work on different types but in here we are using `Array.reduce`. We actually need to control the `reduce` function, so let's make our own.
+This is good, very good. There is one more detail we need to address, compatibility. I did mention that transducers work on different types but in here we are using `Array.reduce`. We actually need to control the `reduce` function, so let's make our own.
 
 Since javascript has the iterable protocol, we can use that to save ourselves some troubles. With this our transducers will be compatible with multiple types of collections.
 
@@ -419,7 +419,7 @@ There is one more thing you need to know.
 
 So far I've been showing transducers as functions that return a `reducer`, but that was just to show you idea behind them. These things work but the problem is they are limited. There are a few things that our implementation doesn't support.
 
-* An initialization hook: If the initial value is not provided, the transducer should have the oportunity to produce one.
+* An initialization hook: If the initial value is not provided, the transducer should have the opportunity to produce one.
 
 * Early termination: A transducer should be able to send a "signal" to terminate the process and return the current value processed. Almost like the `break` keyword in a `for` loop.
 
@@ -434,7 +434,7 @@ The only libraries I know that have support for transducers are these:
 
 ## Follow the protocol
 
-We know what make transducers tick, now let's find out how one might implement a transducer the right way. For this we will follow the [protocol](https://github.com/cognitect-labs/transducers-js#the-transducer-protocol) stablished in the *transducer-js* library.
+We know what make transducers tick, now let's find out how one might implement a transducer the right way. For this we will follow the [protocol](https://github.com/cognitect-labs/transducers-js#the-transducer-protocol) established in the *transducer-js* library.
 
 The rules say that a transducer must be an object with this shape.
 
