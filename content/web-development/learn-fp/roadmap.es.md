@@ -59,16 +59,15 @@ Y por si acaso se pasaron por alto este video, aquí se los dejo otra vez. Aquí
 Ya tienen una idea de cómo manipular funciones y adaptarlas a sus necesidades. Pero todavía hay un par de conceptos que no están claros, dos en particular: Functors y Monads. Aquí hago mi mejor esfuerzo para decirles cómo pueden usarlos en su beneficio. 
 
 - [Hablando de Functors](@/web-development/learn-fp/the-power-of-map.es.md)
-
 - [Un poco de Functor Aplicativos](@/web-development/learn-fp/applicative-functors.es.md)
-
 - [Una Introducción a los Monads](@/web-development/learn-fp/an-introduction-to-monads-in-js.es.md)
-
 - [Usando un Maybe](@/web-development/learn-fp/using-a-maybe.es.md)
 
 ## Contenido extra
 
 - [Reduce: cómo y cuando](@/web-development/learn-fp/reduce-how-and-when.es.md)
+- [La utilidad de los reducers](@/web-development/the-case-for-reducers.es.md)
+- [Transductores en javascript](@/web-development/transducers-in-javascript.es.md)
 - [Lenses: Una alternativa a los getters y setters](@/web-development/learn-fp/lenses-a-k-a-composable-getters-and-setters.es.md)
 - [Explorando Fantasy Land](@/web-development/tagged-unions-and-fantasy-land.es.md)
 

@@ -58,16 +58,15 @@ Just in case you missed it. In this talk (the source of the previous article) yo
 By now you must know how to manipulate functions and make them do your bidding. But I bet there are still things you want to know in more detail, two in particular: Functors and Monads. So, I'll try my best to tell you how you can use them to your advantage.
 
 - [Have you met Functors?](@/web-development/learn-fp/the-power-of-map.md)
-
 - [Something about Applicative Functors](@/web-development/learn-fp/applicative-functors.md)
-
 - [An Introduction to Monads](@/web-development/learn-fp/an-introduction-to-monads-in-js.md)
-
 - [Using a Maybe](@/web-development/learn-fp/using-a-maybe.md)
 
 ## Extra content
 
 - [Reduce: how and when](@/web-development/learn-fp/reduce-how-and-when.md)
+- [The case for reducers](./content/web-development/the-case-for-reducers.md)
+- [Transducers in javascript](./content/web-development/transducers-in-javascript.md)
 - [Lenses: an alternative to getters and setters](@/web-development/learn-fp/lenses-a-k-a-composable-getters-and-setters.md)
 - [Exploring Fantasy Land](@/web-development/tagged-unions-and-fantasy-land.md)
 
