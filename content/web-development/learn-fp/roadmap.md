@@ -65,8 +65,8 @@ By now you must know how to manipulate functions and make them do your bidding. 
 ## Extra content
 
 - [Reduce: how and when](@/web-development/learn-fp/reduce-how-and-when.md)
-- [The case for reducers](./content/web-development/the-case-for-reducers.md)
-- [Transducers in javascript](./content/web-development/transducers-in-javascript.md)
+- [The case for reducers](@/web-development/the-case-for-reducers.md)
+- [Transducers in javascript](@/web-development/transducers-in-javascript.md)
 - [Lenses: an alternative to getters and setters](@/web-development/learn-fp/lenses-a-k-a-composable-getters-and-setters.md)
 - [Exploring Fantasy Land](@/web-development/tagged-unions-and-fantasy-land.md)
 

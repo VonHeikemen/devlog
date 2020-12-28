@@ -77,6 +77,9 @@ Uncaught TypeError: data.filter is not a function
 How can we solve this? One way would be using a `for..of` loop.
 
 ```js
+const is_even = number => number % 2 === 0;
+const add_message = number => `The number is: ${number}`;
+
 const data = new Set([1, 2, 3]);
 const filtered = new Set();
 
@@ -258,6 +261,8 @@ This is just one way to achieve partial application. It doesn't have to be this 
 In theory we already have something useful. Now we need a `reduce` function. Fortunately the `Array` prototype has one that we can use. Let's start our test with just one transducer.
 
 ```js
+const is_even = number => number % 2 === 0;
+
 const data = [1, 2, 3];
 
 const combine = (state, value) => (state.push(value), state);
@@ -269,9 +274,11 @@ data.reduce(filter(is_even, combine), []);
 It actually works! Now let's expand our data set. Say that now we have negative numbers in `data`, but we don't want those. Let's create another filter. Here is where composition comes into play.
 
 ```js
+const is_even = number => number % 2 === 0;
+const is_positive = number => number > 0;
+
 const data = [-2, -1, 0, 1, 2, 3];
 
-const is_positive = number => number > 0;
 const combine = (state, value) => (state.push(value), state);
 
 const transducer = compose(filter(is_positive), filter(is_even));
@@ -417,7 +424,7 @@ There is one more thing you need to know.
 
 ## This isn't their final form
 
-So far I've been showing transducers as functions that return a `reducer`, but that was just to show you idea behind them. These things work but the problem is they are limited. There are a few things that our implementation doesn't support.
+So far I've been showing transducers as functions that return a `reducer`, but that was just to show you the idea behind them. These things work but the problem is they are limited. There are a few things that our implementation doesn't support.
 
 * An initialization hook: If the initial value is not provided, the transducer should have the opportunity to produce one.
 
@@ -718,6 +725,8 @@ Now let's use it in `reduce`.
 Now is time to test the result of all our hard work.
 
 ```js
+const is_positive = number => number > 0;
+
 const data = [-2, -1, 0, 1, 2, 3];
 const combine = (state, value) => (state.push(value), state);
 
@@ -740,6 +749,8 @@ function transduce(combine, initial, transducer, collection) {
 Let's go again.
 
 ```js
+const is_positive = number => number > 0;
+
 const data = [-2, -1, 0, 1, 2, 3];
 const combine = (state, value) => (state.push(value), state);
 
@@ -750,6 +761,9 @@ transduce(combine, [], filter(is_positive), data);
 Now let's test the composition.
 
 ```js
+const is_even = number => number % 2 === 0;
+const is_positive = number => number > 0;
+
 const data = [-2, -1, 0, 1, 2, 3];
 const combine = (state, value) => (state.push(value), state);
 

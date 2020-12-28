@@ -78,6 +78,9 @@ Uncaught TypeError: data.filter is not a function
 ¿Cómo podemos resolver esto? Una forma sería usar el ciclo `for..of`.
 
 ```js
+const is_even = number => number % 2 === 0;
+const add_message = number => `The number is: ${number}`;
+
 const data = new Set([1, 2, 3]);
 const filtered = new Set();
 
@@ -261,6 +264,8 @@ Esta es sólo una forma de lograr la aplicación parcial. No tiene que ser de es
 Ya tenemos algo que en teoría debería funcionar. Ahora necesitamos una función `reduce`. Por suerte para nosotros el prototipo `Array` tiene una que podemos usar. Empecemos usando un solo transductor.
 
 ```js
+const is_even = number => number % 2 === 0;
+
 const data = [1, 2, 3];
 
 const combine = (state, value) => (state.push(value), state);
@@ -272,9 +277,11 @@ data.reduce(filter(is_even, combine), []);
 ¡Genial, de verdad funciona! Ahora vamos a expandir el conjunto de datos. Digamos que ahora `data` tendrá números negativos, pero tampoco queremos esos, vamos a crear otro filtro que deje pasar sólo los números positivos. Aquí es donde la composición entra en escena.
 
 ```js
+const is_even = number => number % 2 === 0;
+const is_positive = number => number > 0;
+
 const data = [-2, -1, 0, 1, 2, 3];
 
-const is_positive = number => number > 0;
 const combine = (state, value) => (state.push(value), state);
 
 const transducer = compose(filter(is_positive), filter(is_even));
@@ -721,6 +728,8 @@ Ahora podemos usarla en `reduce`.
 Es momento de probar todo el arduo trabajo.
 
 ```js
+const is_positive = number => number > 0;
+
 const data = [-2, -1, 0, 1, 2, 3];
 const combine = (state, value) => (state.push(value), state);
 
@@ -743,6 +752,8 @@ function transduce(combine, initial, transducer, collection) {
 Vamos de nuevo.
 
 ```js
+const is_positive = number => number > 0;
+
 const data = [-2, -1, 0, 1, 2, 3];
 const combine = (state, value) => (state.push(value), state);
 
@@ -753,6 +764,9 @@ transduce(combine, [], filter(is_positive), data);
 Ahora vamos a probar la composición.
 
 ```js
+const is_even = number => number % 2 === 0;
+const is_positive = number => number > 0;
+
 const data = [-2, -1, 0, 1, 2, 3];
 const combine = (state, value) => (state.push(value), state);
 
