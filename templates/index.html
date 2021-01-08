@@ -2,6 +2,7 @@
 
 {% set env = get_env(name="ENV", default="development") %}
 {% set payment_pointer = get_env(name="PAYMENT_POINTER", default=false) %}
+{% set current_year = now() | date(format='%Y') %}
 
 {% if lang %}
   {% set current_lang = lang %}
@@ -83,7 +84,11 @@
                         <li class="sidebar-nav-item"><a href="{{ change_base_url }}">{{ trans(key="change_language_link", lang=other_lang) }}</a></li>
                         {% endblock sidebar_nav %}
                     </ul>
-                    © 2020 Heiker Curiel
+                    {% if current_year == config.extra.creation_year %}
+                      © {{ config.extra.creation_year }} Heiker Curiel
+                    {% else %}
+                      © {{ config.extra.creation_year }}-{{ current_year }} Heiker Curiel
+                    {% endif %}
                 </div>
             </div>
         {% endblock sidebar %}

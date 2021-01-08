@@ -47,6 +47,7 @@ published_in = "Originalmente publicado en"
 read_in = "Leer en español"
 
 [extra]
+creation_year = 2020
 site_keywords = ["software", "coding", "development"]
 meta_description = "Personal knowledge base about coding and software development"
 hyde_theme = "theme-base-custom"
