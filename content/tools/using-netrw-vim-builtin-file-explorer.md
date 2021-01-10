@@ -35,7 +35,7 @@ Now that we now how Netrw looks like let's cover some of its basic features.
 
 Our first stop is the `:Explore` command. Using it with no arguments will show the directory of the file we are editing. If we don't want that we could give it the path to the directory we want. Depending on your vim config, specifically the `hidden` option, it will do things differently. If `hidden` is disabled (this is the default) and there are no unsaved changes in the current file, `:Explore` will make Netrw occupy the entire window. If we do have unsaved changes in a file it will create a horizontal split and have Netrw in the upper window.
 
-![netrw en media pantalla](https://res.cloudinary.com/vonheikemen/image/upload/v1609951259/devlog/using-vim-netrw/netrw-half-screen_2021-01-06_12-39-50.png)
+![netrw taking half the screen](https://res.cloudinary.com/vonheikemen/image/upload/v1609951259/devlog/using-vim-netrw/netrw-half-screen_2021-01-06_12-39-50.png)
 
 > If we wanted a vertical split we would use the `:Explore!` command.
 
@@ -43,9 +43,9 @@ If `hidden` is enabled Netrw will always occupy the whole window.
 
 Now let's talk about some `:Explore` variants we have available.
 
-- Hexplore: Will create a horizontal split and show the directory in the lower window. The variant with an `!` will show the directory in the oposite side.
+- Hexplore: Will create a horizontal split and show the directory in the lower window. The variant with an `!` will show the directory in the opposite side.
 
-- Vexplore: Will create a vertical split and show the directory on the left side. The variant with an `!` will show the directory in the oposite side.
+- Vexplore: Will create a vertical split and show the directory on the left side. The variant with an `!` will show the directory in the opposite side.
 
 - Sexplore: Will create a horizontal split and show the directory in the upper window. The variant with an `!` will create a vertical split and show the directory on the left side. 
 
@@ -78,11 +78,11 @@ We know how to move, now let's see how can we perform some of the most common ta
 
 - `gh`: Toggles the hidden files.
 
-- `%`: Creates a file. Well... it actually doesn't, it just gives you the oportunity to create one. When you press `%` vim will ask the name you want to give the file and then it lets you edit it. After entering the name you have to save the file (using `:write`) to create it.
+- `%`: Creates a file. Well... it actually doesn't, it just gives you the opportunity to create one. When you press `%` vim will ask the name you want to give the file and then it lets you edit it. After entering the name you have to save the file (using `:write`) to create it.
 
 - `R`: Renames a file
 
-- `mt`: Asign the "target directory" used by the move and copy commands.
+- `mt`: Assign the "target directory" used by the move and copy commands.
 
 - `mf`: Marks a file or directory. Any action that can be performed on multiple files depend on these marks. So if you want to copy, move or delete files, you need to mark them.
 
@@ -102,11 +102,11 @@ After reading about those keymaps I bet you're wondering how does one copy or mo
 
 This will be a three step process:
 
-- Asign the target directory.
+- Assign the target directory.
 
 - Mark the files we want to move.
 
-- Run the appropiate command, in our case `mm`.
+- Run the appropriate command, in our case `mm`.
 
 {{ asciinema(id="YkvegGilPQpSbABrOcFZYhN7W") }}
 
@@ -116,7 +116,7 @@ This is what happens in the demo:
 
 - *00:00-00:17* I use `:Explore` to open Netrw. Then check the content of `test dir`.
 
-- *00:18* I Asign `test dir` as the target directory. Notice how the banner updates to show us the target directory. This line gets added.
+- *00:18* I assign `test dir` as the target directory. Notice how the banner updates to show us the target directory. This line gets added.
 
 ```
 "   Copy/Move Tgt: /tmp/vim/test dir/ (local)
@@ -124,7 +124,7 @@ This is what happens in the demo:
 
 - *00:20-00:25* I mark the files `a-file.txt` and `another-file.txt`. To indicate they are marked vim shows us the name of the files in bold.
 
-- *00:25-00:27*  I press `mm` to move the files, and these desappear from the current window.
+- *00:25-00:27*  I press `mm` to move the files, and these disappear from the current window.
 
 - *00:29* Now I check if the files are inside `test dir` (they are).
 
@@ -242,7 +242,7 @@ nnoremap <Leader>da :Lexplore<CR>
 
 #### Navigation
 
-Unfortunately we don't have a direct way to asign a keymap in Netrw. We can still have them but it does requires a few steps.
+Unfortunately we don't have a direct way to assign a keymap in Netrw. We can still have them but it does requires a few steps.
 
 Netrw is a plugin that defines its own filetype, so we are going to use that to our advantage. What we are going to do is place our keymaps inside a function and create an `autocommand` that calls it everytime vim opens a filetype `netrw`.
 
@@ -315,7 +315,7 @@ nmap <buffer> f; mx
 - `ff`: Will create a file. But like create it for real. This time, after doing `%` we use `:w<CR>` to save the empty file and `:buffer #<CR>` to go back to Netrw.
 - `fe`: Will rename a file.
 - `fc`: Will copy the marked files.
-- `fC`: We will use this to "skip" a step. After you mark your files you can put the cursor in a directory and this will asign the target directory and copy in one step.
+- `fC`: We will use this to "skip" a step. After you mark your files you can put the cursor in a directory and this will assign the target directory and copy in one step.
 - `fx`: Will move marked files.
 - `fX`: Same thing as `fC` but for moving files.
 - `f;`: Will be for running external commands on the marked files.
