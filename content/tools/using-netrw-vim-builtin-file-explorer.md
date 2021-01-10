@@ -23,7 +23,7 @@ The first thing we see is a banner with information about the current directory.
 - Another sort criteria. This time is a sequence that describes the priority it gives to a file according to its suffix.
 - "Quick help". In here you can see a few hints about actions that Netrw can perform.
 
-Fun fact, you can actually interact with some of the "options" in the banner. So, if you put the cursor on the line that says "sorted" and press `Enter` you'll hange the order of the files. You can order them by name, last update, size or the extension of the file. And the quick help can show you keymaps for some common tasks.
+Fun fact, you can actually interact with some of the "options" in the banner. So, if you put the cursor on the line that says "sorted" and press `Enter` you'll change the order of the files. You can order them by name, last update, size or the extension of the file. And the quick help can show you keymaps for some common tasks.
 
 After the banner we have our directories and files. `../` is the parent directory and `./` is the current directory. Lastly, we have our files sorted perfectly.
 
@@ -33,7 +33,7 @@ Now that we now how Netrw looks like let's cover some of its basic features.
 
 ### How to call it
 
-Our first stop is the `:Explore` command. Using this command with no arguments will show the directory of the file we are editing. If we don't want that we could give it the path to the directory we want. Depending on your vim config, specifically the `hidden` option, it will do things differently. If `hidden` is disabled (this is the default) and there are no unsaved changes in the current file, `:Explore` will make Netrw occupy the entire window. If we do have unsaved changes in a file it will create a horizontal split and have Netrw in the upper window.
+Our first stop is the `:Explore` command. Using it with no arguments will show the directory of the file we are editing. If we don't want that we could give it the path to the directory we want. Depending on your vim config, specifically the `hidden` option, it will do things differently. If `hidden` is disabled (this is the default) and there are no unsaved changes in the current file, `:Explore` will make Netrw occupy the entire window. If we do have unsaved changes in a file it will create a horizontal split and have Netrw in the upper window.
 
 ![netrw en media pantalla](https://res.cloudinary.com/vonheikemen/image/upload/v1609951259/devlog/using-vim-netrw/netrw-half-screen_2021-01-06_12-39-50.png)
 
@@ -64,7 +64,7 @@ If we want to move between directories and files these are the keymaps we need t
 - `Enter`: Opens a directory or a file.
 - `-`: Go up to the parent directory.
 - `u`: Go back to the previous directory in the history.
-- `gb`: Jump to the most recent directory saved on you "Bookmarks". To create a bookmark we use `mb`.
+- `gb`: Jump to the most recent directory saved on the "Bookmarks". To create a bookmark we use `mb`.
 
 Let's recap. If we want to "go down a directory" we use `Enter`. To "go up" we use `-`. To go back, `u`. And if we want to "jump" quickly to a directory of our choosing we should first add it to the bookmarks (using `mb`) and then we can use `gb` to go there.
 
@@ -182,7 +182,7 @@ So just in case. The solution: mark the directories with `mf`, use `mx` and type
 
 ## Customization
 
-If you decided to give Netrw a chance you might want to make some tweaks to make it easier to use.
+If you decided to give Netrw a chance you might want to make some tweaks to make it nicer.
 
 ### Recommended config
 
@@ -228,6 +228,8 @@ hi! link netrwMarkFile Search
 
 Now that Netrw looks better-ish, let's make it easier to use.
 
+#### Better call Netrw
+
 We begin by changing the way we call Netrw. We bind `:Lexplore` to a shortcut so we can toggle it whenever we want.
 
 ```vim
@@ -238,9 +240,11 @@ nnoremap <Leader>da :Lexplore<CR>
 - `Leader dd`: Will open Netrw in the directory of the current file.
 - `Leader da`: Will open Netrw in the current working directory.
 
-Now we move on to the keymaps for Netrw itself. Unfortunately we don't have a direct way to asign a keymap. We can still have them but it does requires a few steps.
+#### Navigation
 
-Netrw is a plugin that defines its own filetype, so we are going to use that in our advantage. What we are going to do is place our keymaps inside a function and create an `autocommand` that call this function everytime vim opens a filetype `netrw`.
+Unfortunately we don't have a direct way to asign a keymap in Netrw. We can still have them but it does requires a few steps.
+
+Netrw is a plugin that defines its own filetype, so we are going to use that to our advantage. What we are going to do is place our keymaps inside a function and create an `autocommand` that calls it everytime vim opens a filetype `netrw`.
 
 ```vim
 function! NetrwMapping()
@@ -316,7 +320,7 @@ nmap <buffer> f; mx
 - `fX`: Same thing as `fC` but for moving files.
 - `f;`: Will be for running external commands on the marked files.
 
-We can still the couple of things, if you don't mind using some of Netrw's internal variables.
+We can still do a couple of things, if you don't mind using some of Netrw's internal variables.
 
 Show a list of marked files.
 
@@ -330,15 +334,17 @@ Show the target directory, just in case we want to avoid the banner.
 nmap <buffer> fq :echo 'Target:' . netrw#Expose("netrwmftgt")<CR>
 ```
 
-Now we can use that along side `mt`. Again, this is only useful if you really, really want to avoid showing the banner.
+Now we can use that along side `mt`.
 
 ```vim
 nmap <buffer> fd mtfq
 ```
 
+Again, this is only useful if you really, really want to avoid showing the banner.
+
 #### Bookmarks
 
-In the same way we grouped the file related actions, we can do for bookmarks.
+In the same way we grouped the file related actions, we do it for bookmarks.
 
 ```vim
 nmap <buffer> bb mb
@@ -372,7 +378,7 @@ function! NetrwRemoveRecursive()
 endfunction
 ```
 
-First thing we do in this function is check if we in a buffer controlled by Netrw. Then we prepare the remove command. We take advantage of the fact that vim makes us drop to command mode and create a keymap (`<CR>`) that will write the command for us. Next, we use `normal mu` to clear all the marks, 'cause we don't want to remove anything by accident. We then mark the directory under the cursor with `normal mf`. Here comes the funny part, `normal mx` will ask us what command we want to execute, and is at this point when we can abort the process using `ctrl + c` or press `Enter` which will trigger the command `rm -r`. Lastly, we undo the keymap we created in the beginning of the function, because it will be terrible inconvenient to have it permanently.
+First thing we do in this function is check if we are in a buffer controlled by Netrw. Then we prepare the remove command. We take advantage of the fact that vim makes us drop to command mode and create a keymap (`<CR>`) that will write the command for us. Next, we use `normal mu` to clear all the marks, 'cause we don't want to remove anything by accident. We then mark the directory under the cursor with `normal mf`. Here comes the funny part, `normal mx` will ask us what command we want to execute, and is at this point when we can abort the process using `ctrl + c` or press `Enter` which will trigger the command `rm -r`. Lastly, we undo the keymap we created in the beginning of the function, because it will be terrible to have it permanently.
 
 And how do we use it?
 
@@ -386,7 +392,7 @@ You can find every option and function in this article [here](https://gist.githu
 
 ## Conclusion
 
-Netrw might not be the best file manager in the vim ecosystem but with a little effort we can turn it into an intuitve file explorer. Even if you don't adopt in Netrw in your workflow knowing how to use it can be handy in some situations. You never know when you're going to be stuck in a remote server without your favorite vim plugins at hand.
+Netrw might not be the best file manager in the vim ecosystem but with a little effort we can turn it into an intuitive file explorer. Even if you don't adopt in Netrw in your workflow, knowing how to use it can be handy in some situations. You never know when you're going to be stuck in a remote server without your favorite vim plugins at hand.
 
 ## Source
 

@@ -7,7 +7,7 @@ lang = "es"
 tags = ["vim", "shell"]
 +++
 
-¿Sabían que vim tiene un navegador de archivos? Sí, es un plugin que ya viene instalado con vim. Se llama Netrw... y no es muy popular, al menos no en comparación con otros plugins como NERDtree. La razón para esto es: 1) no es muy intuitivo. 2) tiene algunas limitaciones que son molestas. 3) se ve feo. Hoy vamos a aprender a usarlo y en el proceso también veremos cómo sobrepasar algunas de sus limitaciones y convertirlo en un navegador de archivos más intuitivo.
+¿Sabían que vim tiene un navegador de archivos? Sí, es un plugin que ya viene instalado con vim. Se llama Netrw... y no es muy popular, al menos no en comparación con otros plugins como NERDtree. La razón para esto es: 1) no es muy intuitivo. 2) tiene algunas limitaciones. 3) se ve feo. Hoy vamos a aprender a usarlo, veremos cómo sobrepasar algunas de sus limitaciones y en el proceso vamos a convertirlo en un navegador de archivos más intuitivo.
 
 ## Presentación
 
@@ -188,7 +188,7 @@ Si han decidido darle una oportunidad a Netrw tal vez quieran modificarlo un poc
 
 ### Configuración recomendada
 
-Sincronizar directorio actual y el directorio que está mostrando Netrw. Esto ayuda con el error cuando se intenta mover archivos.
+Sincronizar el directorio actual y el directorio que está mostrando Netrw. Esto ayuda con el error cuando se intenta mover archivos.
 
 ```vim
 let g:netrw_keepdir = 0
@@ -336,11 +336,12 @@ Mostrar el directorio destino, en caso de que queramos evitar mostrar el banner.
 nmap <buffer> fq :echo 'Target:' . netrw#Expose("netrwmftgt")<CR>
 ```
 
-Ahora podemos usar el atajo anterior en conjunto con `mt` para asignar el directorio destino. De nuevo, esto sólo es útil si queremos evitar a toda costa mostrar el banner.
+Ahora podemos usar el atajo anterior en conjunto con `mt` para asignar el directorio destino.
 
 ```vim
 nmap <buffer> fd mtfq
 ```
+De nuevo, esto sólo es útil si queremos evitar a toda costa mostrar el banner.
 
 #### Bookmarks
 
