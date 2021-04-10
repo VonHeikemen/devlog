@@ -7,7 +7,7 @@ lang = "en"
 tags = ["vim", "shell", "todayilearned"]
 +++
 
-So it turns out vim has an "easy mode." Who knew? That will be the topic today, we will learn what's the deal, we'll figure out how to enable it, see why almost nobody pays attention to it, and lastly I'll show you some stuff you can do to make it a bit nicer.
+So it turns out vim has an "easy mode." Who knew? That will be the topic today, we will learn what's the deal with this mode, we'll figure out how to enable it, see why almost nobody pays attention to it, and lastly I'll show you some stuff you can do to make it a bit nicer.
 
 ## Easy, what does that mean?
 
@@ -29,7 +29,7 @@ It even enables some options that will make the experience a bit more intuitive,
 
 ### How does it work?
 
-Good question. This "easy mode" is actually just a set of configuration written in a file called [evim.vim](https://github.com/vim/vim/blob/314dd79cac2adc10304212d1980d23ecf6782cfc/runtime/evim.vim). You can check it out with vim if you want, use this command `vim -R -c 'edit $VIMRUNTIME/evim.vim'` (to get out use `ZZ` or just close the terminal). So, when we active this mode vim just reads and executes this file.
+Good question. This "easy mode" is actually just a set of options written in a file called [evim.vim](https://github.com/vim/vim/blob/314dd79cac2adc10304212d1980d23ecf6782cfc/runtime/evim.vim). You can check it out with vim if you want, use this command `vim -R -c 'edit $VIMRUNTIME/evim.vim'` (to get out use `ZZ` or just close the terminal). So, when we active this mode vim just reads and executes this file.
 
 ### How do we use it?
 
