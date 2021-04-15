@@ -41,17 +41,20 @@ change_language_link = "Devlog in english"
 title_tags = "Explore tags"
 published_in = "Originally published at"
 read_in = "Read in english"
+buymeacoffee="Thank you for reading. If you find this article useful and want to support my efforts, buy me a coffee ☕"
 
 [translations.es]
 change_language_link = "Devlog en español"
 title_tags = "Explorar tags"
 published_in = "Originalmente publicado en"
 read_in = "Leer en español"
+buymeacoffee="Gracias por su tiempo. Si este artículo les pareció útil y quieren apoyar mis esfuerzos para crear más contenido, pueden dejar una propina en buy me a coffee ☕."
 
 [extra]
 creation_year = 2020
 site_keywords = ["software", "coding", "development"]
 meta_description = "Personal knowledge base about coding and software development"
+buymeacoffee_link = "https://www.buymeacoffee.com/vonheikemen"
 hyde_theme = "theme-base-custom"
 hyde_sticky = true
 hyde_reverse = false

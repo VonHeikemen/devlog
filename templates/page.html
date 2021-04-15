@@ -35,12 +35,26 @@
     </a>
     {% endif %}
     {% if translation %}
-    | <a href="{{ translation.permalink }}"> 
+    | <a href="{{ translation.permalink }}">
         {{ trans(key="read_in", lang=translation.lang) }}
       </a>
     {% endif %}
   </span>
   {{ page.content | safe }}
+
+  {%if translation %}
+    <hr>
+    <p>{{ trans(key="buymeacoffee", lang=translation.lang) }}</p>
+    <a href="{{ page.extra.buymeacoffee_link }}"
+      style="display: flex; justify-content: center;"
+      target="_blank"
+    >
+      <img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
+        alt="Buy Me A Coffee"
+        style="height: 60px !important;width: 217px !important;" 
+      />
+    </a>
+  {% endif %}
 </div>
 {% endblock content %}
 
