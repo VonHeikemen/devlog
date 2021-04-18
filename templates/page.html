@@ -42,9 +42,8 @@
   </span>
   {{ page.content | safe }}
 
-  {%if translation %}
     <hr>
-    <p>{{ trans(key="buymeacoffee", lang=translation.lang) }}</p>
+    <p>{{ trans(key="buymeacoffee", lang=page.lang) }}</p>
     <a href="{{ config.extra.buymeacoffee_link }}"
       style="display: flex; justify-content: center;"
       target="_blank"
@@ -54,7 +53,6 @@
         style="height: 60px !important;width: 217px !important;" 
       />
     </a>
-  {% endif %}
 </div>
 {% endblock content %}
 
