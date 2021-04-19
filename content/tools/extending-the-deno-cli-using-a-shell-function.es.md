@@ -44,7 +44,7 @@ deno()
 }
 ```
 
-Ahora si reinician el interprete (o "recargan" su configuración) e invocan el comando `deno` debería obtener `Hola` como resultado. Genial, hemos creado un problema, no podemos usar el comando `deno`. No teman, vamos por buen camino.
+Ahora si reinician el intérprete (o "recargan" su configuración) e invocan el comando `deno` deberían obtener `Hola` como resultado. Genial, hemos creado un problema, no podemos usar el comando `deno`. No teman, vamos por buen camino.
 
 ### Vuelve a mi, deno
 
@@ -106,7 +106,7 @@ La primera línea lo que hace es asignar el primer parámetro (`$1`) a la variab
 deno --version
 ```
 
-Bien, pero ahora si intentamos usar `deno` sin argumentos nos dará un error. Para arreglar eso vamos verificar si el primer argumento está vacío, si ese es el caso sólo llamamos `deno`.
+Bien, pero ahora si intentamos usar `deno` sin argumentos nos dará un error. Para arreglar eso vamos verificar si el primer parámetro está vacío, si ese es el caso sólo llamamos `deno`.
 
 ```sh
 deno()
@@ -128,7 +128,7 @@ deno()
 
 ### Invocando sub-comandos
 
-Ya estamos en el lugar que queremos, finalmente podremos agregar los subcomandos que queremos. Primero vamos a hacer una prueba.
+Ya estamos en el lugar que queremos, finalmente podremos agregar nuestros propios sub-comandos. Veamos cómo funcionaría.
 
 ```diff
   deno()
@@ -151,7 +151,7 @@ Ya estamos en el lugar que queremos, finalmente podremos agregar los subcomandos
   }
 ```
 
-Si invocamos el comando hola:
+Si invocamos el comando `hola`:
 
 ```
 $ deno hola
@@ -163,7 +163,7 @@ Ahora estamos seguros que funciona.
 
 ### deno scripts
 
-Ya podemos comenzar con lo más importante, nuestro reemplazo para los npm scripts. Lo que quiero hacer primero es crear el comando `start`, el cual es el más común que usaría.
+Ya podemos comenzar con lo más importante, nuestro reemplazo para los `npm scripts`. Lo que quiero hacer primero es crear el comando `start`, el cual es el más común que usaría.
 
 ```diff
   deno()
@@ -186,7 +186,7 @@ Ya podemos comenzar con lo más importante, nuestro reemplazo para los npm scrip
   }
 ```
 
-Esto lo que hará será ejecutar un archivo llamado `Taskfile.js` usando `deno`. `--allow-run` nos permitirá usar `Deno.run` en nuestro código para poder llamar comandos externos dentro de `Taskfile.js`. Vamos a asegurarnos de que funciona.
+Esto lo que hará será ejecutar un archivo llamado `Taskfile.js` usando `deno`. `--allow-run` nos permitirá usar `Deno.run` en nuestro código para poder llamar comandos externos dentro de `Taskfile.js`. Ahora vamos a usarlo.
 
 Creamos `Taskfile.js`.
 
@@ -195,7 +195,7 @@ const cmd = ['echo', 'Taskfile: ', ...Deno.args];
 Deno.run({ cmd });
 ```
 
-Y usamos `start` de esta manera.
+Y llamamos `start` de esta manera.
 
 ```
 $ deno start hola
@@ -203,7 +203,7 @@ $ deno start hola
 Taskfile start hola
 ```
 
-Genial. El siguiente paso sería crear un `Taskfile.js` "más inteligente," que sea capaz de ejecutar varias tareas. Ya he hecho algo así en el pasado (Pueden encontrar los detalles [aquí](https://dev.to/vonheikemen/a-simple-way-to-replace-npm-scripts-in-deno-4j0g)), así que les mostraré el código que yo usaría.
+Genial. El siguiente paso sería crear un `Taskfile.js` "más inteligente," que sea capaz de ejecutar varias tareas. Ya he hecho algo así en el pasado (pueden encontrar los detalles [aquí](https://dev.to/vonheikemen/a-simple-way-to-replace-npm-scripts-in-deno-4j0g)), así que les mostraré el código que yo usaría.
 
 ```js
 const entrypoint = "./src/main.js";
@@ -265,7 +265,7 @@ Con esto podríamos ejecutar el archivo `./src/main.js` al invocar `deno start`.
   }
 ```
 
-Ya tiene buena forma. La última cosa que nos quedaría por hacer es manejar otras tareas además de `start`. Con `npm` podemos invocar `npm run` para elegir qué script queremos ejecutar, nuestro equivalente sólo se llamará `x`.
+Ya tiene buena forma. La última cosa que nos quedaría por hacer es manejar otras tareas además de `start`. Con `npm` podemos invocar `npm run` para elegir qué script queremos ejecutar, nuestro equivalente se llamará `x`.
 
 ```diff
   deno()
@@ -303,7 +303,7 @@ deno x test:api
 
 ### Un poco más de conveniencia
 
-Lo último que quiero hacer es crear una forma de llamar a un script el cual pueda llamar las librerías que yo uso con más frecuencia sin usar su URL. Podemos hacer esto con el apoyo de un [import-map](https://deno.land/manual@v1.9.0/linking_to_external_code/import_maps), un archivo `.json` en el cual podemos vincular un "alias" a una URL.
+Lo último que quiero hacer es crear una forma de ejecutar un script el cual pueda llamar las librerías que uso con más frecuencia sin usar su URL. Podemos hacer esto con el apoyo de un [import-map](https://deno.land/manual@v1.9.0/linking_to_external_code/import_maps), un archivo `.json` en el cual podemos vincular un "alias" a una URL.
 
 Yo uso uno como este.
 
@@ -324,7 +324,7 @@ Yo uso uno como este.
 }
 ```
 
-`deno` puede leerlo si le pasamos el argumento `--import-map`. Agregemos el comando.
+`deno` puede leerlo si le pasamos el argumento `--import-map`. Ahora vamos a crear un comando para usarlo.
  
 ```diff
   deno()

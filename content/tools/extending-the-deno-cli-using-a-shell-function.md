@@ -7,7 +7,7 @@ lang = "en"
 tags = ["shell", "deno", "todayilearned"]
 +++
 
-I've been using `deno` more and more these days and I must tell you that are still a couple that bug me. But I did manage to solve some of those problems by "adding" sub-commands to cli. No, it's not dark magic, it's just a trick that I learned a while ago and that I'm going to share with you today.
+I've been using `deno` more and more these days and I must tell you they are still things that bug me. But I did manage to solve some of those problems by "adding" some sub-commands to the cli. No, it's not dark magic, it's just a trick that I learned a while ago and that I'm going to share with you today.
 
 ## What do we need for this?
 
@@ -31,7 +31,7 @@ But as you know those sub-commands don't exists and that's what we are going to 
 
 ## Let us begin
 
-The first step is to locate that one file you know your shell always execute. In `zsh` is `~/.zshrc`. `bash` has `~/.bashrc`. Those two are the only ones I know, if you use any other shell try to find in its documentation the equivalent of that.
+The first step is to locate that one file you know your shell always execute. In `zsh` there's `~/.zshrc`. `bash` has `~/.bashrc`. Those two are the only ones I know, if you use any other shell try to find in its documentation the equivalent of that.
 
 ### The definition
 
@@ -44,17 +44,17 @@ deno()
 }
 ```
 
-Now if you restart your shell (or "reload" your configuration) and try to call `deno` you should get `hello`. Isn't that nice? Awesome, but now we have created a problem, we can use `deno`. But fear not, we are on a good path.
+Now if you restart your shell (or "reload" your configuration) and try to call `deno` you should get `Hello`. Isn't that nice? Awesome, but now we have created a problem, we can't use `deno`. But fear not, we are on a good path.
 
 ### Come back to me deno
 
-If we want to call the `deno` **command** we need to use the command known as `command`.
+If we want to call the `deno` **command** we need to use the command known as `command`. Something like this.
 
 ```sh
 command deno --version
 ```
 
-And that you get us all the info `deno` has about itself.
+And that will get us all the info `deno` has about itself.
 
 ```
 deno x.x.x (release, x86_64-unknown-linux-gnu)
@@ -62,7 +62,7 @@ v8 x
 typescript x.x
 ```
 
-With this new knowledge we can solve our problem. Let's put it in the function.
+With this new knowledge we can solve our problem. Let's use that in our function.
 
 ```sh
 deno()
@@ -72,7 +72,7 @@ deno()
 }
 ```
 
-Good, and when we call it we should get this.
+And when we call it we should get this.
 
 ```
 $ deno
@@ -100,13 +100,13 @@ deno()
 }
 ```
 
-The first thing this function does is assign the first parameter (`$1`) to the variabl  `cmd` and then remove it from the arguments list (`$@`). After that we compare `cmd` with a pattern. For now the only pattern we have is `*` which is a wildcard that matches everything, is basically our default case. Let's make a test.
+The first thing this function does is assign the first parameter (`$1`) to the variable  `cmd` and then remove it from the arguments list (`$@`). After that we compare `cmd` with a pattern. For now the only pattern we have is `*` which is a wildcard that matches everything, is basically our default case. Let's make a test.
 
 ```sh
 deno --version
 ```
 
-We good. But notice that if we try to use `deno` without any arguments it'll give us an error. To fix that we are going to check if the first parameter is empty, and if it is we just call `deno`.
+It's getting better. But notice that if we try to use `deno` without any arguments it'll give us an error. To fix that we are going to check if the first parameter is empty, and if it is we just call `deno`.
 
 ```sh
 deno()
@@ -128,7 +128,7 @@ deno()
 
 ### Calling all sub-commands
 
-We are right were we want to be, we can finally start adding our own sub-commands. But first let's make a sanity check.
+We are right were we want to be, we can finally start adding our own sub-commands. Let's figure out how this would work.
 
 ```diff
   deno()
@@ -151,7 +151,7 @@ We are right were we want to be, we can finally start adding our own sub-command
   }
 ```
 
-Let's call the `hello` command.
+Now call this new `hello` command.
 
 ```
 $ deno hello
@@ -163,7 +163,7 @@ So we know for sure this thing works.
 
 ### deno scripts
 
-We can work on our ad-hoc replacement for npm scripts. Let's start at the beginning, `start` command of course. Is a convention to use this command to start an application or project.
+We can work on our ad-hoc replacement for npm scripts. There is a common convention in `node` where we use a `start` command to "boot up" our application or project. Let's start with that.
 
 ```diff
   deno()
@@ -188,22 +188,22 @@ We can work on our ad-hoc replacement for npm scripts. Let's start at the beginn
 
 This command will execute a file called `Taskfile.js` using `deno`. The `--allow-run` will let us use `Deno.run` in our code to call external commands. It's test time.
 
-Let's make that `Taskfile.js`.
+Make that `Taskfile.js`.
 
 ```js
 const cmd = ['echo', 'Taskfile: ', ...Deno.args];
 Deno.run({ cmd });
 ```
 
-Now we use `start`.
+Now use `start`.
 
 ```
 $ deno start hello
 
-Taskfile start hello
+Taskfile: start hello
 ```
 
-Just great. The next step will be to create a "smarter" `Taskfile.js`, one that can call different tasks. I've done something like this in the past (check out the details of it in [here](https://dev.to/vonheikemen/a-simple-way-to-replace-npm-scripts-in-deno-4j0g)), so I'm going to show you the code I would use.
+Just lovely. The next step will be to create a "smarter" `Taskfile.js`, one that can call different tasks. I've done something like this in the past (check out the details of it in [here](https://dev.to/vonheikemen/a-simple-way-to-replace-npm-scripts-in-deno-4j0g)), so I'm going to show you the code I would use.
 
 ```js
 const entrypoint = "./src/main.js";
@@ -265,7 +265,7 @@ With this we can execute the file `./src/main.js` using `deno start`. But now we
   }
 ```
 
-Everything is looking good. The last thing we will deal is calling other tasks besides `start`. With `npm` we can call any script we want using `npm run`, the equivalent for us will be called `x`.
+Everything is looking good. The last thing we will deal with is calling other tasks besides `start`. With `npm` we can call any script we want using `npm run`, the equivalent for us will be called `x`.
 
 ```diff
   deno()
@@ -295,7 +295,7 @@ Everything is looking good. The last thing we will deal is calling other tasks b
   }
 ```
 
-We are all set. If we had a "task" called `test:api` we can invoke that using this. 
+We are all set. If we had a "task" called `test:api` we can invoke it using this. 
 
 ```sh
 deno x test:api
@@ -303,7 +303,7 @@ deno x test:api
 
 ### A little extra convenience
 
-One more thing, I would like to have a way of calling a specific script and be able to call all my most used libraries without using URLs. We can do this with the help of [import-map](https://deno.land/manual@v1.9.0/linking_to_external_code/import_maps)s, `.json` files that can bind an "alias" with a URL.
+One more thing, I would like to have a way of calling a specific script and be able to call all my most used libraries without using URLs. We can do this with the help of [import-map](https://deno.land/manual@v1.9.0/linking_to_external_code/import_maps)s, `.json` files that can bind an "alias" to a URL.
 
 I use one like this.
 
@@ -324,7 +324,7 @@ I use one like this.
 }
 ```
 
-`deno` can read this if we provide its path using the `--import-map` flag. Let's add command that uses that.
+`deno` can read this if we provide its path using the `--import-map` flag. Let's add a command that uses that.
 
 ```diff
   deno()
@@ -357,7 +357,7 @@ I use one like this.
   }
 ```
 
-As with everything else, we need to test this thing. Create a test script with this.
+As with everything else, we need to test this thing. Create a script with this.
 
 ```js
 import dayjs from '@npm/dayjs';
@@ -370,9 +370,9 @@ const date = dayjs().format('{YYYY} MM-DDTHH:mm:ss SSS [Z] A');
 console.log(c.green(date));
 ```
 
-> Might want to specify the library version. Instead of using `@npm/dayjs`, you put `@npm/dayjs@1.10.4`
+> Might want to specify the library version. Instead of using `@npm/dayjs`, use `@npm/dayjs@1.10.4`
 
-Now call it.
+And now call it.
 
 ```
 $ deno script ./test.js
