@@ -3,7 +3,6 @@ title = "Extending the deno cli using a shell function"
 description = "Improving the deno cli with a little bit of magic"
 date = 2021-04-18
 lang = "en"
-draft = true
 [taxonomies]
 tags = ["shell", "deno", "todayilearned"]
 +++
