@@ -7,7 +7,7 @@ lang = "en"
 tags = ["vim", "neovim", "shell"]
 +++
 
-After a long time in development neovim 0.5 was finally released as a stable version. Among the new exciting features we have better lua support and the promise of a stable api to create our configuration using this language. So today I'm going to share with you everything I learnt while I was migrating my own configuration from vimscript to lua.
+After a long time in development neovim 0.5 was finally released as a stable version. Among the new exciting features we have better lua support and the promise of a stable api to create our configuration using this language. So today I'm going to share with you everything I learned while I was migrating my own configuration from vimscript to lua.
 
 I'm going to talk about the things we can do with lua and its interaction with vimscript. I will be showing a lot of examples but I will not tell you what options you should set with what value. Also, this won't be a tutorial on "how to turn neovim into an IDE", I'll avoid anything that is language specific. What I want to do is teach you enough about lua and the neovim api so you can migrate your own configuration.
 
@@ -612,7 +612,7 @@ This one is not written in lua but I want to add it because it does offer a lua 
 
 ## Conclusion
 
-Recap time. We learnt how to use lua from vimscript. We now know how to use vimscript from lua. We have the tools to activate, deactivate and modify all sorts of options and variables in neovim. We got to know the methods we have available to create our keymaps, and we know their limitations. We figure out how to use plugin managers that aren't written in lua, and saw a few alternatives that are written in lua. I say we are ready to use lua in neovim.
+Recap time. We learned how to use lua from vimscript. We now know how to use vimscript from lua. We have the tools to activate, deactivate and modify all sorts of options and variables in neovim. We got to know the methods we have available to create our keymaps, and we know their limitations. We figure out how to use plugin managers that aren't written in lua, and saw a few alternatives that are written in lua. I say we are ready to use lua in neovim.
 
 For those who want to see a real world usage or whatever, I'll share a link to my current config in github: [neovim](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim).
 
