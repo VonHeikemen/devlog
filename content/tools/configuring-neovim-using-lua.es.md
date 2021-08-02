@@ -7,7 +7,7 @@ lang = "es"
 tags = ["vim", "neovim", "shell"]
 +++
 
-Después de mucho tiempo en desarrollo neovim 0.5 por fin fue liberado como una versión estable. Entre las nuevas mejoras tenemos un mejor soporte para lua y la promesa de una api estable para crear nuestra configuración usando este lenguaje. Aprovechando esto, hoy voy compartir con ustedes todo lo que aprendí mientras migraba mi configuración de vimscript a lua.
+Después de mucho tiempo en desarrollo neovim 0.5 por fin fue liberado como una versión estable. Entre las nuevas mejoras tenemos un mejor soporte para lua y la promesa de una api estable para crear nuestra configuración usando este lenguaje. Aprovechando esto hoy voy compartir con ustedes todo lo que aprendí mientras migraba mi configuración de vimscript a lua.
 
 Vamos a hablar de lo que podemos hacer en lua y su interacción con vimscript. Aunque presentaré muchos ejemplos, no les diré qué configuración deben activar o con qué valor. No hablaré de cosas específicas de algún lenguaje, y tampoco abordaré el tema de "convertir neovim en un IDE". Sólo espero darles una buena base para que puedan migrar su propia configuración.
 
@@ -19,7 +19,7 @@ Comencemos.
 
 Lo primero que deben saber es que podemos incorporar código escrito en lua directamente en nuestro `init.vim`. Podemos comenzar la migración de manera gradual desde `init.vim`, y reemplazar `init.vim` por `init.lua` sólo cuando estemos listos.
 
-Empezemos con el "hola mundo" para probar que todo funciona de manera correcta. Pueden intentar lo siguiente, coloquen esto en su `init.vim`:
+Empezemos con el "hola mundo" para probar que todo funciona de manera correcta. Pueden colocar esto en su `init.vim`:
 
 ```vim
 lua <<EOF
@@ -27,15 +27,15 @@ print('hola desde lua')
 EOF
 ```
 
-El mensaje `hola desde lua` debería aparecer justo debajo de su barra de estado. Aquí estamos utilizando algo llamado `lua-heredoc`. Todo lo que está encerrado en `<<EOF ... EOF` es considerado un "script" que será evaluado por el comando `lua`. Resulta útil cuando queremos ejecutar código con múltiples líneas pero no es estrictamente necesario si sólo necesitamos una. También podemos hacer esto.
+Si ejecutan nuevamente `init.vim` o reinician neovim el mensaje `hola desde lua` debería aparecer justo debajo de su barra de estado. Aquí estamos utilizando algo llamado `lua-heredoc`. Todo lo que está encerrado en `<<EOF ... EOF` es considerado un "script" que será evaluado por el comando `lua`. Resulta útil cuando queremos ejecutar código con múltiples líneas pero no es estrictamente necesario si sólo necesitamos una. También podemos hacer esto.
 
 ```vim
 lua print('esto también funciona')
 ```
 
-Pero si vamos a llamar código lua desde vimscript lo que yo recomendaría sería "llamar" un script verdadero. En lua podemos hacer eso con la función `require`. Para que esto funcione necesitamos colocar nuestro script en un directorio que se encuentre en el `runtimepath` de neovim.
+Pero si vamos a llamar código lua desde vimscript lo que yo recomendaría sería "llamar" un script verdadero. En lua podemos hacer eso con la función `require`. Para que esto funcione necesitamos crear una carpeta llamada `lua` y colocarla en un directorio que se encuentre en el `runtimepath` de neovim.
 
-En esta ocasión vamos a crear un script llamado `basic.lua` en la ruta `~/config/nvim/lua/`. Por ahora este script sólo tendrá este contenido.
+Lo más conveniente sería usar el mismo directorio desde se encuentra `init.vim`, entonces lo que haremos será crear `~/.config/nvim/lua`, y dentro de esa carpeta colocaremos el script que llamaremos `basic.lua`. Por ahora sólo imprimiremos un mensaje.
 
 ```lua
 print('hola desde ~/config/nvim/lua/basic.lua')
@@ -49,7 +49,7 @@ lua require('basic')
 
 Aquí neovim buscará en todos los directorios del `runtimepath` una carpeta llamada `lua` y luego dentro de esa carpeta buscará `basic.lua`. El último script que encuentre que cumpla estas condiciones será ejecutado.
 
-Una particularidad de lua que van a encontrar es que podemos usar el `.` para denotar un separador de ruta. Por ejemplo, imaginemos que tenemos el archivo `~/.config/nvim/lua/usermod/settings.lua`. Si queremos llamar al archivo `usermod/settings.lua` podemos hacerlo de la siguiente manera.
+Una particularidad de lua que van a encontrar es que podemos usar el `.` como un separador de ruta. Por ejemplo, imaginemos que tenemos el archivo `~/.config/nvim/lua/usermod/settings.lua`. Si queremos llamar al archivo `settings.lua` podemos hacerlo de la siguiente manera.
 
 ```lua
 require('usermod.settings')
@@ -61,7 +61,7 @@ Con este conocimiento ya están preparados para empezar su configuración en lua
 
 ## Opciones del editor
 
-Cada opción en neovim está disponible para nosotros en la variable global llamada `vim`... bueno, más que una variable es más como un módulo. Con `vim` tenemos acceso a opciones, a la api de neovim e incluso un conjunto de funciones auxiliares (una librería estándar). Por ahora lo que nos interesa es algo que llaman "meta-accessors", es lo que usaremos para acceder a las opciones del editor.
+Cada opción en neovim está disponible para nosotros en la variable global llamada `vim`... bueno, es más que una variable, es un módulo. Con `vim` tenemos acceso a opciones, a la api de neovim e incluso un conjunto de funciones auxiliares (una librería estándar). Por ahora lo que nos interesa es algo que llaman "meta-accessors", es lo que usaremos para acceder a las opciones del editor.
 
 ### Ámbitos
 
@@ -167,11 +167,9 @@ set.expandtab = true
 
 > Cuando declaran variables en lua no olviden la palabra clave `local`. En lua las variables son globales por defecto (esto incluye las funciones).
 
-Para los que están demasiado acostumbrados a vimscript (mi caso) esta puede ser una manera de mantener una sintaxis que resulte familiar.
-
 ¿Qué pasa con las variables globales o las variables de entorno? Para eso deberían seguir usando `vim.g` y `vim.env` respectivamente.
 
-Lo interesante de `vim.opt` es que cada propiedad es como un objeto especial, son lo que llaman "meta-tabla" en lua. Quiere decir que son objetos que implementan sus propias funciones para operaciones comunes.
+Lo interesante de `vim.opt` es que cada propiedad es como un objeto especial, son lo que llaman "meta-tabla". Quiere decir que son objetos que implementan sus propias funciones para operaciones comunes.
 
 En el primer ejemplo teníamos esto: `vim.opt.autoindent = true`, tal vez estén pensando que también pueden inspeccionar su valor de manera normal, así:
 
@@ -317,7 +315,7 @@ Ya que esto también es una tabla podemos hacer las mismas operaciones que menci
 
 ## Invocando funciones de vim
 
-Vimscript como cualquier otro lenguaje de programación tiene sus propias funciones nativas ([muchas](https://neovim.io/doc/user/usr_41.html#function-list)), y gracias al módulo `vim` podemos acceder a ellas usando `vim.fn`. Esta propiedad al igual que `vim.opt` es una meta-tabla, pero `vim.fn` en particular nos permite tener una sintaxis conveniente para llamar funciones de vim. Esto significa que podemos invocar funciones nativas, funciones creadas por nosotros mismos e incluso funciones de plugins que no están en escritos en lua. 
+Vimscript como cualquier otro lenguaje de programación tiene sus propias funciones nativas ([muchas funciones](https://neovim.io/doc/user/usr_41.html#function-list)) y gracias al módulo `vim` podemos acceder a ellas usando `vim.fn`. Al igual que `vim.opt`, `vim.fn` es una meta-tabla, pero en este caso nos permite tener una sintaxis conveniente para llamar funciones de vim. Podemos usar `vim.fn` para invocar funciones nativas, funciones creadas por nosotros mismos e incluso funciones de plugins que no están en escritos en lua.
 
 Podríamos por ejemplo validar la versión de neovim de esta manera:
 
@@ -347,7 +345,7 @@ Ahora déjenme mostrarle algo genial. La integración lua-vimscript es tan buena
 
 ### vim-plug en lua
 
-Sé que hay un montón de gente que utiliza [vim-plug](https://github.com/junegunn/vim-plug/), y tal vez se estén preguntando si tienen que migrar a un plugin manager que esté escrito en lua. No tienen que hacerlo, `vim.fn` y su acompañante `vim.call` son suficientes para usarlo desde lua.
+Sé que hay un montón de gente que utiliza [vim-plug](https://github.com/junegunn/vim-plug/) y tal vez se estén preguntando si tienen que migrar a un plugin manager que esté escrito en lua. No tienen que hacerlo, `vim.fn` y su acompañante `vim.call` son suficientes para usarlo desde lua.
 
 ```lua
 local Plug = vim.fn['plug#']
@@ -360,7 +358,7 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
 vim.call('plug#end')
 ```
 
-Si todos sus plugins usan la "forma simple" de `vim-plug` entonces esas tres líneas de código es todo lo que necesitan. Pueden probarlo, esto funciona.
+Esas tres líneas de código es todo lo que necesitan. Pueden probarlo, esto funciona.
 
 ```lua
 local Plug = vim.fn['plug#']
@@ -374,9 +372,7 @@ Plug 'tpope/vim-repeat'
 vim.call('plug#end')
 ```
 
-No se me olvidó nada. Todo eso es válido en lua. Si una función sólo recibe un argumento, y ese argumento es una cadena de texto o una tabla, pueden omitir los paréntesis.
-
-Si declaran todos sus plugins de esa manera pueden copiar y pegar su lista de plugins.
+Todo eso es válido en lua. Si una función sólo recibe un argumento y ese argumento es una cadena de texto o una tabla, pueden omitir los paréntesis.
 
 Si necesitan usar el segundo argumento de `Plug` deben usar los paréntesis y el segundo argumento debe ser una tabla. Vamos a comparar. Si en vimscript tenemos esto:
 
@@ -424,7 +420,7 @@ vim.cmd [[
 ]]
 ```
 
-Básicamente cualquier fragmento de su `init.vim` que no puedan "traducir" a lua pueden colocarlo una cadena de texto y pasarlo a `vim.cmd`.
+Cualquier fragmento de su `init.vim` que no puedan "traducir" a lua pueden colocarlo una cadena de texto y pasarlo a `vim.cmd`.
 
 Ya que podemos ejecutar cualquier comando de vim tengo que mencionar que eso incluye `source`, con esto podemos invocar scripts escritos en vimscript. Por ejemplo, en mi configuración yo lo uso para ejecutar un script que modifica algunos colores del tema.
 
@@ -432,7 +428,7 @@ Ya que podemos ejecutar cualquier comando de vim tengo que mencionar que eso inc
 vim.cmd 'source ~/.config/nvim/theme.vim'
 ```
 
-Y ese script tiene algo así.
+En este caso `theme.vim` crea un autocomando que ejecuta una función que ocurre el evento `ColorScheme`.
 
 ```vim
 function! MyHighlights() abort
@@ -552,7 +548,7 @@ vim.api.nvim_set_keymap(
 )
 ```
 
-Las cosas cambian un poco cuando necesitamos una expresión, en ese caso no podremos usar el comando `<cmd>lua`. Tenemos que usar la variable `v:lua`, la cual nos permite invocar funciones globales.
+Las cosas cambian un poco cuando necesitamos una expresión, en ese caso no podremos usar el comando `<cmd>lua`. Tenemos que usar la variable `v:lua` la cual nos permite invocar funciones globales.
 
 Para ilustrar este proceso haremos un ejemplo común, haremos que la tecla `<Tab>` sea más "inteligente". Cuando el menú de autocompletado sea visible será capaz de navegar entre la lista de opciones, caso contrarío insertará un caracter `<Tab>`.
 
@@ -579,7 +575,7 @@ vim.api.nvim_set_keymap(
 
 > En lua `_G` es la variable global que contiene todas las variables globales. No es necesario usarla pero de esa manera queda claro que estoy declarando una variable global a propósito.
 
-Si se preguntan porque uso `t'<C-n>'`, es porque no necesitamos retornar el texto `<C-n>`, necesitamos retornar el código que representa `<C-n>` y lo mismo ocurre con `<Tab>`.
+Si se preguntan porque uso `t'<C-n>'` es porque no necesitamos retornar el texto `<C-n>`, necesitamos retornar el código que representa `<C-n>` y lo mismo ocurre con `<Tab>`.
 
 Si esta api no les parece lo suficientemente buena siempre pueden elegir no migrar sus atajos a lua. Pueden simplemente poner sus atajos en un script `.vim` y llamarlo desde lua.
 
