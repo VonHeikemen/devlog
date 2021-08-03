@@ -112,7 +112,7 @@ In lua we would have to do this.
 vim.g['zoom#statustext'] = 'Z'
 ```
 
-As you might have guessed this also gives us an oportunity to access properties which have the name of keywords. You may find yourselves in a situation where you need to access a property called `for`, `do` or `end` which a are reserved keywords, in those cases remember this bracket syntax.
+As you might have guessed this also gives us an oportunity to access properties which have the name of keywords. You may find yourselves in a situation where you need to access a property called `for`, `do` or `end` which are reserved keywords, in those cases remember this bracket syntax.
 
 * vim.env
 
@@ -604,7 +604,7 @@ For those of you who are actually trying to run away from vimscript I could reco
 * [Vimpeccable](https://github.com/svermeulen/vimpeccable)
 * [bex.nvim](https://github.com/bkoropoff/bex.nvim)
 
-No need to download them all. Each one has a different way to create keybingings. Pick the one you like the most.
+No need to download them all. Each one has a different way to create keybindings. Pick the one you like the most.
 
 ## Plugin manager
 
