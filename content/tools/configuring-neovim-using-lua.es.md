@@ -540,6 +540,18 @@ Si aplicamos lo que aprendimos anteriormente sobre cómo llamar código lua desd
 Asumiendo que tenemos un módulo llamado `usermod` y este módulo tiene una función llamada `unafuncion`.
 
 ```lua
+local M = {}
+
+M.unafuncion = function()
+  print('todo bien')
+end
+
+return M
+```
+
+Podemos invocar `unafuncion` de esta manera.
+
+```lua
 vim.api.nvim_set_keymap(
   'n',
   '<Leader>w',

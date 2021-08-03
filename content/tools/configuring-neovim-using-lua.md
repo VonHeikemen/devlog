@@ -543,6 +543,18 @@ If we apply the knowledge we gained already about calling lua from vimscript, th
 Assuming we have a lua module called `usermod` and this module has a function called `somefunction`.
 
 ```lua
+local M = {}
+
+M.somefunction = function()
+  print('all good')
+end
+
+return M
+```
+
+We can call it like this.
+
+```lua
 vim.api.nvim_set_keymap(
   'n',
   '<Leader>w',
