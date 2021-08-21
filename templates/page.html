@@ -1,7 +1,7 @@
 {% extends "index.html" %}
 
 {% block title %}
-  {{ config.title }} | {{ page.title }}
+  {{ page.title }} | {{ config.title }}
 {% endblock title %}
 
 {% block extra_head %}
@@ -23,7 +23,7 @@
 
 {% block content %}
 
-{% set translation = page.translations | nth(n=0)  %}
+{% set translation = page.translations | filter(attribute="lang", value=other_lang) | nth(n=0)  %}
 
 <div class="post">
   <h1 class="post-title">{{ page.title }}</h1>
@@ -34,6 +34,7 @@
       {{ page.extra.canonical_url | split(pat="/") | nth(n=2)  }}
     </a>
     {% endif %}
+    | {{ page.reading_time }} {{ trans(key="min_read", lang=page.lang) }}
     {% if translation %}
     | <a href="{{ translation.permalink }}">
         {{ trans(key="read_in", lang=translation.lang) }}

@@ -1,3 +1,5 @@
+# Zola current version: v0.14
+
 # The URL the site will be built for
 base_url = "https://vonheikemen.github.io/devlog/"
 
@@ -13,18 +15,10 @@ build_search_index = false
 # The site title and description; used in RSS by default.
 title = "Devlog"
 
-# The default language; used in RSS.
+# The default language. (Doesn't seem to work right now on version 0.14)
 default_language = "en"
 
-# The additional languages for the site.
-languages = [
-  {code = "es"},
-]
-
-taxonomies = [
-  {name = "tags", lang = "en", rss = true },
-  {name = "tags", lang = "es", rss = true }
-]
+taxonomies = [{name = "tags"}]
 
 [markdown]
 # Whether to do syntax highlighting
@@ -34,23 +28,35 @@ highlight_code = true
 # The theme to use for code highlighting.
 highlight_theme = "charcoal"
 
+# Whether external links are to be opened in a new tab
+external_links_target_blank = true
 
 [translations]
-[translations.en]
+min_read = "min read"
 change_language_link = "Devlog in english"
 title_tags = "Explore tags"
 published_in = "Originally published at"
 read_in = "Read in english"
 buymeacoffee="Thank you for reading. If you find this article useful and want to support my efforts, buy me a coffee ☕"
 
-[translations.es]
+# The additional languages for the site.
+[languages]
+
+[languages.es]
+title = "Devlog"
+taxonomies = [{name = "tags"}]
+
+[languages.es.translations]
+min_read = "minutos"
 change_language_link = "Devlog en español"
 title_tags = "Explorar tags"
 published_in = "Originalmente publicado en"
 read_in = "Leer en español"
 buymeacoffee="Gracias por su tiempo. Si este artículo les pareció útil y quieren apoyar mis esfuerzos para crear más contenido, pueden dejar una propina en buy me a coffee ☕."
 
+
 [extra]
+languages = ["en", "es"]
 creation_year = 2020
 site_keywords = ["software", "coding", "development"]
 meta_description = "Personal knowledge base about coding and software development"
@@ -59,5 +65,5 @@ hyde_theme = "theme-base-custom"
 hyde_sticky = true
 hyde_reverse = false
 hyde_links = [
-  {url = "/", name = "Whoami"},
+  {url = "/", name = "whoami"},
 ]

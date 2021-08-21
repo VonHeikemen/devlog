@@ -9,15 +9,15 @@
 {% elif taxonomy.lang %}
   {% set current_lang = taxonomy.lang %}
 {% else %}
-  {% set current_lang = config.default_language %}
+  {% set current_lang = config.extra.languages[0] %}
 {% endif %}
 
-{% if current_lang == config.default_language %}
-  {% set other_lang = config.languages[0].code %}
+{% if current_lang == config.extra.languages[0] %}
+  {% set other_lang = config.extra.languages[1] %}
   {% set real_base_url =  config.base_url %}
   {% set change_base_url = config.base_url ~ other_lang ~ '/' %}
 {% else %}
-  {% set other_lang = config.default_language %}
+  {% set other_lang =  config.extra.languages[0] %}
   {% set real_base_url = config.base_url ~ current_lang ~ '/' %}
   {% set change_base_url = config.base_url %}
 {% endif %}
@@ -60,6 +60,7 @@
 
     
     <body class="{{ config.extra.hyde_theme }} {% if config.extra.hyde_reverse %}layout-reverse{% endif %}">
+
         {% block sidebar %}
             <div class="sidebar">
                 <div class="container {% if config.extra.hyde_sticky %}sidebar-sticky{% endif %}">
@@ -74,14 +75,17 @@
 
                     <ul class="sidebar-nav">
                         {% block sidebar_nav %}
+
                         {% for link in config.extra.hyde_links %}
                         <li class="sidebar-nav-item"><a href="{{link.url}}">{{link.name}}</a></li>
                         {% endfor %}
-                        {% for link in config.taxonomies | filter(attribute="lang", value=current_lang) %}
-                        {% set _taxonomy = get_taxonomy(kind=link.name, lang=current_lang) %}
-                        {% set _href = _taxonomy.items[0].permalink | replace(from=_taxonomy.items[0].slug ~ "/", to="") %}
-                        <li class="sidebar-nav-item"><a href="{{ _href }}">{{ trans(key="title_" ~ link.name, lang=current_lang) }}</a></li>
+
+                        {% for link in config.taxonomies %}
+                          {% set _taxonomy = get_taxonomy(kind=link.name, lang=current_lang) %}
+                          {% set _href = _taxonomy.permalink %}
+                          <li class="sidebar-nav-item"><a href="{{ _href }}">{{ trans(key="title_" ~ link.name, lang=current_lang) }}</a></li>
                         {% endfor %}
+
                         <li class="sidebar-nav-item"><a href="{{ change_base_url }}">{{ trans(key="change_language_link", lang=other_lang) }}</a></li>
                         {% endblock sidebar_nav %}
                     </ul>
