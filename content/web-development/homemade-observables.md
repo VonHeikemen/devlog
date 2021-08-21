@@ -443,5 +443,3 @@ Fair warning though. They are not the ultimate solution to every problem. You'll
  * [Github repository - zen-observable](https://github.com/zenparsing/zen-observable)
  * [Understanding Observables](https://dev.to/supermanitu/understanding-observables)
 
-Thank you for reading.
-
