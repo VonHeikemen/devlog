@@ -9,7 +9,10 @@
       </h1>
 
       <p>{{ page.description }}</p>
-      <span class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
+      <span class="post-date">
+        {{ page.date | date(format="%Y-%m-%d") }} 
+        | {{ page.reading_time }} {{ trans(key="min_read", lang=page.lang) }}
+      </span>
     </div>
   {% endfor %}
 </div>
