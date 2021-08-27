@@ -5,6 +5,11 @@ date = 2020-04-21
 lang = "en"
 [taxonomies]
 tags = ["javascript", "functional-programming", "learning"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/reduce-how-and-when-2cj9"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/reduce-how-and-when"]
+]
 +++
 
 Let's talk about the elephant in the `Array` prototype, the not so loved [reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) method but we're not going to discuss whether if it's good or not, let's not do that. We'll talk about how it works internally, then we'll try to figure out under what situation it can be an effective solution.

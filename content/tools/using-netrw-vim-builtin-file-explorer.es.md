@@ -5,6 +5,11 @@ date = 2021-01-10
 lang = "es"
 [taxonomies]
 tags = ["vim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/usando-netrw-el-navegador-de-archivos-nativo-de-vim-2j36"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/using-netrw-vims-builtin-file-explorer-es"]
+]
 +++
 
 ¿Sabían que vim tiene un navegador de archivos? Sí, es un plugin que ya viene instalado con vim. Se llama Netrw... y no es muy popular, al menos no en comparación con otros plugins como NERDtree. La razón para esto es: 1) no es muy intuitivo. 2) tiene algunas limitaciones. 3) se ve feo. Hoy vamos a aprender a usarlo, veremos cómo sobrepasar algunas de sus limitaciones y en el proceso vamos a convertirlo en un navegador de archivos más intuitivo.

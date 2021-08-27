@@ -5,6 +5,11 @@ date = 2021-04-18
 lang = "en"
 [taxonomies]
 tags = ["shell", "deno", "todayilearned"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/extending-the-deno-cli-using-a-shell-function-3ifh"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/extending-the-deno-cli-using-a-shell-function"]
+]
 +++
 
 I've been using `deno` more and more these days and I must tell you they are still things that bug me. But I did manage to solve some of those problems by "adding" some sub-commands to the cli. No, it's not dark magic, it's just a trick that I learned a while ago and that I'm going to share with you today.

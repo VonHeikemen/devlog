@@ -7,6 +7,10 @@ lang = "es"
 tags = ["javascript", "paradigma-funcional", "aprendizaje"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/un-poco-del-paradigma-funcional-en-tu-javascript-usando-un-maybe-4a33"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/un-poco-del-paradigma-funcional-en-tu-javascript-usando-un-maybe-4a33"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/using-a-maybe-es"]
+]
 +++
 
 ¿Alguna vez han escuchado de las estructuras llamadas "monads" y lo geniales que son? Tal vez sí, pero aún no las entienden completamente. Bueno... aquí no intentaré definirlas y tampoco les diré si son geniales o no, lo que haré es mostrarles un ejemplo de cómo sería si las usaran en sus javascripts (específicamente el monad `Maybe`).

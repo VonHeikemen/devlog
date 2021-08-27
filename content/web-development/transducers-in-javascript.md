@@ -5,6 +5,11 @@ date = 2020-12-27
 lang = "en"
 [taxonomies]
 tags = ["javascript", "functional-programming"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/transducers-in-javascript-3gfm"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/transducers-in-javascript"]
+]
 +++
 
 What if I told you we can extract the essence of list operations like `map` and `filter` and apply them in other kinds of collections beyond arrays? What if I told you that I can implement `filter` only once and apply that exact same function in multiple types of collections? That is the idea behind transducers. Today we are going to learn what are they, how they work and how can we use them.

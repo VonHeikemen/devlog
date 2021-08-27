@@ -5,6 +5,11 @@ date = 2021-06-13
 lang = "en"
 [taxonomies]
 tags = ["vim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/vim-and-the-quickfix-list-jump-to-a-location-search-and-replace-in-multiple-files-and-other-shenanigans-3ki8"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/vim-and-the-quickfix-list"]
+]
 +++
 
 We are going to learn about an avanced feature of vim, the quickfix list. We're going to figure out how to use it to search (and replace) a pattern in multiple files, and also how can we jump to the location of an error thrown by an external command.

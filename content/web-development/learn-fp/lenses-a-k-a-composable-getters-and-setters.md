@@ -7,6 +7,10 @@ lang = "en"
 tags = ["javascript", "functional-programming"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/lenses-a-k-a-composable-getters-and-setters-16jd"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/lenses-a-k-a-composable-getters-and-setters-16jd"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/lenses-aka-composable-getters-and-setters"]
+]
 +++
 
 This time around we will figure out what are lenses, how do they look like in javascript and hopefully will build a mostly adequate implementation.

@@ -5,6 +5,11 @@ date = 2021-05-02
 lang = "es"
 [taxonomies]
 tags = ["vim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/vim-y-el-quickfix-list-saltar-a-una-ubicacion-buscar-y-reemplazar-en-multiples-archivos-y-otras-curiosidades-13n4"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/vim-and-the-quickfix-list-es"]
+]
 +++
 
 En esta ocasión cubriremos una funcionalidad avanzada de vim, la lista de cambios rápidos, A.K.A. *the quickfix list*. Aprenderemos cómo usarla para buscar (y reemplazar) un patrón en múltiples archivos y también para saltar rápidamente a la ubicación de un error generado por un comando externo.

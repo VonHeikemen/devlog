@@ -5,6 +5,11 @@ date = 2021-07-29
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/todo-lo-que-necesitan-saber-para-configurar-neovim-usando-lua-2fon"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/everything-you-need-to-know-to-configure-neovim-using-lua-es"]
+]
 +++
 
 Después de mucho tiempo en desarrollo neovim 0.5 por fin fue liberado como una versión estable. Entre las nuevas mejoras tenemos un mejor soporte para lua y la promesa de una api estable para crear nuestra configuración usando este lenguaje. Aprovechando esto hoy voy compartir con ustedes todo lo que aprendí mientras migraba mi configuración de vimscript a lua.

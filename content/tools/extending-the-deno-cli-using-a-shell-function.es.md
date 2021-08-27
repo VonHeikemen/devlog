@@ -5,6 +5,11 @@ date = 2021-04-18
 lang = "es"
 [taxonomies]
 tags = ["shell", "deno", "hoy-aprendi"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/extendiendo-deno-cli-usando-una-funcion-1153"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/extending-the-deno-cli-using-a-shell-function-es"]
+]
 +++
 
 Estos días he estado usando `deno` con más frecuencia y debo decirles que aún hay un par de cosas que me molestan. Sí logré resolver algunos de esos problemas "agregando" algunos sub-comandos. No, no es magia negra, sólo un pequeño truco que aprendí hace tiempo y hoy voy a decirles cómo funciona.

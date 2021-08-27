@@ -5,6 +5,11 @@ date = 2020-08-11
 lang = "en"
 [taxonomies]
 tags = ["javascript", "functional-programming"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/what-are-these-applicative-functors-you-speak-of-4j6f"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/applicative-functors"]
+]
 +++
 
 What are they indeed. Our goal for today will be to learn about applicative functors using javascript. Yes, javascript. Don't judge me, it's what I know. We'll cover things like how to create them, how you can spot them in the wild and a somewhat useful use case.

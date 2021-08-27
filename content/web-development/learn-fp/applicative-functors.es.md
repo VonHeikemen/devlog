@@ -5,6 +5,11 @@ date = 2020-08-13
 lang = "es"
 [taxonomies]
 tags = ["javascript", "paradigma-funcional"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/que-son-los-applicative-functors-1cnn"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/applicative-functors-es"]
+]
 +++
 
 Nuestra agenda para hoy será aprender qué son applicative functors (aplicativos de ahora en adelante) usando javascript. Sí, usaremos javascript. No me juzguen, es lo que sé. Al terminar este artículo sabrán cómo crearlos, cómo reconocerlos y les enseñaré un truco que puede o no resultarles útil alguna vez.

@@ -5,6 +5,11 @@ date = 2020-04-02
 lang = "en"
 [taxonomies]
 tags = ["javascript", "functional-programming", "learning"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/pure-functions-and-why-they-are-a-good-idea-2n5g"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/pure-functions"]
+]
 +++
 
 When we talk about functional programming very few things can be as important as pure functions. People who write code in this style make a considerable effort to contain as much logic as they can in pure functions, I'll try to explain some of the reasons behind this. But, first things first...

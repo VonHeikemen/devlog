@@ -5,6 +5,11 @@ date = 2020-07-12
 lang = "en"
 [taxonomies]
 tags = ["zsh", "shell", "todayilearned"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/zsh-global-aliases-4g15"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/zsh-global-aliases"]
+]
 +++
 
 If you have spend a significant amount of time writing commands in a shell chances are you have come across these handy little things called **aliases**. They usually come with the promise of boosting your productivity. Sometimes we use them to protect us from long commands with cryptic arguments and sometimes we use them just to save ourselves a few keystrokes. Regardless of your motives I'm going to show you another type of alias you might not know of, global aliases.

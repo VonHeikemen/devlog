@@ -5,6 +5,11 @@ date = 2020-04-03
 lang = "es"
 [taxonomies]
 tags = ["javascript", "paradigma-funcional", "aprendizaje"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/lo-que-se-del-paradigma-funcional-590d"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/learn-fp-in-js"]
+]
 +++
 
 Aprender sobre el paradigma funcional en la programación no es una tarea fácil, sobre todo si buscan material que contenga ejemplos prácticos de cómo usar los conceptos que enseñan. Lo que presento en esta ocasión es una recopilación de las notas que he tomado, y que he transformado en "artículos", así como también enlaces a las fuentes de donde he sacado toda esta información.

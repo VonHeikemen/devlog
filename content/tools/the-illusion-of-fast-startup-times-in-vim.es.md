@@ -5,6 +5,10 @@ date = 2021-08-22
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/la-ilusion-de-un-inicio-rapido-en-vim-5dmb"]
+]
 +++
 
 "Ilusión" es la palabra clave. Lo que voy a enseñarles no es ningún "truco mágico" que hará vim más rápido. Alejen ese pensamiento de sus mentes. Lo único que haremos hoy será retrasar lo inevitable.

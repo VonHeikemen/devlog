@@ -5,6 +5,11 @@ date = 2020-06-12
 lang = "en"
 [taxonomies]
 tags = ["javascript", "functional-programming"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/tagged-unions-and-fantasy-land-4kjc"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/tagged-unions-and-fantasy-land"]
+]
 +++
 
 Let's do something fun, let's explore one branch of the [Fantasy Land](https://github.com/fantasyland/fantasy-land) specification using tagged unions. In order to keep this as short as possible I'll mostly focus on how things work and leave out a lot of details. So, what we'll do is create a data structure and see if we can follow the rules on the specification.

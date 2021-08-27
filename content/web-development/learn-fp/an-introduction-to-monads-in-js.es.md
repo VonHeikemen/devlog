@@ -5,6 +5,11 @@ date = 2020-09-26
 lang = "es"
 [taxonomies]
 tags = ["javascript", "paradigma-funcional"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/una-introduccion-a-las-monadas-en-javascript-4hg0"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/an-introduction-to-monads-in-js-es"]
+]
 +++
 
 Las infames mónadas. Innombrables en el mundo javascript. Hoy hablaremos de ellas, para ser más específico lo que haremos será "revisar" una definición de mónadas que leí por ahí, la única que no hace que mi cerebro explote. Para mantener nuestra cordura intacta sólo vamos a explorar los aspectos que podemos modelar fácilmente usando javascript. ¿Todo el mundo listo? Comencemos.

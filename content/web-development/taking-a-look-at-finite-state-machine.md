@@ -7,6 +7,10 @@ lang = "en"
 tags = ["javascript", "learning", "beginners"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/taking-a-look-at-finite-state-machines-2g9i"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/taking-a-look-at-finite-state-machines-2g9i"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/taking-a-look-at-finite-state-machines"]
+]
 +++
 
 ## The finite who-- what?

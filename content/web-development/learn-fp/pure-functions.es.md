@@ -5,6 +5,11 @@ date = 2020-04-02
 lang = "es"
 [taxonomies]
 tags = ["javascript", "paradigma-funcional", "aprendizaje"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/funciones-puras-y-porque-son-una-buena-idea-37i7"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/pure-functions-es"]
+]
 +++
 
 Cuando se habla del paradigma funcional en la programación uno de los conceptos básicos que resalta por su importancia son la funciones puras. Las personas acostumbradas a este paradigma hacen un gran esfuerzo para mantener su código tanto como sea posible en funciones puras, aquí les explicaré algunas de las razones. Pero primero debemos saber...

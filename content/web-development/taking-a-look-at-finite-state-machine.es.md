@@ -7,6 +7,10 @@ lang = "es"
 tags = ["javascript", "aprendizaje"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/un-vistazo-a-las-maquinas-de-estados-finitos-1181"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/un-vistazo-a-las-maquinas-de-estados-finitos-1181"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/taking-a-look-at-finite-state-machines-es"]
+]
 +++
 
 ## ¿Máquinas de qué-- quién?

@@ -5,6 +5,11 @@ date = 2020-05-24
 lang = "es"
 [taxonomies]
 tags = ["javascript", "paradigma-funcional"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/uniones-discriminadas-y-fantasy-land-1fn6"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/tagged-unions-and-fantasy-land-es"]
+]
 +++
 
 Vamos a hacer algo divertido, vamos a explorar una de las ramas de la especificación [Fantasy Land](https://github.com/fantasyland/fantasy-land) usando uniones discriminadas como nuestro medio transporte. Para no extendernos más de lo necesario vamos a enfocarnos más que todo en el cómo funcionan las cosas y dejaremos de lado muchos detalles. Entonces, lo que haremos será crear una estructura y ver si podemos seguir las reglas que aparecen en la especificación.

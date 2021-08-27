@@ -7,6 +7,10 @@ lang = "en"
 tags = ["javascript", "functional-programming"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/functional-programming-for-your-everyday-javascript-partial-application-6dm"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/functional-programming-for-your-everyday-javascript-partial-application-6dm"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/partial-application"]
+]
 +++
 
 Today we are here to solve a mystery, the mystery of why some people choose to create functions that take a callback as the first argument. You might be thinking that the answer is partial application and you would be half right, but partial application is just the means to an end, the real reason to do such a thing is to enable a "better" function composition. But before we get into details of partial application let's explore how we do things now.

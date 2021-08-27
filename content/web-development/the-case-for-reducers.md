@@ -5,6 +5,11 @@ date = 2020-11-22
 lang = "en"
 [taxonomies]
 tags = ["javascript"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/the-case-for-reducers-101l"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/the-case-for-reducers"]
+]
 +++
 
 In a [previous post](@/web-development/learn-fp/reduce-how-and-when.md) I talked about `.reduce`, how it worked and (what I think) it's ideal use case, this time around I'll cover some other use cases where `.reduce` could be a good fit. Now, you don't have to read that post but I will assume that you at least know how `Array.reduce` works. By the end of this post I hope that you learn how to recognize the places where `.reduce` would work perfectly.

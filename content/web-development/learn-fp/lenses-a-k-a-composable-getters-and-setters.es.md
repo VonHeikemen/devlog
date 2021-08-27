@@ -7,6 +7,10 @@ lang = "es"
 tags = ["javascript", "paradigma-funcional"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/lenses-o-mejor-dicho-getters-y-setters-combinables-kfo"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/lenses-o-mejor-dicho-getters-y-setters-combinables-kfo"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/lenses-aka-composable-getters-and-setters-es"]
+]
 +++
 
 Esta vez vamos a descubrir qué son lenses (lentes en inglés), cómo se ven en javascript y espero que al final de todo esto podamos crear una implementación casi adecuada.

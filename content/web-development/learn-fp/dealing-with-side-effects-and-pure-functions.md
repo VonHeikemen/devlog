@@ -7,6 +7,10 @@ lang = "en"
 tags = ["javascript", "functional-programming"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/dealing-with-side-effects-and-pure-functions-in-javascript-16mg"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/dealing-with-side-effects-and-pure-functions-in-javascript-16mg"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/dealing-with-side-effects-and-pure-functions-in-javascript"]
+]
 +++
 
 Have you ever heard the term "pure function"? What about "side effects"? If you have then probably you've heard that side effects are evil and should be avoided at all cost (just like `var`.) Here is the problem, if you write javascript you probably want to cause those side effects (specially if you get paid to write javascript) So the solution here is not to avoid all the side effects but to control them. I going to show you a few things that you can do to make your pure functions and your side effects get along just fine.

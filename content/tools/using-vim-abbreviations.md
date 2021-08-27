@@ -5,6 +5,11 @@ date = 2020-11-03
 lang = "en"
 [taxonomies]
 tags = ["vim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/using-vim-s-abbreviations-4jj6"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/using-vim-abbreviations"]
+]
 +++
 
 One of the things vim does extremely well is automation. This time we'll explore a feature called "abbreviation" and how can we use it to automate things in insert mode (you can use it in other modes but I'll focus on insert mode). We will go from the most basic use case to some that are more elaborated. But don't worry, we'll take one step at a time. Let's start.

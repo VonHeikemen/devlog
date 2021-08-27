@@ -5,6 +5,11 @@ date = 2021-01-10
 lang = "en"
 [taxonomies]
 tags = ["vim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/using-netrw-vim-s-builtin-file-explorer-16mb"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/using-netrw-vims-builtin-file-explorer"]
+]
 +++
 
 Did you know that vim has a file explorer? It's a plugin that comes bundled with vim. It's called Netrw... and it's not very popular, at least not if you compare it with something like NERDtree. The reasons for this could include 1) is not very intuitive. 2) has a few annoying limitations. 3) doesn't look cool. Today we are going to learn how to use it, how to get around those limitations and in the process we're going to turn it into something more intuitive and easier to use.

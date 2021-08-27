@@ -7,6 +7,10 @@ lang = "es"
 tags = ["javascript", "paradigma-funcional", "aprendizaje"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/un-poco-del-paradigma-funcional-en-tu-javascript-los-poderes-de-map-473i"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/un-poco-del-paradigma-funcional-en-tu-javascript-los-poderes-de-map-473i"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/the-power-of-map-es"]
+]
 +++
 
 En esta ocasión vamos a dar un vistazo dentro del mundo de los `functors` y descubrir qué los hace tan especiales. Functor es uno de esos términos que aparece cuando la gente a habla del paradigma funcional en la programación pero cuando llega el momento de explicar qué es, lo que ocurre es que mencionan otros términos abstractos o sólo cuantan los detalles necesarios que necesitan saber. Ya que no tengo ningún conocimiento formal de teoría de categorías no voy a fingir qué sé exactamente lo que son, lo que haré será dicerles lo suficiente para que puedan reconocerlos y cómo pueden usarlos.

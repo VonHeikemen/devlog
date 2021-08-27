@@ -5,6 +5,10 @@ date = 2021-08-22
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/the-illusion-of-fast-startup-times-in-vim-bfo"]
+]
 +++
 
 With an emphasis on the word "Illusion". What I'm going to show you is not a "magic trick" that will make vim go faster. Don't get your hopes up. The only thing we'll do here is delay the inevitable.

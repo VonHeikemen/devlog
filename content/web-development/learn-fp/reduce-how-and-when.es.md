@@ -5,6 +5,11 @@ date = 2020-04-19
 lang = "es"
 [taxonomies]
 tags = ["javascript", "paradigma-funcional", "aprendizaje"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/reduce-como-y-cuando-18a1"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/reduce-how-and-when-es"]
+]
 +++
 
 Vamos a hablar del elefante rosa en el prototipo `Array`, me refiero al a veces odiado método [reduce](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce) pero no vamos a discutir sobre si esta función es buena o mala. Vamos a descubrir qué es lo que hace internamente, luego intentaremos descubrir las situaciones en las que puede ser una solución efectiva.

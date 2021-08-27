@@ -5,6 +5,11 @@ date = 2021-04-10
 lang = "es"
 [taxonomies]
 tags = ["vim", "shell", "hoy-aprendi"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/vim-en-modo-facil-usando-vim-como-un-editor-de-texto-convencional-41na"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/vims-easy-mode-making-vim-behave-like-a-conventional-text-editor-es"]
+]
 +++
 
 Resulta que vim tiene incorporado de manera nativa un "modo fácil." ¿Quién lo diría? Hoy vamos a aprender de qué se trata, cómo podemos habilitarlo, veremos por qué nadie le presta atención y por último les enseñaré algunas cosas que pueden hacer para mejorarlo.

@@ -7,6 +7,10 @@ lang = "es"
 tags = ["javascript", "paradigma-reactivo", "aprendizaje"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/observables-hechos-en-casa-1bch"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/observables-hechos-en-casa-1bch"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/homemade-observables-es"]
+]
 +++
 
 En esta ocasión implementaremos nuestros propios observables. Al terminar espero que tengan un mejor entendimiento de cómo este patrón es usado en librerías como RxJS.

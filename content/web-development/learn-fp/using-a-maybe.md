@@ -7,6 +7,10 @@ lang = "en"
 tags = ["javascript", "functional-programming", "learning"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/functional-programming-for-your-everyday-javascript-using-a-maybe-126j"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/functional-programming-for-your-everyday-javascript-using-a-maybe-126j"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/using-a-maybe"]
+]
 +++
 
 Have you ever heard about monads and how great they are? Maybe you have but you still don't get it. Well... I'm not here to tell you what they are, I won't try to sell them to you either, what I will do is show you an example of how would it be if you use them in your javascripts.

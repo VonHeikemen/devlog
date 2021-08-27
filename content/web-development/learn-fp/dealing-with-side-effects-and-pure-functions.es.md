@@ -7,6 +7,10 @@ lang = "es"
 tags = ["javascript", "paradigma-funcional"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/como-combinar-efectos-y-funciones-puras-en-javascript-38go"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/como-combinar-efectos-y-funciones-puras-en-javascript-38go"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/dealing-with-side-effects-and-pure-functions-in-javascript-es"]
+]
 +++
 
 ¿Alguna vez han escuchado el término "función pura"? ¿Y "efecto secundario"? Si la respuesta es sí entonces probablemente les han dicho que los efectos secundarios son malos y deben evitarlos a toda costa. Este es el problema, si están usando javascript es muy probable que quieran causar esos efectos (especialmente si les pagan por usar javascript) Entonces la solución no es evitar estos efectos sino controlarlos. Voy a mostrarles algunas maneras en las que pueden combinar los efectos secundarios y las funciones puras.

@@ -5,6 +5,11 @@ date = 2020-12-27
 lang = "es"
 [taxonomies]
 tags = ["javascript", "paradigma-funcional"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/transductores-en-javascript-30kc"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/transducers-in-javascript-es"]
+]
 +++
 
 ¿Qué pasaría si pudiéramos extraer la idea detrás de operaciones como `map` y `filter` y aplicarlas a otro tipo de colecciones más allá de los arreglos? ¿Y si les digo que puedo implementar `filter` una sola vez y reusar ese mismo código en diferentes tipos de colecciones? Esa es la premisa de los transductores. Hoy vamos a aprender qué son, cómo funcionan y cómo se usan.

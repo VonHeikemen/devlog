@@ -5,6 +5,11 @@ date = 2020-09-02
 lang = "en"
 [taxonomies]
 tags = ["javascript", "functional-programming"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/an-introduction-to-monads-in-js-2f7d"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/an-introduction-to-monads-in-js"]
+]
 +++
 
 Oh the infamous M word. The one we don't speak about in javascript. Well, today we are going talk about it, specifically we are going to "review" one definition I really like, the only one that doesn't make my head explode. In order to keep our sanity we are just going to explore the aspects we can model using javascript. Everyone ready? Let us begin.

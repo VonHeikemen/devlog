@@ -7,6 +7,10 @@ lang = "en"
 tags = ["javascript", "functional-programming", "learning"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/functional-programming-for-your-everyday-javascript-the-power-of-map-4n9m"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/functional-programming-for-your-everyday-javascript-the-power-of-map-4n9m"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/the-power-of-map"]
+]
 +++
 
 This time we are going to take a look inside the world of `functors` and what makes them so special. Functors is one of those terms that you hear every now and then when people talk about functional programming but when the time comes to explain it they either bombard you with more abstract terms or tell you just the details you need to know. Since I have no knowledge of category theory I'm not going to pretend that I know exactly what a functor is, I'm just going show enough for you to know how you can spot them in the wild and how you can use them to your advantage.

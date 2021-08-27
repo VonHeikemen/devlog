@@ -5,6 +5,11 @@ date = 2020-11-27
 lang = "es"
 [taxonomies]
 tags = ["javascript"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/la-utilidad-de-los-reducers-4apa"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/the-case-for-reducers-es"]
+]
 +++
 
 En un [artículo anterior](@/web-development/learn-fp/reduce-how-and-when.md) les hablé del método `.reduce`, cómo funciona y el caso ideal en el que podemos usarlo (en mi opinion). Esta vez voy a mostrar más casos en los que podría ser una buena opción. Ahora bien, no tienen que haber leído ese artículo pero de aquí en adelante voy a asumir que saben cómo funciona el método `Array.reduce`. Al finalizar espero que aprendan a reconocer en qué lugares `.reduce` podría funcionar perfectamente.

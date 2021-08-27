@@ -5,6 +5,11 @@ date = 2020-03-29
 lang = "es"
 [taxonomies]
 tags = ["javascript", "paradigma-funcional", "aprendizaje"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/un-poco-del-paradigma-funcional-en-tu-javascript-tecnicas-de-composicion-fj5"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/function-composition-techniques-es"]
+]
 +++
 
 Hoy el tema será la composición de funciones. El arte de crear cosas complejas con piezas "simples". Si no saben nada del paradigma funcional en la programación incluso mejor, esta será una introducción a conceptos y patrones de ese paradigma que pueden implementarse en javascript. Lo que voy a presentar no será una fórmula mágica que hará su código más legible, simple y sin errores; así no funcionan las cosas. Sí creo que ayuda en la solución de problemas pero para sacarle el mayor provecho deben tener en cuenta ciertas cosas. Así que antes de mostrar cualquier implementación vamos a hablar de algunos conceptos y filosofía.

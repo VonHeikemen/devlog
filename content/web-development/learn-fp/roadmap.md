@@ -5,6 +5,11 @@ date = 2020-04-03
 lang = "en"
 [taxonomies]
 tags = ["javascript", "functional-programming", "learning"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/what-i-know-about-functional-programming-38mc"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/learn-fp-in-js"]
+]
 +++
 
 Learning about functional programming is not an easy task, specially if you search for articles that have concrete examples of the concepts they try to teach. I have been learning about this paradigm for a while and I want it to share the notes I have taken, the ones I've turn into articles, and also the source material where I got the information.

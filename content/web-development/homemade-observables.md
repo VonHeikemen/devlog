@@ -7,6 +7,10 @@ lang = "en"
 tags = ["javascript", "learning" , "reactive-programming"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/homemade-observables-4ab3"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/homemade-observables-4ab3"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/homemade-observables"]
+]
 +++
 
 On this episode we will build our own implementation of an observable. I hope that by the end of this post we gain a better understanding of this pattern that is used in libraries like RxJS.

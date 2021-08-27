@@ -5,6 +5,11 @@ date = 2020-03-30
 lang = "en"
 [taxonomies]
 tags = ["javascript", "functional-programming", "learning"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/functional-programming-for-your-everyday-javascript-composition-techniques-4663"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/function-composition-techniques"]
+]
 +++
 
 Today we are going to talk about function composition. The art of creating big things with "simple" pieces. It will be even better if you don't know anything about functional programming, this will be an introduction to common concepts and patterns used in that paradigm that can be implemented in javascript. What I'm about to show you is not a magical formula to make your code more readable or bug free, that's not how any of this works. I do believe that it can help solve some problems, but in order to do that in the best way you need to keep a few things in mind. So, before I show you any implementation we are going to talk about some concepts and a little bit about philosophy. 

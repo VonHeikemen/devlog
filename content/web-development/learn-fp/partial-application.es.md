@@ -7,6 +7,10 @@ lang = "es"
 tags = ["javascript", "paradigma-funcional", "aprendizaje"]
 [extra]
 canonical_url = "https://dev.to/vonheikemen/un-poco-del-paradigma-funcional-en-tu-javascript-aplicacion-parcial-41kl"
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/un-poco-del-paradigma-funcional-en-tu-javascript-aplicacion-parcial-41kl"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/partial-application-es"]
+]
 +++
 
 Hoy vamos a resolver un misterio, el misterio de porque algunas personas crean funciones que aceptan una (otra) función como primer parámetro. Ya deben estar pensando que la respuesta es aplicación parcial y tienen razón en cierta parte, pero la aplicación parcial sólo es el medio para un fin, la verdadera razón de esto es para hacer posible una "mejor" composición de funciones. Pero antes de adentrarnos en los detalles técnicos de la aplicación parcial vamos a explorar la manera en la que hacemos las cosas actualmente.

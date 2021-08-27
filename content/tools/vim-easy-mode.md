@@ -5,6 +5,11 @@ date = 2021-04-10
 lang = "en"
 [taxonomies]
 tags = ["vim", "shell", "todayilearned"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/vim-s-easy-mode-making-vim-behave-like-a-conventional-text-editor-4h26"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/vims-easy-mode-making-vim-behave-like-a-conventional-text-editor"]
+]
 +++
 
 So it turns out vim has an "easy mode." Who knew? That will be the topic today, we will learn what's the deal with this mode, we'll figure out how to enable it, see why almost nobody pays attention to it, and lastly I'll show you some stuff you can do to make it a bit nicer.

@@ -5,6 +5,11 @@ date = 2020-07-12
 lang = "es"
 [taxonomies]
 tags = ["zsh", "shell", "hoy-aprendi"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/alias-global-en-zsh-4i9p"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/zsh-global-aliases-es"]
+]
 +++
 
 Si han pasado mucho tiempo escribiendo comandos en la terminal lo más probable es que estén al tanto de la existencia los **alias**. Generalmente cuando se habla de ellos también se habla de una promesa de incrementar la productividad. Lo cierto es que algunas veces los usamos para protegernos de comandos largos con argumentos crípticos y algunas veces sólo los usamos para ahorranos algunos caracteres. Sin importar sus motivos les voy a enseñar a crear otro tipo de alias que tal vez no conocían antes, los alias globales.
