@@ -1,8 +1,11 @@
 {% extends "index.html" %}
 
 {% block content %}
+    {% set_global posts = [] %}
     {% for current in section.subsections  %}
       {% set current_section = get_section(path=current) %}
-      {{ macros::posts_list(pages=current_section.pages) }}
+      {% set_global posts = posts | concat(with=current_section.pages) %}
     {% endfor %}
+
+    {{ macros::posts_list(pages=posts | sort(attribute="date") | reverse) }}
 {% endblock content %}
