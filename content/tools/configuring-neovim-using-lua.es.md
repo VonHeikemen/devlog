@@ -344,7 +344,7 @@ Pero también podemos usar la función `vim.call`.
 vim.call('fzf#vim#files', '~/projects', false)
 ```
 
-En la práctica `vim.fn.unafuncion()` y `vim.call('unafuncion')` tienen exactamente el mismo efecto. Son iguales.
+En la práctica `vim.fn.unafuncion()` y `vim.call('unafuncion')` tienen exactamente el mismo efecto.
 
 Ahora déjenme mostrarle algo genial. La integración lua-vimscript es tan buena que podríamos utilizar un "plugin manager" sin necesidad de adaptaciones especiales.
 
@@ -603,8 +603,10 @@ vim.cmd 'source ~/.config/nvim/keymap.vim'
 Para los que quieren huir de vimscript tanto como sea posible puedo recomendarles algunos plugins:
 
 * [astronauta.nvim](https://github.com/tjdevries/astronauta.nvim)
+* [mapx.nvim](https://github.com/b0o/mapx.nvim)
 * [Vimpeccable](https://github.com/svermeulen/vimpeccable)
 * [bex.nvim](https://github.com/bkoropoff/bex.nvim)
+* [nest.nvim](https://github.com/LionC/nest.nvim)
 
 No necesitan descargarlos todos. Cada uno tiene una manera diferente de declarar atajos usando lua. Elijan el que tiene el diseño que más les guste.
 

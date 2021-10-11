@@ -207,7 +207,7 @@ Even when we assign a value inside `vim.opt` there is a little bit of magic goin
 
 These might not seem like a big deal but there is still a difference that is worth mention.
 
-In vimscript we can activate or deactivate an option like this.
+In vimscript we can enable or disable an option like this.
 
 ```vim
 set cursorline
@@ -335,19 +335,19 @@ end
 
 Wait, hold up, why are we comparing the result of `has` with a `1`? Ah, well, it turns out vimscript only included booleans in the `7.4.1154` version. So functions like `has` return `0` or `1`, and in lua both are truthy.
 
-I've already mentioned that vimscript can have variable names that are valid in lua, in that case you know you can use square brackets like this.
+I've already mentioned that vimscript can have variable names that are not valid in lua, in that case you know you can use square brackets like this.
 
 ```lua
 vim.fn['fzf#vim#files']('~/projects', false)
 ```
 
-But what you need to know now is that we can also use `vim.call`.
+Another way we can solve this is by using `vim.call`.
 
 ```lua
 vim.call('fzf#vim#files', '~/projects', false)
 ```
 
-Those two do the exact same thing. In practice `vim.fn.somefunction()` and `vim.call('somefunction')` have the same effect. They are the same.
+Those two do the exact same thing. In practice `vim.fn.somefunction()` and `vim.call('somefunction')` have the same effect.
 
 Now let me show you something cool. In this particular case the lua-vimscript integration is so good we can use a plugin manager without any special adapters.
 
@@ -606,8 +606,10 @@ vim.cmd 'source ~/.config/nvim/keymap.vim'
 For those of you who are actually trying to run away from vimscript I could recommend some plugins:
 
 * [astronauta.nvim](https://github.com/tjdevries/astronauta.nvim)
+* [mapx.nvim](https://github.com/b0o/mapx.nvim)
 * [Vimpeccable](https://github.com/svermeulen/vimpeccable)
 * [bex.nvim](https://github.com/bkoropoff/bex.nvim)
+* [nest.nvim](https://github.com/LionC/nest.nvim)
 
 No need to download them all. Each one has a different way to create keybindings. Pick the one you like the most.
 
