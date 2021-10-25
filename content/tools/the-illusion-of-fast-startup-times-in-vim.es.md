@@ -7,7 +7,8 @@ lang = "es"
 tags = ["vim", "neovim", "shell"]
 [extra]
 shared = [
-  ["dev.to", "https://dev.to/vonheikemen/la-ilusion-de-un-inicio-rapido-en-vim-5dmb"]
+  ["dev.to", "https://dev.to/vonheikemen/la-ilusion-de-un-inicio-rapido-en-vim-5dmb"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/the-illusion-of-fast-startup-times-in-vim-es"]
 ]
 +++
 
