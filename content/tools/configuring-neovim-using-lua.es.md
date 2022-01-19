@@ -602,7 +602,6 @@ vim.cmd 'source ~/.config/nvim/keymap.vim'
 
 Para los que quieren huir de vimscript tanto como sea posible puedo recomendarles algunos plugins:
 
-* [astronauta.nvim](https://github.com/tjdevries/astronauta.nvim)
 * [mapx.nvim](https://github.com/b0o/mapx.nvim)
 * [Vimpeccable](https://github.com/svermeulen/vimpeccable)
 * [bex.nvim](https://github.com/bkoropoff/bex.nvim)
