@@ -194,6 +194,12 @@ Si realmente quieren saber qué hay dentro de `vim.opt.autoindent` pueden usar `
 print(vim.inspect(vim.opt.autoindent))
 ```
 
+O incluso mejor, si tienen la version 0.7 pueden user el comando `:lua =` para inspeccionar su valor desde el modo de comandos.
+
+```vim
+:lua = vim.opt.autoindent
+```
+
 Eso les mostrará el estado interno de la propiedad.
 
 ### Tipos de datos
@@ -325,8 +331,8 @@ Vimscript como cualquier otro lenguaje de programación tiene sus propias funcio
 Podríamos por ejemplo validar la versión de neovim de esta manera:
 
 ```lua
-if vim.fn.has('nvim-0.5') == 1 then
-  print('tenemos neovim 0.5')
+if vim.fn.has('nvim-0.7') == 1 then
+  print('tenemos neovim 0.7')
 end
 ```
 
@@ -412,65 +418,35 @@ Ahora ya saben, no tienen que preocuparse si su plugin manager no está escrito 
 
 ## Vimscript aún es nuestro amigo
 
-Algunos de ustedes habrán notado que en el último ejemplo usé `vim.cmd` para configurar el tema del editor. Esto es porque aún hay cosas que no podemos hacer en lua. Por los momentos no podemos crear o invocar comandos, y tampoco podemos crear autocomandos.
+Algunos de ustedes habrán notado que en el último ejemplo usé `vim.cmd` para configurar el tema del editor. Esto es porque aún hay cosas que no podemos hacer en lua. Con `vim.cmd` podemos ejecutar expresiones escritas en vimscript. Esto nos permite invocar comandos que no tienen un equivalente en lua.
 
-Para sobrepasar estas limitaciones usamos `vim.cmd`. Esta función es capaz de ejecutar múltiples líneas de vimscript. Significa que puedes hacer múltiples cosas en una sola llamada a `vim.cmd`.
+`vim.cmd` también es capaz de ejecutar múltiples líneas de vimscript. Significa que podemos hacer múltiples cosas en una sola llamada a `vim.cmd`.
 
 ```lua
 vim.cmd [[
   syntax enable
   colorscheme rubber
-
-  command! Hola echom "hola!!"
 ]]
 ```
 
 Cualquier fragmento de su `init.vim` que no puedan "traducir" a lua pueden colocarlo una cadena de texto y pasarlo a `vim.cmd`.
 
-Ya que podemos ejecutar cualquier comando de vim tengo que mencionar que eso incluye `source`, con esto podemos invocar scripts escritos en vimscript. Por ejemplo, en mi configuración yo lo uso para ejecutar un script que modifica algunos colores del tema.
+Ya que podemos ejecutar cualquier comando de vim tengo que mencionar que eso incluye `source`, con esto podemos invocar scripts escritos en vimscript. Por ejemplo, digamos que estamos migrando nuestra configuración pero aún no estamos listos para migrar nuestros atajos de teclado. Podemos crear un archivo `keymaps.vim` con nuestros atajos y ejecutarlo desde lua.
 
 ```lua
-vim.cmd 'source ~/.config/nvim/theme.vim'
+vim.cmd 'source ~/.config/nvim/keymaps.vim'
 ```
-
-En este caso `theme.vim` crea un autocomando que ejecuta una función que ocurre el evento `ColorScheme`.
-
-```vim
-function! MyHighlights() abort
-  hi! link Question String
-  hi! link NonText LineNr
-
-  hi! link TelescopeMatching Boolean
-  hi! link TelescopeSelection CursorLine
-endfunction
-
-augroup MyColors
-  autocmd!
-  autocmd ColorScheme * call MyHighlights()
-augroup END
-```
-
-Me gusta mantener esta parte separada en su propio script porque es muy probable que siga agregando líneas. Eso y porque no hay manera de traducirlo a lua.
 
 ## Atajos de teclado
 
-Aquí nos encontramos en una situación interesante. Actualmente podemos definir nuestros atajos usando lua pero aún no tenemos una api "conveniente". ¿Por qué digo que no es conveniente? La manera en la que se definen los atajos no se parece a lo que estoy acostumbrado en vimscript. No es familiar. Lo otro es que no podemos asignar funciones de lua a un atajo. Sí es posible ejecutar una función de lua con un atajo pero tenemos que hacer trampa (ya les diré cómo).
+No, no necesitamos vimscript. Podemos crearlos usando lua.
 
-En fin, estas son las dos funciones que tenemos disponibles.
+Para estos casos tenemos la función `vim.keymap.set` (introducida en la versión v0.7). Esta función acepta 4 argumentos.
 
-* `vim.api.nvim_set_keymap`
-* `vim.api.nvim_buf_set_keymap`
-
-La primera asigna atajos globales y la segunda asigna atajos sólamente en un archivo específico.
-
-La función `nvim_set_keymap` acepta 4 argumentos:
-
-* Modo en el que tendrá efecto. Usualmente es la forma abreviada del modo. Pueden encontrar una lista completa y detallada [aquí](https://github.com/nanotee/nvim-lua-guide#defining-mappings).
+* Modo (o una lista de modos) en el que tendrá efecto nuestro atajo. Pero no podemos usar el nombre del modo, necesitamos usar su forma abreviada. Pueden encontrar una lista completa y detallada [aquí](https://github.com/nanotee/nvim-lua-guide#defining-mappings).
 * Atajo que queremos vincular.
 * La acción que queremos ejecutar.
-* Opciones extra. Estas opciones son las mismas que usaríamos en vimscript (exceptuando la opción `buffer`), pueden encontrar la lista [aquí](https://neovim.io/doc/user/map.html#:map-arguments).
-
-> `nvim_buf_set_keymap` es casi igual, la única diferencia es que su primer argumento es el número (o id) del buffer. Si usan el número `0` neovim asume que queremos asignar el atajo al buffer que estamos editando.
+* Opciones extra. Estas opciones son las mismas que usaríamos en vimscript, pueden encontrar la lista [aquí](https://neovim.io/doc/user/map.html#:map-arguments). Pero también acepta un par de nuevas opciones, pueden encontrar los detalles en la documentación [:help vim.keymap.set()](https://neovim.io/doc/user/lua.html#vim.keymap.set()).
 
 Digamos que queremos trasladar este atajo a lua.
 
@@ -481,141 +457,119 @@ nnoremap <Leader>w :write<CR>
 Tendríamos que hacer esto.
 
 ```lua
-vim.api.nvim_set_keymap('n', '<Leader>w', ':write<CR>', {noremap = true})
+vim.keymap.set('n', '<Leader>w', ':write<CR>')
 ```
 
-No es lo más cómodo del mundo pero hay un par de cosas que podemos hacer para mejorar la experiencia.
-
-* Un alias
-
-Si prefieren un enfoque minimalista pueden simplemente asignar esta función a una variable con un nombre más corto.
+Por defecto los atajos serán "no recursivos", lo que significa que no debemos preocuparnos por ocasionar ciclos infinitos. Podríamos crear versiones alternativas de algún atajo. Por ejemplo, si queremos centrar la pantalla después de realizar una búsqueda con `*`.
 
 ```lua
-local map = vim.api.nvim_set_keymap
-
-map('n', '<Leader>w', ':write<CR>', {noremap = true})
+vim.keymap.set('n', '*', '*zz')
 ```
 
-* Una función auxiliar
+Podemos usar `*` en el atajo y la acción, y esto no creará ningún conflicto.
 
-Con este enfoque podríamos aprovecharlo para dejar algunos valores por defecto en las opciones extra. Digo esto porque es considerado una buena práctica que nuestros atajos no sean recursivos, es decir, podríamos dejar `{noremap = true}` por defecto.
+Hay ocasiones donde necesitamos un atajo recursivo, generalmente cuando la acción que queremos ejecutar fue creada por un plugin. En esta situación podemos proveer la opción `remap = true` en el último argumento.
 
 ```lua
-local map = function(key)
-  -- extraer opciones
-  local opts = {noremap = true}
-  for i, v in pairs(key) do
-    if type(i) == 'string' then opts[i] = v end
-  end
-
-  -- soporte básico para atajos de buffer
-  local buffer = opts.buffer
-  opts.buffer = nil
-
-  if buffer then
-    vim.api.nvim_buf_set_keymap(0, key[1], key[2], key[3], opts)
-  else
-    vim.api.nvim_set_keymap(key[1], key[2], key[3], opts)
-  end
-end
+vim.keymap.set('n', '<leader>e', '%', {remap = true})
 ```
 
-Uso básico.
+Un beneficio extra de esta función es que nos permite usar funciones de lua como nuestra "acción".
 
 ```lua
-map {'n', '<Leader>w', ':write<CR>'}
+vim.keymap.set('n', 'Q', function()
+  print('Hola')
+end)
 ```
 
-Lo interesante de esta función es que aprovecha la manera en la que podemos crear tablas en lua. Esto es válido.
+## Comandos de usuario
 
-```lua
-map {noremap = false, 'n', '<Leader>e', '%'}
+A partir de la version v0.7 neovim nos permite crear nuestros propios "ex-commands" usando lua, con la función `vim.api.nvim_create_user_command`.
+
+`nvim_create_user_command` espera tres argumentos:
+
+* Nombre del comando. El nombre **debe** empezar con una letra mayúscula.
+* Comando. Puede ser una cadena de texto o una función de lua.
+* Atributos. Una tabla con las características opcionales que puede tener nuestro comando. Pueden encontrar los detalles en la documentación [:help nvim_create_user_command()](https://neovim.io/doc/user/api.html#nvim_create_user_command()) y [:help command-attributes](https://neovim.io/doc/user/map.html#command-attributes).
+
+Digamos que tenemos este comando en vimscript.
+
+```vim
+command! -bang ProjectFiles call fzf#vim#files('~/projects', <bang>0)
 ```
 
-Y también esto.
+En lua tenemos la posibilidad de usar vimscript in una cadena de texto.
 
 ```lua
-map {'n', '<Leader>e', '%', noremap = false}
-```
-
-### Invocando funciones de lua
-
-Si aplicamos lo que aprendimos anteriormente sobre cómo llamar código lua desde vimscript podemos hacer lo siguiente:
-
-Asumiendo que tenemos un módulo llamado `usermod` y este módulo tiene una función llamada `unafuncion`.
-
-```lua
-local M = {}
-
-M.unafuncion = function()
-  print('todo bien')
-end
-
-return M
-```
-
-Podemos invocar `unafuncion` de esta manera.
-
-```lua
-vim.api.nvim_set_keymap(
-  'n',
-  '<Leader>w',
-  "<cmd>lua require('usermod').unafuncion()<CR>",
-  {noremap = true}
+vim.api.nvim_create_user_command(
+  'ProjectFiles',
+  "call fzf#vim#files('~/projects', <bang>0)",
+  {bang = true}
 )
 ```
 
-Las cosas cambian un poco cuando necesitamos una expresión, en ese caso no podremos usar el comando `<cmd>lua`. Tenemos que usar la variable `v:lua` la cual nos permite invocar funciones globales.
-
-Para ilustrar este proceso haremos un ejemplo común, haremos que la tecla `<Tab>` sea más "inteligente". Cuando el menú de autocompletado sea visible será capaz de navegar entre la lista de opciones, caso contrarío insertará un caracter `<Tab>`.
+O podemos usar una función de lua.
 
 ```lua
-local t = function(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
-end
-
-_G.smart_tab = function()
-  if vim.fn.pumvisible() == 1 then
-    return t'<C-n>'
-  else
-    return t'<Tab>'
-  end
-end
-
-vim.api.nvim_set_keymap(
-  'i',
-  '<Tab>',
-  'v:lua.smart_tab()',
-  {noremap = true, expr = true}
+vim.api.nvim_create_user_command(
+  'ProjectFiles',
+  function(input)
+    vim.call('fzf#vim#files', '~/projects', input.bang)
+  end,
+  {bang = true}
 )
 ```
 
-> En lua `_G` es la variable global que contiene todas las variables globales. No es necesario usarla pero de esa manera queda claro que estoy declarando una variable global a propósito.
+## Autocomandos
 
-Si se preguntan porque uso `t'<C-n>'` es porque no necesitamos retornar el texto `<C-n>`, necesitamos retornar el código que representa `<C-n>` y lo mismo ocurre con `<Tab>`.
+Los autocomandos nos permiten ejecutar funciones y comandos cuando neovim emite un evento. Pueden encontrar la lista de eventos en la documentación: [:help events](https://neovim.io/doc/user/autocmd.html#events).
 
-Si esta api no les parece lo suficientemente buena siempre pueden elegir no migrar sus atajos a lua. Pueden simplemente poner sus atajos en un script `.vim` y llamarlo desde lua.
+Digamos que tenemos un autocomando que modifica ligeramente un tema del editor, específicamente el tema `rubber`.
 
-```lua
-vim.cmd 'source ~/.config/nvim/keymap.vim'
+```vim
+augroup highlight_cmds
+  autocmd!
+  autocmd ColorScheme rubber highlight String guifg=#FFEB95
+augroup END
 ```
 
-Para los que quieren huir de vimscript tanto como sea posible puedo recomendarles algunos plugins:
+> Este bloque debe ejecutarse antes de invocar el comando `colorscheme`.
 
-* [mapx.nvim](https://github.com/b0o/mapx.nvim)
-* [Vimpeccable](https://github.com/svermeulen/vimpeccable)
-* [bex.nvim](https://github.com/bkoropoff/bex.nvim)
-* [nest.nvim](https://github.com/LionC/nest.nvim)
+Este es el equivalente en lua.
 
-No necesitan descargarlos todos. Cada uno tiene una manera diferente de declarar atajos usando lua. Elijan el que tiene el diseño que más les guste.
+```lua
+local augroup = vim.api.nvim_create_augroup('highlight_cmds', {clear = true})
+
+vim.api.nvim_create_autocmd('ColorScheme', {
+  pattern = 'rubber',
+  group = augroup,
+  command = 'highlight String guifg=#FFEB95'
+})
+```
+
+Noten que aquí estamos usando una opción llamada `command`, esta nos permite utilizar únicamente expresiones escritas en vimscript. También podemos usar una función de lua pero no con la propiedad `command`, tenemos que usar `callback`.
+
+```lua
+local augroup = vim.api.nvim_create_augroup('highlight_cmds', {clear = true})
+
+vim.api.nvim_create_autocmd('ColorScheme', {
+  pattern = 'rubber',
+  group = augroup,
+  callback = function()
+    vim.api.nvim_set_hl(0, 'String', {fg = '#FFEB95'})
+  end
+})
+```
+
+Para conocer más detalles de los autocomandos pueden leer la documentación, [:help nvim_create_autocmd()](https://neovim.io/doc/user/api.html#nvim_create_autocmd()) y [:help autocmd](https://neovim.io/doc/user/autocmd.html#autocommand).
 
 ## Plugin manager
 
-Hablando de plugins. Tal vez quieran usar un plugin manager que este escrito en lua sólo porque sí. Por lo que he visto estas son sus opciones:
+Tal vez quieran usar un plugin manager que este escrito en lua sólo porque sí. Por lo que he visto estas son sus opciones:
 
 * [paq](https://github.com/savq/paq-nvim/)
 
-Es un manejador de plugins rápido y sencillo. No es broma, tiene menos de 300 líneas de código y fue creado para descargar, actualizar y eliminar plugins. Es todo. Si eso es todo lo que necesitan no busquen más, este es el manejador que quieren. 
+Es un manejador de plugins rápido y sencillo. No es broma, tiene menos de 300 líneas de código y fue creado para descargar, actualizar y eliminar plugins. Es todo. Si eso es todo lo que necesitan no busquen más, este es el manejador que quieren.
 
 * [packer](https://github.com/wbthomason/packer.nvim)
 
@@ -627,9 +581,12 @@ No está escrito en lua pero quise agregarlo porque ofrece una interfaz para lua
 
 ## Conclusión
 
-Aprendimos cómo usar lua desde vimscript. Sabemos cómo usar vimscript desde lua. Ahora tenemos todas las herramientas para activar, desactivar y modificar cualquier tipo de opción o variable disponible en neovim. Conocemos los métodos para crear nuestros atajos de teclado, sus limitaciones. Sabemos cómo usar un manejador de plugins desde lua ya sea que esté escrito en lua o no. Ya estamos listos.
+Aprendimos cómo usar lua desde vimscript. Sabemos cómo usar vimscript desde lua. Ahora tenemos todas las herramientas para activar, desactivar y modificar cualquier tipo de opción o variable disponible en neovim. Conocemos los métodos para crear nuestros atajos de teclado. Aprendimos sobre comandos y autocomandos. Sabemos cómo usar un manejador de plugins desde lua ya sea que esté escrito en lua o no. Ya estamos listos.
 
-Para los que quieran ver un ejemplo de la vida real, aquí les dejo un enlace a mi configuración en github: [neovim](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim).
+Para los que quieran ver un ejemplo de la vida real, aquí les dejo un enlace a mi configuración en github:
+
+* [neovim (v0.6)](https://github.com/VonHeikemen/dotfiles/tree/057f4d604e31ad121c4b4b36fd7e4148483d50c8/my-configs/neovim)
+* [neovim (v0.7+)](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim)
 
 ## Fuentes
 
@@ -639,6 +596,5 @@ Para los que quieran ver un ejemplo de la vida real, aquí les dejo un enlace a 
 * [:help lua-vim-variables](https://neovim.io/doc/user/lua.html#lua-vim-variables)
 * [:help lua-stdlib](https://neovim.io/doc/user/lua.html#lua-stdlib)
 * [:help function-list](https://neovim.io/doc/user/usr_41.html#function-list)
-* [:help nvim_set_keymap()](https://neovim.io/doc/user/api.html#nvim_set_keymap())
 * [curist's bundle.lua](https://github.com/curist/dotvim/blob/98b161f0759d3316fcf6a776d03665d6ab4827ee/bundles.lua)
 
