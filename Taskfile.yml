@@ -2,12 +2,12 @@ version: '2'
 
 vars: 
   CSS_FILES:
-    public/poole.css
-    public/hyde.css
-    public/custom.css
+    tmp/poole.css
+    tmp/hyde.css
+    tmp/custom.css
 
   OUTPUT_DIR:
-    ./public/dist/
+    ./public/dist
 
 tasks:
   serve:
@@ -19,9 +19,10 @@ tasks:
     desc: Build site on current directory
     cmds:
       - zola build
-      - rm -R {{.OUTPUT_DIR}}
-      - mkdir {{.OUTPUT_DIR}}
-      - task: prepare
+      - task: html
+      - task: css
+      - cp ./public/robots.txt ./tmp/robots.txt
+      - mv tmp {{.OUTPUT_DIR}}
     env:
       ENV: production
 
@@ -29,24 +30,18 @@ tasks:
     desc: Build site with localhost as base url
     cmds:
       - zola build --base-url "http://localhost:5000/"
-      - task: prepare
-      - serve ./public/dist/
+      - serve ./public/
     env:
       ENV: production
 
   css:
     desc: Bundle css files
     cmds:
-      - minify -o public/styles.css {{.CSS_FILES}}
-      - rm {{.CSS_FILES}} 
+      - minify -b -o ./tmp/styles.css {{.CSS_FILES}}
+      - rm {{.CSS_FILES}}
 
   html:
     desc: Minify html files
     cmds:
-      - minify -r -o {{.OUTPUT_DIR}} ./public
+      - minify -r -o ./tmp/ ./public
 
-  prepare:
-    desc: Minify and bundle assets
-    cmds:
-      - task: css
-      - task: html
