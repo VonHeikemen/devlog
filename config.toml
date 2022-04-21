@@ -42,6 +42,7 @@ reach_out = "or reach out to me on twitter"
 leave_comment = "Have any question? Feel free to leave a comment"
 leave_comment_single_platform = "on"
 leave_comment_multi_platform = "in one of these platform where I have shared this:"
+last_updated = "Last updated"
 
 # The additional languages for the site.
 [languages]
@@ -61,6 +62,7 @@ reach_out = "o puedes contactarme en twitter"
 leave_comment = "¿Tienen alguna pregunta? Pueden dejar un comentario"
 leave_comment_single_platform = "en"
 leave_comment_multi_platform = "en cualquiera de estas plataformas:"
+last_updated = "Última actualización"
 
 [extra]
 languages = ["en", "es"]
