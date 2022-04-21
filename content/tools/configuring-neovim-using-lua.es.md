@@ -2,6 +2,7 @@
 title = "Todo lo que necesitan saber para configurar neovim usando lua"
 description = "Tus primeros pasos hacia una configuración creada en lua"
 date = 2021-07-29
+updated = 2022-04-21
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -463,15 +464,15 @@ vim.keymap.set('n', '<Leader>w', ':write<CR>')
 Por defecto los atajos serán "no recursivos", lo que significa que no debemos preocuparnos por ocasionar ciclos infinitos. Podríamos crear versiones alternativas de algún atajo. Por ejemplo, si queremos centrar la pantalla después de realizar una búsqueda con `*`.
 
 ```lua
-vim.keymap.set('n', '*', '*zz')
+vim.keymap.set('n', '*', '*zz', {desc = 'Buscar y centrar pantalla'})
 ```
 
-Podemos usar `*` en el atajo y la acción, y esto no creará ningún conflicto.
+Podemos usar `*` en el atajo y la acción, esto no creará ningún conflicto.
 
 Hay ocasiones donde necesitamos un atajo recursivo, generalmente cuando la acción que queremos ejecutar fue creada por un plugin. En esta situación podemos proveer la opción `remap = true` en el último argumento.
 
 ```lua
-vim.keymap.set('n', '<leader>e', '%', {remap = true})
+vim.keymap.set('n', '<leader>e', '%', {remap = true, {desc = 'Ir al par correspondiente'}})
 ```
 
 Un beneficio extra de esta función es que nos permite usar funciones de lua como nuestra "acción".
@@ -479,8 +480,26 @@ Un beneficio extra de esta función es que nos permite usar funciones de lua com
 ```lua
 vim.keymap.set('n', 'Q', function()
   print('Hola')
-end)
+end, {desc = 'Saludar'})
 ```
+
+Hablemos un poco de la opción `desc`. Esta nos permite agregar una descripción a nuestros atajos. Podemos leer estas descripciones con el comando `:map <atajo>`.
+
+Entonces, ejecutar `:map *` nos mostrará:
+
+```
+n  *           * *zz
+                 Buscar y centrar pantalla
+```
+
+Querrán utilizar estas descripciones cuando su atajo ejecute una función de lua. Por qué? Si revisamos `Q` con el comando `:map Q` obtenemos:
+
+```
+n  Q           * <Lua function 50>
+                 Saludar
+```
+
+No podemos leer el código de la función, entonces el único indicio que tenemos de su funcionalidad es la descripción. Tambien vale la pena mencionar que plugins pueden extraer esta descripción y mostrarlas de una manera más amigable.
 
 ## Comandos de usuario
 
@@ -516,9 +535,18 @@ vim.api.nvim_create_user_command(
   function(input)
     vim.call('fzf#vim#files', '~/projects', input.bang)
   end,
-  {bang = true}
+  {bang = true, desc = 'Buscar en directorio projects'}
 )
 ```
+
+Sí, podemos agregar descripciones a nuestros comandos. Pero en esta ocasión sólo estarán disponibles si el comando ejecuta una función de lua. Para inspeccionar un comando podemos ejecutar `:command <nombre>`. Entonces, el comando `:command ProjectFiles` nos mostrará:
+
+```
+    Name              Args Address Complete    Definition
+!   ProjectFiles      0                        Buscar en directorio projects
+```
+
+Si nuestro comando ejecuta una expresión de vimscript nos mostrará ese código en la columna `Definition`.
 
 ## Autocomandos
 
@@ -555,10 +583,18 @@ local augroup = vim.api.nvim_create_augroup('highlight_cmds', {clear = true})
 vim.api.nvim_create_autocmd('ColorScheme', {
   pattern = 'rubber',
   group = augroup,
+  desc = 'Cambiar color de cadenas de texto'
   callback = function()
     vim.api.nvim_set_hl(0, 'String', {fg = '#FFEB95'})
   end
 })
+```
+
+Los autocomandos también pueden tener una descripción. Pero al igual que los comandos de usuario sólo estarán disponibles si están vinculadas a una función de lua. Si queremos revisar los autocomandos de un evento podemos ejecutar el comando `:autocmd <evento> <patrón>`. El comando `:autocmd ColorScheme rubber` debería mostrarnos:
+
+```
+ColorScheme
+    rubber    Cambiar color de cadenas de texto
 ```
 
 Para conocer más detalles de los autocomandos pueden leer la documentación, [:help nvim_create_autocmd()](https://neovim.io/doc/user/api.html#nvim_create_autocmd()) y [:help autocmd](https://neovim.io/doc/user/autocmd.html#autocommand).

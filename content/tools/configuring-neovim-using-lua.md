@@ -2,6 +2,7 @@
 title = "Everything you need to know to configure neovim using lua"
 description = "Your first steps into a lua configuration"
 date = 2021-08-01
+updated = 2022-04-21
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -385,7 +386,7 @@ Plug 'tpope/vim-repeat'
 vim.call('plug#end')
 ```
 
-Before you say anything, yes, all of that is valid lua. If a function only recieves a single argument, and that argument is a string or a table, you can omit the parenthesis.
+Before you say anything, yes, all of that is valid lua. If a function only receives a single argument, and that argument is a string or a table, you can omit the parenthesis.
 
 If you use the second argument of `Plug` you'll need the parenthesis and the second argument must be a table. Let me show you. If you have this in vimscript.
 
@@ -441,9 +442,9 @@ vim.cmd 'source ~/.config/nvim/keymaps.vim'
 
 ## Keybindings
 
-So we don't need vimscript for this. We can do it in lua.
+No, we don't need vimscript for this. We can do it in lua.
 
-For this we can use `vim.keymap.set`. This functions takes 4 arguments.
+We can create our keybindings using `vim.keymap.set`. This functions takes 4 arguments.
 
 * Mode. But not the name of the mode, we need the abbreviation. You can find a list of valid options [here](https://github.com/nanotee/nvim-lua-guide#defining-mappings).
 * Key we want to bind.
@@ -462,18 +463,18 @@ We would have to do this.
 vim.keymap.set('n', '<Leader>w', ':write<CR>')
 ```
 
-By default our keybindings will be "non recursive", means that we don't have to worry about infinite loops. We can create alternatives of built-in keybindings. We could center the screen after making a search with `*`.
+By default our keybindings will be "non recursive", it means that we don't have to worry about infinite loops. This opens the possibility to create alternatives of built-in keybindings. For example, we could center the screen after making a search with `*`.
 
 ```lua
-vim.keymap.set('n', '*', '*zz')
+vim.keymap.set('n', '*', '*zz', {desc = 'Search and center screen'})
 ```
 
-Notice that we are using `*` in the key and the action, and this would not cause any conflict.
+In here we are using `*` in the key and the action, and we won't have any conflict.
 
 But sometimes we do need recursive bindings, most of the time when the action we want to execute was created by a plugin. In this case we can use `remap = true` in the last parameter.
 
 ```lua
-vim.keymap.set('n', '<leader>e', '%', {remap = true})
+vim.keymap.set('n', '<leader>e', '%', {remap = true, desc = 'Go to matching pair'})
 ```
 
 Now the best part, `vim.keymap.set` can use a lua function as the action.
@@ -481,8 +482,26 @@ Now the best part, `vim.keymap.set` can use a lua function as the action.
 ```lua
 vim.keymap.set('n', 'Q', function()
   print('Hello')
-end)
+end, {desc = 'Say hello'})
 ```
+
+Let's talk about the `desc` option. This allows us to add a description to our keybindings. We can read these description if we use the command `:map <keybinding>`.
+
+So executing `:map *` will show us.
+
+```
+n  *           * *zz
+                 Search and center screen
+```
+
+It becomes specially useful when using binding lua functions. If we inspect our `Q` mapping with `:map Q` we will get.
+
+```
+n  Q           * <Lua function 50>
+                 Say hello
+```
+
+Notice we can't see the source for our function but at least we see the description and know what it can do. It is worth mention that plugins can read this property and show it with a nice presentation.
 
 ## User commands
 
@@ -518,9 +537,18 @@ vim.api.nvim_create_user_command(
   function(input)
     vim.call('fzf#vim#files', '~/projects', input.bang)
   end,
-  {bang = true}
+  {bang = true, desc = 'Search projects folder'}
 )
 ```
+
+Yes, we can also add a description to user commands. We read these descriptions using the command `:command <name>`. But they will only appear if our command is bound to a lua function. So the command `:command ProjectFiles` will show this.
+
+```
+    Name              Args Address Complete    Definition
+!   ProjectFiles      0                        Search projects folder
+```
+
+If the command had been vimscript expression the that expression will appear in the `Definition` column.
 
 ## Autocommands
 
@@ -557,10 +585,18 @@ local augroup = vim.api.nvim_create_augroup('highlight_cmds', {clear = true})
 vim.api.nvim_create_autocmd('ColorScheme', {
   pattern = 'rubber',
   group = augroup,
+  desc = 'Change string highlight',
   callback = function()
     vim.api.nvim_set_hl(0, 'String', {fg = '#FFEB95'})
   end
 })
+```
+
+Just like the previous apis we can add a description for autocommands. To inspect an autocommand use the command `:autocmd <event> <pattern>`. But just like user commands they will only be available for inspection when using a lua function. If we check with `:autocmd ColorScheme rubber` will get.
+
+```
+ColorScheme
+    rubber    Change string highlight
 ```
 
 To know more details about autocommands checkout the documentation, see [:help nvim_create_autocmd()](https://neovim.io/doc/user/api.html#nvim_create_autocmd()) and [:help autocmd](https://neovim.io/doc/user/autocmd.html#autocommand).
