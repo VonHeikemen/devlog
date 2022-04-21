@@ -41,6 +41,13 @@
       </a>
     {% endif %}
   </span>
+
+  {% if page.updated %}
+    <blockquote>
+      {{ trans(key="last_updated", lang=page.lang) }}: {{ page.updated }}
+    </blockquote>
+  {% endif %}
+
   {{ page.content | safe }}
 
     <hr>
