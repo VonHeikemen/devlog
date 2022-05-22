@@ -28,8 +28,8 @@ Ahora que sabemos el porqué de las cosas pongamos manos a la obra.
   * [cmp-path](https://github.com/hrsh7th/cmp-path)
   * [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip)
   * [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp)
-  * [LuaSnip](https://github.com/L3MON4D3/LuaSnip) 
-  * [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) 
+  * [LuaSnip](https://github.com/L3MON4D3/LuaSnip)
+  * [friendly-snippets](https://github.com/rafamadriz/friendly-snippets)
 
 En la documentación de `nvim-lspconfig` pueden encontrar instrucciones de cómo instalar algunos servidores: [server_configurations.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md)
 
@@ -214,7 +214,7 @@ Vamos a pasar un buen rato configurando nvim-cmp. Quiero explicarles las opcione
 local select_opts = {behavior = cmp.SelectBehavior.Select}
 
 cmp.setup({
-  
+
 })
 ```
 
@@ -303,7 +303,7 @@ Lista de atajos de teclado. Aquí necesitamos declarar una lista de pares propie
 
 ```lua
 mapping = {
-  ['<CR>'] = cmp.mapping.confirm({select = true}), 
+  ['<CR>'] = cmp.mapping.confirm({select = true}),
 }
 ```
 
@@ -618,6 +618,7 @@ lspconfig.sumneko_lua.setup({})
 
 En está ocasión es todo lo que voy a decir sobre `nvim-lsp-installer`. Si quieren saber más detalles deben revisar su documentación.
 
+
 ## Conclusión
 
 Han aprendido porque necesitamos nvim-lspconfig. Saben cómo crear una configuración global para todos sus servidores. Conocen las funciones más comúnes para sus atajos de teclado. Todo lo necesario para aprovechar las bondades que puede darles un servidor LSP.
@@ -625,6 +626,8 @@ Han aprendido porque necesitamos nvim-lspconfig. Saben cómo crear una configura
 Tuvimos la oportunidad de armar una configuración de `nvim-cmp` desde cero. Explorando paso a paso las opciones más utilizadas.
 
 Finalmente vimos algunas opciones que nos permiten modificar la presentación de los diagnósticos (mensajes de error, advertencia, etc). Aprendimos a modificar los handlers que muestran ventanas flotantes. Y, dimos un vistazo a un método para instalar servidores de manera local.
+
+Pueden encontrar todo el código de configuración aquí: [nvim-lspconfig + nvim-cmp](https://gist.github.com/VonHeikemen/8fc2aa6da030757a5612393d0ae060bd)
 
 ## Fuentes
 
