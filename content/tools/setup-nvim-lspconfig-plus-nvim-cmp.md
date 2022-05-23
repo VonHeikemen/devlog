@@ -59,7 +59,7 @@ What do we have here?
 
 * `on_attach`: Callback function that will be executed when a language server is attached to a buffer. It is recommended that we set our keybindings and commands in this function. Personally, I like to use `nvim_exec_autocmds` to trigger an "event", that way I can declare my keybindings anywhere I want.
 
-Now, `lsp_defaults` it's just a variable, there is nothing special about it. We need to merge this `lspconfig`'s global config. We can find it in `util.default_config`. We will be using `vim.tbl_deep_extend` to merge those two variables in a safe way.
+Now, `lsp_defaults` it's just a variable, there is nothing special about it. We need to merge this with `lspconfig`'s global config. We can find it in `util.default_config`. We will be using `vim.tbl_deep_extend` to merge those two variables in a safe way.
 
 ```lua
 local lspconfig = require('lspconfig')
@@ -81,7 +81,7 @@ For the language `lua` we can use a server called `sumneko_lua`. Install it and 
 lspconfig.sumneko_lua.setup({})
 ```
 
-If you need to customize the its behavior you add some keys to `.setup()`'s argument.
+If you need to customize its behavior you need to add some keys to `.setup()`'s argument.
 
 ```lua
 lspconfig.sumneko_lua.setup({
@@ -95,7 +95,7 @@ lspconfig.sumneko_lua.setup({
 
 Notice here that the new `on_attach` calls the `on_attach` on `default_config`. We must do this because the options we set on `.setup()` will override the ones on our global configuration. We could also use `lsp_defaults.on_attach` if its in the scope of the function.
 
-At this point to take advantage of some "LSP features" we need to create some keybindings. This particular setup I'm showing allows us to do it with an autocommand. We could declare our keybindings anywhere in our config.
+At this point to take advantage of some "LSP features" we need to create some keybindings. This particular setup I'm showing allows us to do it with an autocommand. We can declare our keybindings anywhere in our config.
 
 ```lua
 vim.api.nvim_create_autocmd('User', {
@@ -208,7 +208,7 @@ local luasnip = require('luasnip')
 
 `cmp` is the one we will use to configure `nvim-cmp`. And this `luansnip`? Well, nvim-cmp doesn't "know" how to expand a snippet, that's why we need it.
 
-We are going to spend some time exploring nvim-cmp's options. I want to explain all the things I do in my personal configuration. Now, let's add a setup function.
+We are going to spend some time exploring nvim-cmp's options. I want to explain all the things I do in my personal configuration. For now let's just add the setup function.
 
 ```lua
 local select_opts = {behavior = cmp.SelectBehavior.Select}
@@ -236,7 +236,7 @@ Here we can list all the data sources nvim-cmp will use to populate the completi
 
 Each "source" is a lua table that must have a `name` property. That `name` is not the name of the plugin, it's the "id" the plugin used when creating the source. Each source should tell what name they have in their documentation.
 
-Other properties you should be aware of are `priority` and `keyword_length`. `priority` allows nvim-cmp to sort the completion list. If you do not set a `priority` then the order of the sources will determine the priority. Now with `keyword_length` you can control how many characters does are necesary to begin querying the source.
+Other properties you should be aware of are `priority` and `keyword_length`. `priority` allows nvim-cmp to sort the completion list. If you do not set a `priority` then the order of the sources will determine the priority. Now with `keyword_length` you can control how many characters are necesary to begin querying the source.
 
 In my personal configuration I have the sources setup this way.
 
@@ -328,7 +328,7 @@ Here is a list of common keybindings:
 ['<C-f>'] = cmp.mapping.scroll_docs(4),
 ```
 
-* Cancel completions.
+* Cancel completion.
 
 ```lua
 ['<C-e>'] = cmp.mapping.abort(),
@@ -491,11 +491,11 @@ cmp.setup({
 
 ## Bonus content
 
-Technically we are ready. All the code shown so far should get us a functional setup. We can now use our language servers and autocompletion. But there are a couple of customizations we can make.
+Technically we are ready. All the code shown so far should get us a functional setup. We can now use our language servers and autocompletion. But there are still a couple of customizations we can make.
 
 ### Change diagnostic icons
 
-We do this using a function called `sign_define`. Keep in mind this not a lua function, it's vimscript. We access it using the prefix `vim.fn`. To know the details of this function check the documentation: `:help sign_define`.
+We do this using a function called `sign_define`. Keep in mind this is not a lua function, it's vimscript. We access it using the prefix `vim.fn`. To know the details of this function check the documentation: `:help sign_define`.
 
 Anyway, this is the code you'll need to change the sign icons.
 
@@ -560,7 +560,7 @@ vim.diagnostic.config({
 
 ### Help windows with borders
 
-There are two lsp methods using floating windows: `vim.lsp.buf.hover()` and `vim.lsp.buf.signature_help()`. By default these windows don't have any style, but we can change by modifying the associated "handler" of each method. To achieve this we need to use `vim.lsp.with()`.
+There are two lsp methods that use floating windows: `vim.lsp.buf.hover()` and `vim.lsp.buf.signature_help()`. By default these windows don't have any style, but we can change that by modifying the associated "handler" of each method. To achieve this we need to use `vim.lsp.with()`.
 
 I don't want to bore you with the details so let me just show you the code.
 
@@ -616,7 +616,7 @@ lspconfig.util.default_config = vim.tbl_deep_extend(
 lspconfig.sumneko_lua.setup({})
 ```
 
-Right now this is all I have to say about `nvim-lsp-installer`. If you want to know more about you'll have read its documentation.
+Right now this is all I have to say about `nvim-lsp-installer`. If you want to know more about it you'll have read their documentation.
 
 ## Conclusion
 
@@ -624,7 +624,7 @@ We've learned the things `nvim-lspconfig` can do for us. We figure out how to ma
 
 We had the chance to assemble a configuration for `nvim-cmp` from scratch. We explored some common options step by step.
 
-Finally, we made some additional customizations to diagnostics. Learned a little something about configuring lsp handlers, specifically the ones who use floating windows. And we took a brief look at method to install language servers locally.
+Finally, we made some additional customizations to diagnostics. Learned a little something about configuring lsp handlers, specifically the ones using floating windows. And we took a brief look at a method to install language servers locally.
 
 You can find all the configuration code here: [nvim-lspconfig + nvim-cmp](https://gist.github.com/VonHeikemen/8fc2aa6da030757a5612393d0ae060bd)
 
