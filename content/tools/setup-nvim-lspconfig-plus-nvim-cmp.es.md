@@ -5,6 +5,10 @@ date = 2022-05-21
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/neovim-lsp-configurando-nvim-lspconfig-nvim-cmp-1m2g"],
+]
 +++
 
 Dentro de neovim se encuentra un "framework" que le permite al editor comunicarse con un servidor LSP. ¿Qué significa eso? Quiere decir que, con la configuración correcta, tendremos acceso a funcionalidades como renombrar una variable, saltar a una definición, listar referencias, etc. Características que podrían encontrar en un IDE.

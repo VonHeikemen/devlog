@@ -5,6 +5,10 @@ date = 2022-05-23
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/neovim-lsp-setup-nvim-lspconfig-nvim-cmp-4k8e"],
+]
 +++
 
 Neovim includes a lua framework that allows the editor to communicate with a language server. What does that mean for us? Means we can have some IDE-like features such as rename variables, smart jump to definition, list references, etc. But of course we need to configure all of this first.
