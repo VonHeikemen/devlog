@@ -5,6 +5,11 @@ date = 2021-10-26
 lang = "en"
 [taxonomies]
 tags = ["shell", "zsh"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/navigate-your-command-history-with-ease-1f5b"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/navigate-your-command-history-with-ease"]
+]
 +++
 
 When you spend too much time writting commands in the terminal it comes a time when you can't remember every program you have used during the day, not to mention previous days. Lucky for us we don't have to, the "shell" can do it for you. And today we are going to learn how can take advantage of this feature to improve the user experience in the terminal.

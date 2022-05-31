@@ -8,6 +8,7 @@ tags = ["vim", "neovim", "shell"]
 [extra]
 shared = [
   ["dev.to", "https://dev.to/vonheikemen/neovim-lsp-configurando-nvim-lspconfig-nvim-cmp-1m2g"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/setup-nvim-lspconfig-nvim-cmp-es"]
 ]
 +++
 

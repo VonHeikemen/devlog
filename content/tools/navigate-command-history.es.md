@@ -5,6 +5,11 @@ date = 2021-10-25
 lang = "es"
 [taxonomies]
 tags = ["shell", "zsh"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/navega-a-traves-del-historial-de-comandos-de-una-manera-eficiente-191d"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/navigate-your-command-history-with-ease-es"]
+]
 +++
 
 Si pasan mucho tiempo en la terminal va a llegar un momento en el que no podrán recordar todos los comandos que usaron durante el día, y ni hablar de los días anteriores. Por suerte para nosotros nuestro "shell" puede almacenar esta información por nosotros. Ahora les voy a enseñar cómo podemos sacar provecho de esta información para mejorar nuestra experiencia en la terminal.
