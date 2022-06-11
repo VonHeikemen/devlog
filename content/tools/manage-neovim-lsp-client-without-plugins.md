@@ -51,8 +51,6 @@ Why is this inefficient? Because it would only work on a single file. It'll spaw
 
 So what's the missing piece that would make this usable in a project? An autocommand. We need to tell neovim we want to attach the server to a buffer everytime we open a new file of a specific filetype.
 
-We need to define a function like this.
-
 ```lua
 local filetypes = {
   'typescript',
@@ -63,20 +61,14 @@ local filetypes = {
   'javascript.jsx'
 }
 
-local buf_attach = function(client_id)
-  local supported = vim.tbl_contains(filetypes, vim.bo.filetype)
-  if not supported then return end
-
+local buf_attach = function()
   vim.lsp.buf_attach_client(0, client_id)
 end
-```
 
-Next we create the autocommand where this function will be executed.
-
-```lua
-autocmd_id = vim.api.nvim_create_autocmd('BufEnter', {
+autocmd_id = vim.api.nvim_create_autocmd('FileType', {
   desc = string.format('Attach LSP: %s', client_name),
-  callback = function() buf_attach(client_id) end
+  pattern = filetypes,
+  callback = buf_attach
 })
 ```
 
@@ -108,21 +100,21 @@ local launch_tsserver = function()
     root_dir = vim.fn.getcwd(),
   }
 
-  local buf_attach = function(client_id)
-    local supported = vim.tbl_contains(filetypes, vim.bo.filetype)
-    if not supported then return end
-
-    vim.lsp.buf_attach_client(0, client_id)
-  end
-
   config.on_init = function(client, results)
-    autocmd = vim.api.nvim_create_autocmd('BufEnter', {
+    local buf_attach = function()
+      vim.lsp.buf_attach_client(0, client.id)
+    end
+
+    autocmd = vim.api.nvim_create_autocmd('FileType', {
       desc = string.format('Attach LSP: %s', client.name),
-      callback = function() buf_attach(client.id) end
+      pattern = filetypes,
+      callback = buf_attach
     })
 
-    if vim.v.vim_did_enter == 1 then
-      buf_attach(client.id)
+    if vim.v.vim_did_enter == 1 and
+      vim.tbl_contains(filetypes, vim.bo.filetype)
+    then
+      buf_attach()
     end
   end
 
@@ -249,13 +241,6 @@ local launch_tsserver = function()
     vim.api.nvim_exec_autocmds('User', {pattern = 'LspAttached'})
   end
 
-  local buf_attach = function(client_id)
-    local supported = vim.tbl_contains(filetypes, vim.bo.filetype)
-    if not supported then return end
-
-    vim.lsp.buf_attach_client(0, client_id)
-  end
-
   config.on_init = function(client, results)
     if results.offsetEncoding then
       client.offset_encoding = results.offsetEncoding
@@ -267,13 +252,20 @@ local launch_tsserver = function()
       })
     end
 
-    autocmd = vim.api.nvim_create_autocmd('BufEnter', {
+    local buf_attach = function()
+      vim.lsp.buf_attach_client(0, client.id)
+    end
+
+    autocmd = vim.api.nvim_create_autocmd('FileType', {
       desc = string.format('Attach LSP: %s', client.name),
-      callback = function() buf_attach(client.id) end
+      pattern = filetypes,
+      callback = buf_attach
     })
 
-    if vim.v.vim_did_enter == 1 then
-      buf_attach(client.id)
+    if vim.v.vim_did_enter == 1 and
+      vim.tbl_contains(filetypes, vim.bo.filetype)
+    then
+      buf_attach()
     end
   end
 

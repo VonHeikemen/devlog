@@ -43,13 +43,11 @@ vim.api.nvim_create_user_command(
 
 Con esto creamos el comando `LaunchTsserver`, al ejecutarlo podremos usar el servidor `typescript-language-server` y obtener diagnósticos en el archivo actual.
 
-¿Por qué es ineficiente? Bueno, porque sólo funciona con un solo archivo. Y cada vez que lo ejecutamos estamos creando un nuevo proceso de `typescript-language-server`. Lo ideal sería poder "compartir" el mismo servidor en todo el proyecto.
+¿Por qué es ineficiente? Bueno, porque sólo funciona con un solo archivo. Y cada vez que lo ejecutamos estamos creando un nuevo proceso de `typescript-language-server`. Lo ideal sería poder compartir el mismo servidor en todo el proyecto.
 
 ## Uso en proyectos
 
 ¿Qué nos falta para poder utilizar el servidor LSP de manera eficiente? Necesitamos crear un "autocomando". Debemos indicarle a neovim que queremos vincular una extensión o tipo de archivo con un servidor LSP.
-
-Necesitamos una función como esta.
 
 ```lua
 local filetypes = {
@@ -61,20 +59,14 @@ local filetypes = {
   'javascript.jsx'
 }
 
-local buf_attach = function(client_id)
-  local supported = vim.tbl_contains(filetypes, vim.bo.filetype)
-  if not supported then return end
-
+local buf_attach = function()
   vim.lsp.buf_attach_client(0, client_id)
 end
-```
 
-Luego creamos el autocomando y le pasamos la función que queremos ejecutar.
-
-```lua
-autocmd_id = vim.api.nvim_create_autocmd('BufEnter', {
+autocmd_id = vim.api.nvim_create_autocmd('FileType', {
   desc = string.format('Vincular servidor: %s', client_name),
-  callback = function() buf_attach(client_id) end
+  pattern = filetypes,
+  callback = buf_attach
 })
 ```
 
@@ -88,7 +80,7 @@ vim.api.nvim_del_autocmd(autocmd_id)
 
 ¿Pero en qué momento debemos crear este autocomando? Cuando el servidor termine su proceso de inicialización. Podemos usar la función `on_init` para crearlo y después usamos `on_exit` para borrarlo.
 
-Si aplicamos todo este conocimiento a nuestro ejemplo la función `launch_tsserver` quedaría de la siguiente manera.
+Si aplicamos todo este conocimiento a nuestro ejemplo, la función `launch_tsserver` quedaría de la siguiente manera.
 
 ```lua
 local launch_tsserver = function()
@@ -108,21 +100,21 @@ local launch_tsserver = function()
     root_dir = vim.fn.getcwd(),
   }
 
-  local buf_attach = function(client_id)
-    local supported = vim.tbl_contains(filetypes, vim.bo.filetype)
-    if not supported then return end
-
-    vim.lsp.buf_attach_client(0, client_id)
-  end
-
   config.on_init = function(client, results)
-    autocmd = vim.api.nvim_create_autocmd('BufEnter', {
+    local buf_attach = function()
+      vim.lsp.buf_attach_client(0, client.id)
+    end
+
+    autocmd = vim.api.nvim_create_autocmd('FileType', {
       desc = string.format('Vincular servidor: %s', client.name),
-      callback = function() buf_attach(client.id) end
+      pattern = filetypes,
+      callback = buf_attach
     })
 
-    if vim.v.vim_did_enter == 1 then
-      buf_attach(client.id)
+    if vim.v.vim_did_enter == 1 and
+      vim.tbl_contains(filetypes, vim.bo.filetype)
+    then
+      buf_attach()
     end
   end
 
@@ -249,13 +241,6 @@ local launch_tsserver = function()
     vim.api.nvim_exec_autocmds('User', {pattern = 'LspAttached'})
   end
 
-  local buf_attach = function(client_id)
-    local supported = vim.tbl_contains(filetypes, vim.bo.filetype)
-    if not supported then return end
-
-    vim.lsp.buf_attach_client(0, client_id)
-  end
-
   config.on_init = function(client, results)
     if results.offsetEncoding then
       client.offset_encoding = results.offsetEncoding
@@ -267,13 +252,20 @@ local launch_tsserver = function()
       })
     end
 
-    autocmd = vim.api.nvim_create_autocmd('BufEnter', {
+    local buf_attach = function()
+      vim.lsp.buf_attach_client(0, client.id)
+    end
+
+    autocmd = vim.api.nvim_create_autocmd('FileType', {
       desc = string.format('Vincular servidor: %s', client.name),
-      callback = function() buf_attach(client.id) end
+      pattern = filetypes,
+      callback = buf_attach
     })
 
-    if vim.v.vim_did_enter == 1 then
-      buf_attach(client.id)
+    if vim.v.vim_did_enter == 1 and
+      vim.tbl_contains(filetypes, vim.bo.filetype)
+    then
+      buf_attach()
     end
   end
 
