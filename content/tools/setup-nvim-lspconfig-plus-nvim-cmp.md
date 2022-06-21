@@ -60,7 +60,7 @@ What do we have here?
 
 * `flags.debounce_text_changes`: Amount of miliseconds neovim will wait to send the next document update notification.
 
-* `capabilities`: The data on this option is send to the server, to announce what features the editor can support. We use `vim.lsp.protocol.make_client_capabilities()` build the default capabilities. Since `nvim-cmp` can add features to neovim we need to send an updated version of these capabilities.
+* `capabilities`: The data on this option is send to the server, to announce what features the editor can support. We use `vim.lsp.protocol.make_client_capabilities()` to build the default capabilities. Since `nvim-cmp` can add features to neovim we need to send an updated version of these capabilities.
 
 * `on_attach`: Callback function that will be executed when a language server is attached to a buffer. It is recommended that we set our keybindings and commands in this function. Personally, I like to use `nvim_exec_autocmds` to trigger an "event", that way I can declare my keybindings anywhere I want.
 
@@ -76,7 +76,7 @@ lspconfig.util.default_config = vim.tbl_deep_extend(
 )
 ```
 
-Next step is to call the language servers we have installed. They way we do this with `lspconfig` is by calling the `.setup()` of the language server we want to configure.
+Next step is to call the language servers we have installed. The way we do this with `lspconfig` is by calling the `.setup()` of the language server we want to configure.
 
 How do we know which one we have available? Again, lspconfig's documentation has the answer. You can find the list of valid names using `:help lspconfig-server-configurations`.
 
@@ -98,7 +98,7 @@ lspconfig.sumneko_lua.setup({
 })
 ```
 
-Notice here that the new `on_attach` calls the `on_attach` on `default_config`. We must do this because the options we set on `.setup()` will override the ones on our global configuration. We could also use `lsp_defaults.on_attach` if its in the scope of the function.
+Notice here the new `on_attach` calls the `on_attach` on `default_config`. We must do this because the options we set on `.setup()` will override the ones on our global configuration. We could also use `lsp_defaults.on_attach` if its in the scope of the function.
 
 At this point to take advantage of some "LSP features" we need to create some keybindings. This particular setup I'm showing allows us to do it with an autocommand. We can declare our keybindings anywhere in our config.
 
