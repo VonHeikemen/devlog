@@ -7,15 +7,15 @@ lang = "es"
 tags = ["vim", "neovim", "shell"]
 +++
 
-Neovim es un editor que se caracteriza por ser extendible, con suficiente esfuerzo podemos convertirlo en algo más que un editor de texto. Hoy espero poder enseñarles suficiente sobre `lua` y la api Neovim para poder construir una configuración que se adapte a sus necesidades. 
+Neovim es un editor que se caracteriza por ser extendible, con suficiente esfuerzo podemos convertirlo en algo más que un editor de texto. Hoy espero poder enseñarles suficiente sobre `lua` y la api de Neovim para poder construir una configuración que se adapte a sus necesidades.
 
 Lo que haremos será crear una configuración simple, agregaremos un par de plugins y les diré como crear sus propios comandos.
 
-Este tutorial está pensado para aquellos que son totalmente nuevos en Neovim. Si ustedes ya tienen una configuración escrita en vimscript es mejor que lean este artículo: [Todo lo que necesitan saber para configurar neovim usando lua](@/tools/configuring-neovim-using-lua.es.md)
+Este tutorial está pensado para aquellos que son totalmente nuevos en Neovim. Si ustedes ya tienen una configuración escrita en vimscript es mejor que lean este artículo: [Todo lo que necesitan saber para configurar neovim usando lua](@/tools/configuring-neovim-using-lua.es.md).
 
 ## Recomendaciones
 
-Antes de empezar, les aconsejo que descarguen la versión estable más reciente. Pueden visitar la [sección releases](https://github.com/neovim/neovim/releases) del repositorio en github y ver todas las versiones disponibles. De aquí en adelante voy a asumir que están usando la version 0.7
+Antes de empezar, les aconsejo que descarguen la versión estable más reciente. Pueden visitar la [sección releases](https://github.com/neovim/neovim/releases) del repositorio en github y ver todas las versiones disponibles. De aquí en adelante voy a asumir que están usando la version 0.7.
 
 Si aún no se sienten cómodos usando Neovim para editar texto, hagan el tutorial interactivo que viene incluido. Pueden acceder a él ejecutando este comando en su terminal.
 
@@ -71,7 +71,7 @@ nvim --headless -c 'call mkdir(stdpath("config"), "p") | exe "edit" stdpath("con
 
 ## Opciones del editor
 
-Una vez que estamos editando nuestra configuración en lua debemos usar la variable global `vim`. Más que una variable, es un módulo, ahí podemos encontrar cualquier tipo de utilidades. Por el momento lo que nos interesa es una propiedad llamada `opt`, a través de ella podremos modificar cualquiera de las 351 opciones que ofrece Neovim.
+Para acceder a las opciones de Neovim debemos usar la variable global `vim`. Bueno, más que una variable, es un módulo, ahí podemos encontrar cualquier tipo de utilidades. Pero ahora lo que nos interesa es una propiedad llamada `opt`, a través de ella podremos modificar cualquiera de las 351 opciones que ofrece Neovim.
 
 Esta es la sintaxis que deben seguir.
 
@@ -175,7 +175,7 @@ Determina si Neovim debe transformar el carácter `Tab` en espacios. Su valor po
 vim.opt.expandtab = false
 ```
 
-Si quieren saber más detalles de cómo manipular las opciones del editor lean esta sección de un artículo anterior: [Configurando neovim - Opciones del editor](@/tools/configuring-neovim-using-lua.es.md#opciones-del-editor).
+En lo que se refiere a configuración de variables hay más características que podría mencionar, pero tenemos otras cosas qué hacer. Pueden encontrar más detalles del tema aquí: [Configurando neovim - Opciones del editor](@/tools/configuring-neovim-using-lua.es.md#opciones-del-editor).
 
 ## Atajos de teclado
 
@@ -202,7 +202,7 @@ vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
   - `v`: Visual y selección.
   - `t`: Modo de terminal.
   - `o`: Modo de espera de operador.
-  - ` `: Sí, un espacio vacío. Es el equivalente a `n` + `v` + `o`.
+  - ` `: Sí, una cadena de texto vacía. Es el equivalente a `n` + `v` + `o`.
 
 * `{lhs}` es el atajo que queremos crear.
 
