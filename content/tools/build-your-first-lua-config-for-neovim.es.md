@@ -482,8 +482,6 @@ Digamos que tenemos este atajo definido.
 vim.keymap.set('n', '<F2>', '<cmd>Lexplore<cr>')
 ```
 
-Ahora cuando pulsamos `F2` en modo normal invocamos el explorador de archivos.
-
 Bien, ahora vamos a crear un atajo recursivo que utilice `F2`.
 
 ```lua
@@ -587,7 +585,7 @@ El segundo autocomando usa una función de lua en la propiedad `callback`. Esta 
 
 No hay ninguna regla que nos obligue a tener toda nuestra configuración en un solo archivo. Podemos crear módulos para colocar ciertas secciones si queremos.
 
-La convención es colocar todos nuestros módulos en un "espacio único" para evitar conflictos con plugins. Muchas personas crean un módulo llamado `user` (ustedes pueden darle otro nombre si quieren). Para esto debemos ir la carpeta donde está `init.lua` y crear el directorio `lua/user`.
+La convención es colocar todos nuestros módulos en un "espacio único" para evitar conflictos con plugins. Muchas personas crean un módulo llamado `user` (ustedes pueden darle otro nombre si quieren). Para esto debemos ir la carpeta donde está `init.lua`, crear el directorio `lua`, y dentro creamos `user`. Podemos hacer todo eso con un comando.
 
 ```vim
 :call mkdir(stdpath("config") . "/lua/user", "p")
