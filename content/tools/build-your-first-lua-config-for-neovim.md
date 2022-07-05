@@ -1,7 +1,7 @@
 +++
 title = "Build your first Neovim configuration in lua"
 description = "The one where we learn how to customize Neovim and add plugins"
-date = 2022-07-03
+date = 2022-07-04
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
