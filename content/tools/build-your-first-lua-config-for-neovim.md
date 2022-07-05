@@ -19,7 +19,7 @@ Before we start, I suggest you install the latest stable version of Neovim. You 
 
 If you don't feel comfortable using Neovim as an editor, follow the tutorial that comes bundled with it. You can start it using this command in the terminal.
 
-```shell
+```sh
 nvim +Tutor
 ```
 
