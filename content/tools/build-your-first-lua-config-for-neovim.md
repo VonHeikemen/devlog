@@ -7,7 +7,7 @@ lang = "en"
 tags = ["vim", "neovim", "shell"]
 +++
 
-Neovim is a tool both powerful and extensible. With some effort can make it do more than just modify text in a file. Today I hope I can teach you enough Neovim's `lua` api to be able to build your configuration.
+Neovim is a tool both powerful and extensible. With some effort it can do more than just modify text in a file. Today I hope I can teach you enough about Neovim's `lua` api to be able to build your configuration.
 
 We will create a simple configuration file called `init.lua`, add a couple of plugins and I'll tell you how to make your own commands.
 
@@ -83,7 +83,7 @@ Where `option_name` can be anything in [this list](https://neovim.io/doc/user/qu
 
 > You can see the list in Neovim using `:help option-list`.
 
-One thing you should know is that every option has a scope. Some options are global, some only apply in the current window or file. The scope of every option in mentioned in their help page. To navigate to the help page of an option follow this pattern.
+One thing you should know is that every option has a scope. Some options are global, some only apply in the current window or file. The scope of every option is mentioned in their help page. To navigate to the help page of an option follow this pattern.
 
 ```vim
 :help 'option_name'
@@ -93,7 +93,7 @@ One thing you should know is that every option has a scope. Some options are glo
 
 * `number`
 
-This options expects a boolean value. This means it can only have two possible values: `true` or `false`. If we assign `true` we enable it, `false` does the opposite.
+This option expects a boolean value. This means it can only have two possible values: `true` or `false`. If we assign `true` we enable it, `false` does the opposite.
 
 When we enable `number` Neovim starts showing the line number in the gutter.
 
@@ -103,7 +103,7 @@ vim.opt.number = true
 
 * `mouse`
 
-Neovim (and Vim) can let you use the mouse for some things, like select text or change the size of window. `mouse` expect a data type called a string (a piece of text wrapped in quotes) with a combination of modes. We are not going to worry about those modes now, we can just enable it for every mode.
+Neovim (and Vim) can let you use the mouse for some things, like select text or change the size of window. `mouse` expects a data type called a string (a piece of text wrapped in quotes) with a combination of modes. We are not going to worry about those modes now, we can just enable it for every mode.
 
 ```lua
 vim.opt.mouse = 'a'
@@ -119,7 +119,7 @@ vim.opt.ignorecase = true
 
 * `smartcase`
 
-Makes our search ignore uppercase letters unless the search term has an uppercase letter. Most of the time this is use in combination with `ignorecase`.
+Makes our search ignore uppercase letters unless the search term has an uppercase letter. Most of the time this is used in combination with `ignorecase`.
 
 ```lua
 vim.opt.smartcase = true
@@ -143,7 +143,7 @@ vim.opt.wrap = true
 
 * `breakindent`
 
-Preserve the indentation of a virtual line. A "virtual line" are the ones only visible when `wrap` is enabled.
+Preserve the indentation of a virtual line. These "virtual lines" are the ones only visible when `wrap` is enabled.
 
 ```lua
 vim.opt.breakindent = true
@@ -177,13 +177,13 @@ There are a few other things in the `vim` module we can use to modify variables,
 
 ## Keybindings
 
-Because Neovim clearly doesn't have enough, we need to create more. To do it we need to learn about `vim.keymap.set`. Here is basic usage example.
+Because Neovim clearly doesn't have enough, we need to create more. To do it we need to learn about `vim.keymap.set`. Here is a basic usage example.
 
 ```lua
 vim.keymap.set('n', '<space>w', '<cmd>write<cr>', {desc = 'Save'})
 ```
 
-After executing this the sequence `Space` + `w` will call the `write` command. Basically, we can save changes made to a file with `Space` + `w`.
+After executing this, the sequence `Space` + `w` will call the `write` command. Basically, we can save changes made to a file with `Space` + `w`.
 
 Now let me explain `vim.keymap.set` parameters.
 
@@ -204,11 +204,11 @@ vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 
 * `{lhs}` is the key we want to bind.
 
-* `{rhs}` is the action we want to execute. It can be a string with a command, or an expression. You can also provide a lua function.
+* `{rhs}` is the action we want to execute. It can be a string with a command or an expression. You can also provide a lua function.
 
 * `{opts}` this must be a lua table. If you don't know what is a "lua table" just think is a way of storing several values in one place. Anyway, it can have these properties.
 
-  - `desc`: A string that describes what the keybinding does. 
+  - `desc`: A string that describes what the keybinding does. You can write anything you want.
   
   - `remap`: A boolean that determines if our keybinding can be recursive. The default value is `false`. Recursive keybindings can cause some conflicts if used incorrectly. Don't enable it unless you know what you're doing. I will explain this recursive thing later.
   
@@ -299,7 +299,7 @@ Pay attention to `install_path`, this variable controls where we install packer.
 :echo stdpath('data') . '/site/pack/packer'
 ```
 
-If you ever have a problem with the install (or removal) of a plugin, check that folder. Inside you'll find two folders: `opt` and `start`. In the `opt` folder you'll find "optional plugins" and the `start` folder will have all the plugins that Neovim will load at startup.
+If you ever have a problem with the install (or removal) of a plugin, check that folder. Inside you'll find two folders: `opt` and `start`. In the `opt` folder you'll find "optional plugins" and the `start` folder will have all the plugins that Neovim will load at startup. Packer by default install all plugins in the `start` folder.
 
 Now, to actually use packer we can follow this pattern.
 
@@ -412,7 +412,7 @@ This documentation  shows we can make the plugin work just by calling `setup` on
 require('lualine').setup()
 ```
 
-But now lets pretend we want to change some options. For example, say we hate icons, we want them gone. In the documentation there is section called `lualine-Default-configuration`, in there I can see some code that says `icon_enabled = true`. Great, let's copy all the necessary properties to modify that.
+But now lets pretend we want to change some options. For example, say we hate icons, we want them gone. In the documentation there is a section called `lualine-Default-configuration`, in there I can see some code that says `icon_enabled = true`. Great, let's copy all the necessary properties to modify that.
 
 ```lua
 require('lualine').setup({
@@ -474,7 +474,7 @@ That's it... well no, there are more variables, but like this is the basic stuff
 
 If you are familiar with the word "recursive" you might be able to guess what kind of consequences they can have. If not, let me try to explain with an example.
 
-Let's say we have keybinding that opens the file explorer.
+Let's say we have a keybinding that opens the file explorer.
 
 ```lua
 vim.keymap.set('n', '<F2>', '<cmd>Lexplore<cr>')
@@ -502,7 +502,7 @@ Notice here we are using `*` in `{lhs}` and also `{rhs}`. If we make this recurs
 
 ### User commands
 
-Yes, we can create our own commands. In lua we do this with the function `vim.api.nvim_create_user_command`. This is what it needs.
+Yes, we can create our own commands. In lua we use this function.
 
 ```lua
 vim.api.nvim_create_user_command({name}, {command}, {opts})
@@ -524,11 +524,12 @@ User commands are a fairly advance topic so if you want to know more details you
 
 ```vim
 :help nvim_create_user_command()
+:help user-commands
 ```
 
 ### Autocommands
 
-With autocommands we can execute actions when Neovim triggers an event. You can check the complete list of event with this command `:help events`.
+With autocommands we can execute actions when Neovim triggers an event. You can check the complete list of events with this command `:help events`.
 
 We can create autocommands with this function.
 
@@ -544,7 +545,7 @@ vim.api.nvim_create_autocmd({event}, {opts})
 
   - `group` it can be a number or a string. If you provide a string it must be the name of an existing group. If you provide a number it must be the "id" of a group.
 
-  - `pattern` can be a lua table or a string. This allows to filter even more when we want to trigger the autocommand. Its value depends on the event. Check the documentation of the event to know the possible values.
+  - `pattern` can be a lua table or a string. This allows us to control when we want to trigger the autocommand. Its value depends on the event. Check the documentation of the event to know the possible values.
 
   - `once` it can be a boolean. If enabled the autocommand will only execute once. The default value is `false`.
 
@@ -579,20 +580,34 @@ The first autocommand will make a keymap `q` to close the current window, but on
 
 The second autocommand will highlight the text we copy using `y`. If you want to test the effect try copying a line using `yy`.
 
+To know more about autocommands in general check the documentation.
+
+```vim
+:help autocmd-intro
+```
+
 ### User modules
 
-There isn't anything that prevent using lua module to split our configuration into smaller pieces.
+We can use lua modules to split our configuration into smaller pieces.
 
-A common convention is to put every module you create into a single folder. We do this to avoid any potential conflict with a plugin. Lots of people call this module `user` (you can use another name). To make this module we need to create a couple of folders inside our config folder. First create a `lua` folder, and inside of that create a `user` folder. You could do it with this command.
+A common convention is to put every module we create into a single folder. We do this to avoid any potential conflict with a plugin. Lots of people call this module `user` (you can use another name). To make this module we need to create a couple of folders inside our config folder. First create a `lua` folder, and inside that create a `user` folder. You can do it with this command.
 
 ```lua
 :call mkdir(stdpath("config") . "/lua/user", "p")
 ```
 
-Inside `/lua/user` create a script. Let's pretend we have one called `settings.lua`. Neovim doesn't know it exists, it won't be executed automatically. We need to call it in `init.lua`.
+Inside `/lua/user` we create our lua scripts.
+
+Let's pretend we have one called `settings.lua`. Neovim doesn't know it exists, it won't be executed automatically. We need to call it from `init.lua`.
 
 ```lua
 require('user.settings')
+```
+
+If you want to know more details about `require`'s behavior inside Neovim checkout.
+
+```vim
+:help lua-require
 ```
 
 ### The require function
@@ -608,7 +623,7 @@ require('user.settings')
 
 In here the script `settings.lua` will only be executed once. If you want to create plugins or create a feature that depends on a plugin, this behavior is good. The bad news is if want to use `:source $MYVIMRC` to reload our config the results might not be what we expect.
 
-There is a very simple hack we can do to make `source` work. We can empty `require`'s cache before using it. Like this.
+There is a very simple hack we can do to make it `source` friendly. We can empty `require`'s cache before using it. Like this.
 
 ```lua
 local load = function(mod)
