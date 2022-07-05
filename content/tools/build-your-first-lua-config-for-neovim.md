@@ -7,15 +7,15 @@ lang = "en"
 tags = ["vim", "neovim", "shell"]
 +++
 
-Neovim is a tool both powerful and extensible. With some effort can make do more than just modify text in a file. Today I hope I can teach you enough Neovim's `lua` api to be able to build your configuration.
+Neovim is a tool both powerful and extensible. With some effort can make it do more than just modify text in a file. Today I hope I can teach you enough Neovim's `lua` api to be able to build your configuration.
 
-We will create a simple configuration, add a couple of plugins and I'll tell you how to make your own commands.
+We will create a simple configuration file called `init.lua`, add a couple of plugins and I'll tell you how to make your own commands.
 
-This tutorial is meant for people totally new to Neovim. If you already have a configuration written in vimscript and want to migrate you might find this other article more useful: [Everything you need to know to configure neovim using lua](@/tools/configuring-neovim-using-lua.md).
+This tutorial is meant for people totally new to Neovim. If you already have a configuration written in vimscript and want to migrate to lua, you might find this other article more useful: [Everything you need to know to configure neovim using lua](@/tools/configuring-neovim-using-lua.md).
 
 ## Some advice
 
-Before we start, I suggest you install the latest stable version of Neovim. You can go to the [release page](https://github.com/neovim/neovim/releases) in the github repository and get it there. From now on I will assume you are using version 0.7.
+Before we start, I suggest you install the latest stable version of Neovim. You can go to the [release page](https://github.com/neovim/neovim/releases) in the github repository and download it from there. From now on I will assume you are using version 0.7.
 
 If you don't feel comfortable using Neovim as an editor, follow the tutorial that comes bundled with it. You can start it using this command in the terminal.
 
@@ -27,11 +27,11 @@ I will assume you know all the features `Tutor` teaches.
 
 ## The entry point
 
-First things first, we need to create a configuration file. And where that might be? Well, it depends on your operating system and also your environment variables. I can tell you a way of creating it using Neovim, that way we don't have to worry about those details.
+First things first, we need to create a configuration file, the famous `init.lua`. And where that might be? Well, it depends on your operating system and also your environment variables. I can tell you a way of creating it using Neovim, that way we don't have to worry about those details.
 
 > Fun fact: Some articles online call the configuration file `vimrc`. That is the name it has in Vim.
 
-For this task we won't be using lua, we'll use language created specifically for Vim: vimscript.
+For this task we won't be using lua, we'll use the language created specifically for Vim: vimscript.
 
 Let's open Neovim and execute this command.
 
@@ -45,13 +45,13 @@ It'll create the folder where the configuration file needs to be. If you want to
 :echo stdpath("config")
 ```
 
-Now we are going to edit the file we are going to call `init.lua`.
+Now we are going to edit the configuration file.
 
 ```vim
 :exe "edit" stdpath("config") . "/init.lua"
 ```
 
-After doing that we'll be in "blank page" but the file doesn't exists on the system just yet. We need to save it with this command.
+After doing that we'll be in a "blank page". At this point the file doesn't exists on the system just yet. We need to save it with this command.
 
 ```vim
 :write
@@ -83,7 +83,7 @@ Where `option_name` can be anything in [this list](https://neovim.io/doc/user/qu
 
 > You can see the list in Neovim using `:help option-list`.
 
-One thing you should know is that every option has a scope. Some options are global, some only apply in the current window or file. The scope of every option in mentioned in their help page. To get to help page of an option follow this pattern.
+One thing you should know is that every option has a scope. Some options are global, some only apply in the current window or file. The scope of every option in mentioned in their help page. To navigate to the help page of an option follow this pattern.
 
 ```vim
 :help 'option_name'
@@ -103,7 +103,7 @@ vim.opt.number = true
 
 * `mouse`
 
-Neovim (and Vim) can let you use the mouse for some things, like select text or change the size of window. `mouse` expect a data type called a string (a piece of text wrapped in quotes) with a combination of modes. We are not going to worry about those modes now, we can just enable for every mode.
+Neovim (and Vim) can let you use the mouse for some things, like select text or change the size of window. `mouse` expect a data type called a string (a piece of text wrapped in quotes) with a combination of modes. We are not going to worry about those modes now, we can just enable it for every mode.
 
 ```lua
 vim.opt.mouse = 'a'
@@ -143,7 +143,7 @@ vim.opt.wrap = true
 
 * `breakindent`
 
-Preserve the indentation of virtual line. A virtual line are the ones only visible when `wrap` is enabled.
+Preserve the indentation of a virtual line. A "virtual line" are the ones only visible when `wrap` is enabled.
 
 ```lua
 vim.opt.breakindent = true
@@ -175,7 +175,7 @@ vim.opt.expandtab = false
 
 There are a few other things in the `vim` module we can use to modify variables, but we have other things to do right now. I talk about this topic in more detail here: [Configuring Neovim - Editor Settings](@/tools/configuring-neovim-using-lua.md#editor-settings).
 
-## keybindings
+## Keybindings
 
 Because Neovim clearly doesn't have enough, we need to create more. To do it we need to learn about `vim.keymap.set`. Here is basic usage example.
 
@@ -204,7 +204,7 @@ vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 
 * `{lhs}` is the key we want to bind.
 
-* `{rhs}` is tha action we want to execute. It can be a string with a command, or an expression. You can also provide a lua function.
+* `{rhs}` is the action we want to execute. It can be a string with a command, or an expression. You can also provide a lua function.
 
 * `{opts}` this must be a lua table. If you don't know what is a "lua table" just think is a way of storing several values in one place. Anyway, it can have these properties.
 
@@ -212,7 +212,7 @@ vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
   
   - `remap`: A boolean that determines if our keybinding can be recursive. The default value is `false`. Recursive keybindings can cause some conflicts if used incorrectly. Don't enable it unless you know what you're doing. I will explain this recursive thing later.
   
-  - `buffer`: It can be a boolean or number. If we assign the boolean `true` it means the keybinding will only be effective in the current file. If we assign a number, it needs to be the "id" of an open buffer.
+  - `buffer`: It can be a boolean or a number. If we assign the boolean `true` it means the keybinding will only be effective in the current file. If we assign a number, it needs to be the "id" of an open buffer.
 
   - `silent`: A boolean. Determines whether or not the keybindings can show a message. The default value is `false`.
 
@@ -278,7 +278,7 @@ vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>')
 
 ## Plugin manager
 
-Right now the most popular plugin manager es [packer.nvim](https://github.com/wbthomason/packer.nvim). In here I'll show some basic usage example.
+Right now the most popular plugin manager is [packer.nvim](https://github.com/wbthomason/packer.nvim). I'll show some basic usage examples.
 
 First step is to install it from github. It just so happens we can do this using lua. In packer's documentation they show us how to do it. We add this to our config.
 
@@ -299,7 +299,7 @@ Pay attention to `install_path`, this variable controls where we install packer.
 :echo stdpath('data') . '/site/pack/packer'
 ```
 
-If ever have a problem with the install (or removal) of a plugin, check that folder. Inside you'll find two folders: `opt` and `start`. In the `opt` folder you'll find "optional plugins" and the `start` folder will have all the plugins that Neovim will load at startup.
+If you ever have a problem with the install (or removal) of a plugin, check that folder. Inside you'll find two folders: `opt` and `start`. In the `opt` folder you'll find "optional plugins" and the `start` folder will have all the plugins that Neovim will load at startup.
 
 Now, to actually use packer we can follow this pattern.
 
@@ -316,9 +316,9 @@ end)
 
 The `.startup` function in packer takes another function as an argument. Inside that function we can list our plugins. We call the function `use` to tell packer what plugins we want. Default behavior of packer makes it easy to download plugins from github, we just have to specify the user and the name of the repository.
 
-That little `if` section we have at the bottom is the one that downloads plugins for the first time. If `install_plugins` has the `true` packer will do  its thing.
+That little `if` section we have at the bottom is the one that downloads plugins for the first time. If `install_plugins` has the value `true` packer will do its thing.
 
-If your entire configuration in one file, meaning you don't have any extra modules, I suggest you stop the execution of the script while plugins are being downloaded the first time. Like this.
+If your entire configuration is in one file, meaning you don't have any extra modules, I suggest you stop the execution of the script while plugins are being downloaded the first time. Like this.
 
 ```lua
 require('packer').startup(function(use)
@@ -336,7 +336,7 @@ if install_plugins then
 end
 ```
 
-Notice the second `if` block has the keyword `return`, that will stop the script and save you the trouble of Neovim trying to configure plugins that aren't installed just yet.
+Notice the second `if` block has the keyword `return`, that will stop the script and save you the trouble of Neovim trying to configure plugins that aren't installed.
 
 Now let's download a plugin, a colorscheme to make Neovim look better.
 
@@ -368,17 +368,17 @@ vim.opt.termguicolors = true
 vim.cmd('colorscheme onedark')
 ```
 
-First we enable `termguicolors` so Neovim can show the "best" version of the colorscheme. Each colorscheme can have two versions: one that works for terminals which only support 256 colors and another that specifies colors in hexadecimal codes (has way more colors).
+We enable `termguicolors` so Neovim can show the "best" version of the colorscheme. Each colorscheme can have two versions: one that works for terminals which only support 256 colors and another that specifies colors in hexadecimal codes (has way more colors).
 
 We tell Neovim which theme we want by using the `colorscheme` command. Notice that we are using `vim.cmd`, that allows us to use vimscript inside lua. But why? We still don't have a lua api to apply a theme.
 
-We save these changes and restart Neovim, to trigger the download of packer. When Neovim start it should show a message telling the clone started executing. After it's done in packer is installed another window will show up, it'll tell us the progress of the plugins download. After plugins are installed we should restart Neovim again to see the changes.
+We save these changes and restart Neovim, to trigger the download of packer. When Neovim start it should show a message telling us is cloning packer's repository. After it's done and packer is installed another window will show up, it'll tell us the progress of the plugins download. After plugins are installed we should restart Neovim again to see the changes.
 
 ## Plugin configuration
 
 Each plugin author has the freedom to create the configuration method they want. But then how do we know what to do? We have to rely on the documentation the plugin provides, we have no other choice.
 
-Most plugins have a file called `README.md` in their repository, github is kind enough to render that file in main page. It's the main place you should look for configuration instructions.
+Most plugins have a file called `README.md` in their repository, github is kind enough to render that file in the main page. It's the main place you should look for configuration instructions.
 
 If for some reason the README doesn't have the information we are after, look for a folder called `doc`. Inside there should be a `txt` file, this is the help page. We can read it using Neovim executing the command `:help name-of-file.txt`.
 
@@ -398,7 +398,7 @@ Now save the changes, then execute the command to reload the config and install 
 :source $MYVIMRC | PackerSync
 ```
 
-After the plugin you can add the configuration.
+After that you can add the configuration.
 
 In lualine's repository we can find a `doc` folder and inside there is a file called `lualine.txt`. We can read it in Neovim using this.
 
@@ -452,7 +452,7 @@ Did you know Neovim has a file explorer? Yeah, it is plugin that comes bundled i
 :help netrw
 ```
 
-If you check the table of content in the help page you'll notice a section called `netrw-browser-settings`. Once there we get a list of variables and their descriptions. Let's focus on the ones that start with `g:`, those are the ones we change with `vim.g`.
+If you check the table of content in the help page, you'll notice a section called `netrw-browser-settings`. Once there we get a list of variables and their descriptions. Let's focus on the ones that start with `g:`.
 
 For example, if we want to hide the help text in the banner we use `netrw_banner`.
 
@@ -538,13 +538,13 @@ vim.api.nvim_create_autocmd({event}, {opts})
 
 * `{event}` must be a string with the name of an event.
 
-* `{opts}` must be a lua table, its properties will determine the behavior of the autocommand. This are some of the most useful options.
+* `{opts}` must be a lua table, its properties will determine the behavior of the autocommand. These are some of the most useful options.
 
   - `desc` a string that describes what the autocommand does.
 
   - `group` it can be a number or a string. If you provide a string it must be the name of an existing group. If you provide a number it must be the "id" of a group.
 
-  - `pattern` can be a lua table or a string. This allows to filter even more what type of event we want to trigger the autocommand. Its value depends on the event. Check the documentation of the event to what values it can have.
+  - `pattern` can be a lua table or a string. This allows to filter even more when we want to trigger the autocommand. Its value depends on the event. Check the documentation of the event to know the possible values.
 
   - `once` it can be a boolean. If enabled the autocommand will only execute once. The default value is `false`.
 
@@ -626,7 +626,7 @@ If we do this in `init.lua` the `source` command will be able to execute all the
 
 ## init.lua
 
-If we apply (almost) everything we learned here in single configuration file this would be the result.
+If we apply (almost) everything we learned here in a single configuration file this would be the result.
 
 ```lua
 -- ================================================================== --
@@ -738,7 +738,7 @@ If you feel prepared to tackle more advanced topics you can read this other tuto
 
 * [Setup nvim-lspconfig + nvim-cmp](@/tools/setup-nvim-lspconfig-plus-nvim-cmp.md)
 
-If you recommendations for plugins and other configurations I suggest you check these templates.
+If you want recommendations for plugins and other configurations I suggest you check these configuration templates.
 
 * [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
 * [nvim-basic-ide](https://github.com/LunarVim/nvim-basic-ide)
@@ -750,7 +750,7 @@ You can also check my personal configuration if you like.
 
 ## Conclusion
 
-Now we know how to configure some basic options in Neovim. We learn how to create our very own keybindings. We know how to get plugins from github. We manage to configure a couple of plugins, a lua plugin and one written in vimscript. We took a brief look at some advance topics like recursive mappings, user commands, autocommands and lua modules.
+Now we know how to configure some basic options in Neovim. We learned how to create our very own keybindings. We know how to get plugins from github. We manage to configure a couple of plugins, a lua plugin and one written in vimscript. We took a brief look at some advance topics like recursive mappings, user commands, autocommands and lua modules.
 
 I'd say you have everything you need to start exploring plugins, check other people's config and learn from them.
 
