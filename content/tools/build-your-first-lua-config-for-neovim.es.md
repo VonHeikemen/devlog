@@ -7,7 +7,7 @@ lang = "es"
 tags = ["vim", "neovim", "shell"]
 +++
 
-Neovim es un editor que se caracteriza por ser extendible, con suficiente esfuerzo podemos convertirlo en algo más que un editor de texto. Hoy espero poder enseñarles suficiente sobre `lua` y la api de Neovim para poder construir una configuración que se adapte a sus necesidades.
+Neovim es un editor que se caracteriza por ser extensible, con suficiente esfuerzo podemos convertirlo en algo más que un editor de texto. Hoy espero poder enseñarles suficiente sobre `lua` y la api de Neovim para poder construir una configuración que se adapte a sus necesidades.
 
 Lo que haremos será crear un archivo de configuración que llamaremos `init.lua`, agregaremos un par de plugins y les diré cómo crear sus propios comandos.
 
