@@ -9,13 +9,13 @@ tags = ["vim", "neovim", "shell"]
 
 Neovim es un editor que se caracteriza por ser extendible, con suficiente esfuerzo podemos convertirlo en algo más que un editor de texto. Hoy espero poder enseñarles suficiente sobre `lua` y la api de Neovim para poder construir una configuración que se adapte a sus necesidades.
 
-Lo que haremos será crear una configuración simple, agregaremos un par de plugins y les diré como crear sus propios comandos.
+Lo que haremos será crear un archivo de configuración que llamaremos `init.lua`, agregaremos un par de plugins y les diré cómo crear sus propios comandos.
 
-Este tutorial está pensado para aquellos que son totalmente nuevos en Neovim. Si ustedes ya tienen una configuración escrita en vimscript es mejor que lean este artículo: [Todo lo que necesitan saber para configurar neovim usando lua](@/tools/configuring-neovim-using-lua.es.md).
+Este tutorial está pensado para aquellos que son totalmente nuevos en Neovim. Si ustedes ya tienen una configuración escrita en vimscript y desean migrarla a lua, encontrarán todo lo que necesitan aquí: [Todo lo que necesitan saber para configurar neovim usando lua](@/tools/configuring-neovim-using-lua.es.md).
 
 ## Recomendaciones
 
-Antes de empezar, les aconsejo que descarguen la versión estable más reciente. Pueden visitar la [sección releases](https://github.com/neovim/neovim/releases) del repositorio en github y ver todas las versiones disponibles. De aquí en adelante voy a asumir que están usando la version 0.7.
+Antes de empezar, les aconsejo que instalen la versión de Neovim estable más reciente. Pueden visitar la [sección releases](https://github.com/neovim/neovim/releases) del repositorio en github y descargarla de ahí. De aquí en adelante voy a asumir que están usando la version 0.7.
 
 Si aún no se sienten cómodos usando Neovim para editar texto, hagan el tutorial interactivo que viene incluido. Pueden acceder a él ejecutando este comando en su terminal.
 
@@ -27,11 +27,11 @@ El tutorial está inglés. Si no tienen un buen dominio del idioma pueden [desca
 
 ## El Inicio
 
-Lo primero que debemos hacer es crear nuestro archivo de configuración. ¿Dónde es eso? Depende de su sistema operativo, y también de sus variables de entorno. Pero puedo enseñarles cómo crearlo desde Neovim sin preocuparnos por esos detalles.
+Lo primero que debemos hacer es crear nuestro archivo de configuración, el famoso `init.lua`. ¿Dónde? Depende de su sistema operativo, y también de sus variables de entorno. Pero puedo enseñarles cómo crearlo desde Neovim, así no tenemos que preocuparnos por esos detalles.
 
 > Dato curioso: En algunos tutoriales se refieren al archivo de configuración como `vimrc`, porque ese es el nombre que tiene el archivo en Vim.
 
-En esta sección no vamos a usar `lua`, usaremos el lenguaje que fue creado para Vim: vimscript.
+En esta sección no vamos a usar lua, usaremos el lenguaje que fue creado para Vim: vimscript.
 
 Vamos a abrir Neovim y luego ejecutamos este comando.
 
@@ -45,19 +45,19 @@ Con esto crearemos la carpeta donde vivirá nuestra configuración. Si quieren s
 :echo stdpath("config")
 ```
 
-Ahora vamos con el comando para editar el archivo `init.lua`.
+Ahora vamos con el comando para editar la configuración.
 
 ```vim
 :exe "edit" stdpath("config") . "/init.lua"
 ```
 
-Después de eso el archivo aún no existe. Para crearlo debemos guardarlo. Ejecuten esto.
+Después de ejecutarlo tendremos una página en blanco, pero el archivo aún no existe en el sistema. Para crearlo debemos guardarlo. Ejecuten esto.
 
 ```vim
 :write
 ```
 
-Una vez que el archivo existe dentro de nuestro sistema podremos editarlo en cualquier momento con este comando.
+Una vez que tenemos el archivo podremos editarlo en cualquier momento con este comando.
 
 ```vim
 :edit $MYVIMRC
@@ -71,7 +71,7 @@ nvim --headless -c 'call mkdir(stdpath("config"), "p") | exe "edit" stdpath("con
 
 ## Opciones del editor
 
-Para acceder a las opciones de Neovim debemos usar la variable global `vim`. Bueno, más que una variable, es un módulo, ahí podemos encontrar cualquier tipo de utilidades. Pero ahora lo que nos interesa es una propiedad llamada `opt`, a través de ella podremos modificar cualquiera de las 351 opciones que ofrece Neovim.
+Para acceder a las opciones de Neovim debemos usar la variable global `vim`. Bueno, más que una variable, es un módulo, ahí podemos encontrar cualquier tipo de utilidades. Pero ahora lo que nos interesa es una propiedad llamada `opt`, con eso podremos modificar cualquiera de las 351 opciones que ofrece Neovim.
 
 Esta es la sintaxis que deben seguir.
 
@@ -103,17 +103,15 @@ vim.opt.number = true
 
 * `mouse`
 
-Neovim (y Vim) pueden utilizar el ratón para algunas operaciones, cosas como seleccionar texto o cambiar el tamaño de una ventana. `mouse` acepta una cadena de texto (carácteres rodeados por comillas) que contiene una combinación de modos.
+Neovim (y Vim) pueden utilizar el ratón para algunas operaciones, cosas como seleccionar texto o cambiar el tamaño de una ventana. `mouse` acepta una cadena de texto (carácteres rodeados por comillas) que contiene una combinación de modos. No vamos a preocuparnos por los modos, podemos habilitarlo para todos así:
 
 ```lua
 vim.opt.mouse = 'a'
 ```
 
-Aquí `a` significa que podremos utilizar el ratón en todos los modos.
-
 * `ignorecase`
 
-Con esto le decimos a Neovim si debe ignorar las letrás mayúsculas cuando realizamos una búsqueda. Por ejemplo, si buscamos la palabra `dos` nuestros resultados pueden incluir diferentes variaciones como: `Dos`, `DOS` o `dos`.
+Con esto le decimos a Neovim si debe ignorar las letrás mayúsculas cuando realizamos una búsqueda. Por ejemplo, si buscamos la palabra `dos` nuestros resultados pueden incluir diferentes variaciones como `Dos`, `DOS` o `dos`.
 
 ```lua
 vim.opt.ignorecase = true
@@ -129,7 +127,7 @@ vim.opt.smartcase = true
 
 * `hlsearch`
 
-Resalta los resultados de una búsqueda. La mayor parte del tiempo no queremos esto, así que lo deshabilitamos.
+Resalta los resultados de una búsqueda anterior. La mayor parte del tiempo no queremos esto, así que lo deshabilitamos.
 
 ```lua
 vim.opt.hlsearch = false
@@ -145,7 +143,7 @@ vim.opt.wrap = true
 
 * `breakindent`
 
-Conserva la indentación de las "líneas virtuales" (las que sólo son visibles cuando `wrap` es `true`).
+Conserva la indentación de las líneas que sólo son visibles cuando `wrap` es `true`.
 
 ```lua
 vim.opt.breakindent = true
@@ -202,15 +200,15 @@ vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
   - `v`: Visual y selección.
   - `t`: Modo de terminal.
   - `o`: Modo de espera de operador.
-  - ` `: Sí, una cadena de texto vacía. Es el equivalente a `n` + `v` + `o`.
+  - `''`: Sí, una cadena de texto vacía. Es el equivalente a `n` + `v` + `o`.
 
 * `{lhs}` es el atajo que queremos crear.
 
 * `{rhs}` es la acción que queremos ejecutar. Puede ser un comando, una expresión o una función de lua.
 
-* `{opts}` este parámetro debe ser una tabla de lua. Si no saben qué es una tabla, sólo piensen que es una manera albergar varios tipos de datos en un lugar.
+* `{opts}` este parámetro debe ser una tabla de lua. Si no saben qué es una tabla, sólo piensen que es una manera albergar varios tipos de datos en un lugar. En fin, estas son las propiedades de uso común.
 
-  - `desc`: Cadena de texto que describe qué hace el comando.
+  - `desc`: Cadena de texto que describe qué hace el comando. Aquí podemos escribir cualquier cosa.
 
   - `remap`: Booleano que controla si nuestro atajo debe ser recursivo. Su valor por defecto es `false`. Los atajos recursivos pueden crear conflictos, así que no lo habiliten si no saben todos los detalles de lo que quieren lograr. Luego les explico con más detalle.
 
@@ -244,7 +242,7 @@ Y así la secuencia `,` + `w` guarda el archivo actual.
 vim.g.mapleader = ' '
 ```
 
-### Ejemplos
+### Atajos
 
 Ahora les mostraré algunos atajos que pueden ser útiles para ustedes.
 
@@ -266,7 +264,7 @@ vim.keymap.set({'n', 'x'}, 'cv', '"+p')
 
 * Borrar texto sin alterar el registro
 
-Cuando borramos algo en modo normal usando `c`, `d` o `x` ese texto se va un registro. Esto afecta el texto que podemos pegar con la tecla `p`. Lo que quiero hacer es modificar `x` para poder borrar texto sin afectar el "historial" de copias.
+Cuando borramos algo en modo normal o visual usando `c`, `d` o `x` ese texto se va un registro. Esto afecta el texto que podemos pegar con la tecla `p`. Lo que quiero hacer es modificar `x` para poder borrar texto sin afectar el "historial" de copias.
 
 ```lua
 vim.keymap.set({'n', 'x'}, 'x', '"_x')
@@ -280,9 +278,9 @@ vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<CR>')
 
 ## Plugin manager
 
-Por el momento el manejador de plugins más popular es [packer.nvim](https://github.com/wbthomason/packer.nvim). Voy a mostrarles la estructura básica para usarlo.
+Actualmente el manejador de plugins más popular es [packer.nvim](https://github.com/wbthomason/packer.nvim). Voy a mostrarles la estructura básica para usarlo.
 
-Nuestro primer paso será instalarlo y usaremos lua para esto. En la documentación de packer.nvim nos enseñan como hacerlo. Agregamos esto en nuestra configuración.
+Nuestro primer paso será instalarlo y usaremos lua para esto. En la documentación de packer.nvim nos enseñan cómo hacerlo. Agregamos esto en nuestra configuración.
 
 ```lua
 local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
@@ -295,13 +293,13 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 end
 ```
 
-Quiero que presten atención a la variable `install_path`, es ahí donde instalaremos packer. Lo que es más importante, quiero que sepan cúal es la ruta donde sus plugins van a estar instalados. Ejecuten este comando.
+Presten atención a la variable `install_path`, es ahí donde instalaremos packer. Lo que es más importante, quiero que sepan cúal es la ruta donde sus plugins van a estar instalados. Ejecuten este comando.
 
 ```vim
 :echo stdpath('data') . '/site/pack/packer'
 ```
 
-Si alguna vez tienen un problema con un plugin que no se instaló/desinstaló de manera apropiada, revisen esa carpeta. Dentro de ese directorio deberán encontrar dos carpetas: `opt` y `start`. En `opt` se encuentran los plugins "opcionales" y en `start` se encuentran los plugins que se inicializan cuando abrimos Neovim.
+Si alguna vez tienen un problema instalando (o desinstalando) un plugin, revisen esa carpeta. Dentro deberán encontrar dos carpetas más: `opt` y `start`. En `opt` se encuentran los plugins "opcionales" y en `start` se encuentran los plugins que se inicializan cuando abrimos Neovim. Por defecto packer descarga los plugins en `start`.
 
 Ahora bien, para usar packer seguimos este patrón.
 
@@ -316,9 +314,9 @@ require('packer').startup(function(use)
 end)
 ```
 
-La función `.startup` de packer acepta otra función como parámetro. Dentro de esa función es donde especificamos la lista de plugins. Usamos el parámetro `use` para decirle a packer qué plugin queremos. Por defecto packer descarga los plugins de github, así que sólo debemos especificar el usuario y el repositorio.
+La función `.startup` de packer acepta otra función como argumento. Dentro de esa función es donde especificamos la lista de plugins. Usamos el parámetro `use` para decirle a packer qué plugin queremos. Por defecto packer descarga los plugins de github, así que sólo debemos especificar el usuario y el repositorio.
 
-La sección donde tenemos el `if` es la que se encarga de descargar los plugins por primera vez. Si la variable `install_plugins` tiene el valor `true` packer empezará a descargar plugins.
+La sección donde tenemos el `if` es la que se encarga de descargar los plugins por primera vez. Si la variable `install_plugins` tiene el valor `true` packer empezará la descarga.
 
 Si su configuración está enteramente en `init.lua`, es decir si no tienen más módulos, les aconsejo que paren la ejecución del script asi:
 
@@ -347,7 +345,7 @@ require('packer').startup(function(use)
   -- Package manager
   use 'wbthomason/packer.nvim'
 
-  -- Theme inspired by Atom
+  -- Tema inspirado en Atom
   use 'joshdick/onedark.vim'
 
   if install_plugins then
@@ -378,7 +376,7 @@ Si guardamos los cambios y reiniciamos Neovim deberá aparecer un mensaje que no
 
 ## Configuración de plugins
 
-Para muchos esta parte es la más difícil. Cada autor puede crear su método de configuración. ¿Cómo sabemos qué debemos hacer? Leemos la documentación, no nos queda de otra.
+Cada autor puede crear el método de configuración que mejor le parezca. ¿Cómo sabemos qué debemos hacer? Leemos la documentación, no nos queda de otra.
 
 Cada plugin como mínimo debe tener un archivo llamado `README.md`. Este es el archivo que github nos muestra en la página principal del repositorio. Ahí debemos buscar las instrucciones de configuración.
 
@@ -386,7 +384,7 @@ Si el archivo `README.md` no tiene la información que nos interesa busquen una 
 
 ### Convenciones de plugins escritos en lua
 
-Por suerte para nosotros la mayoría de los plugins escritos en lua siguen un patrón, usan una función llamada `setup` que acepta una tabla de lua como argumento. Si hay algo que deben aprender para configurar plugins en lua es cómo crear tablas.
+Por suerte para nosotros muchos de los plugins escritos en lua siguen un patrón, usan una función llamada `setup` que acepta una tabla de lua como argumento. Si hay algo que deben aprender para configurar plugins en lua es cómo crear tablas.
 
 Vamos a configurar un plugin. Para este ejemplo voy a usar [lualine](https://github.com/nvim-lualine/lualine.nvim), un plugin que modifica la "línea de estado" que se encuentra en el fondo de la pantalla. Para descargarlo agregamos esto a la lista de plugins.
 
@@ -394,7 +392,7 @@ Vamos a configurar un plugin. Para este ejemplo voy a usar [lualine](https://git
 use 'nvim-lualine/lualine.nvim'
 ```
 
-En este punto deberíamos guardar el archivo y evaluarlo usando este comando.
+En este punto deberíamos guardar el archivo y evaluarlo. Luego usamos `PackerSync` para instalar el plugin. Podemos recargar la configuración y empezar la descarga con este comando.
 
 ```lua
 :source $MYVIMRC | PackerSync
@@ -442,19 +440,19 @@ require('lualine').setup({
 })
 ```
 
-En resumen, para configurar plugins debemos: saber cómo navegar en la documentación del plugin, y también debemos conocer la sintaxis de lua para crear tablas.
+En resumen, para configurar plugins debemos: saber cómo navegar en la documentación del plugin y también debemos conocer la sintaxis de lua para crear tablas.
 
 ### Plugins en vimscript
 
 Aún hay muchos plugins útiles que están escritos en vimscript. En la mayoría de los casos los configuramos usando variables globales. En lua podremos modificar variables globales de vimscript usando `vim.g`.
 
-¿Ya les conté que Neovim viene con un explorador de archivos? Podemos acceder a él con el comando `:Lexplore`. Este explorador es de hecho un plugin escrito en vimscript, entonces no tenemos una función `setup`. Para saber cómo configurarlo debemos buscar su documentación.
+¿Ya les conté que Neovim viene con un explorador de archivos? Podemos acceder a él con el comando `:Lexplore`. Este explorador es de hecho un plugin escrito en vimscript, entonces no tenemos una función `setup`. Para saber cómo configurarlo debemos buscar en su documentación.
 
 ```vim
 :help netrw
 ```
 
-Si revisan la tabla de contenido de esa página de ayuda notarán una sección llamada `netrw-browser-settings`. Ahí nos muestran una lista de variables y sus descripciones. Vamos a fijarnos en las que comienzan con el prefijo `g:`, esas son las que podemos modificar con `vim.g`.
+Si revisan la tabla de contenido de esa página de ayuda notarán una sección llamada `netrw-browser-settings`. Ahí nos muestran una lista de variables y sus descripciones. Vamos a fijarnos en las que comienzan con el prefijo `g:`.
 
 Por ejemplo si queremos ocultar el texto de ayuda usamos `netrw_banner`.
 
@@ -476,7 +474,7 @@ Eso es todo... bueno, hay más variables que pueden modificar pero en general es
 
 Si ya conocen la palabra "recursividad" tal vez puedan intuir qué consecuencias tienen este tipo de atajos. Si no, dejénme demostrarles con un ejemplo.
 
-Digamos que tenemos este atajo definido.
+Digamos que tenemos este atajo que abre el explorador de archivos.
 
 ```lua
 vim.keymap.set('n', '<F2>', '<cmd>Lexplore<cr>')
@@ -488,9 +486,9 @@ Bien, ahora vamos a crear un atajo recursivo que utilice `F2`.
 vim.keymap.set('n', '<space><space>', '<F2>', {remap = true})
 ```
 
-Si pulsan `Espacio` dos veces seguidas les aparecerá el explorador. Pero si cambian `true` por `false`, no aparecerá nada.
+Si pulsan `Espacio` dos veces seguidas les aparecerá el explorador. Pero si cambian `remap` de `true` a `false`, no aparecerá nada.
 
-Con los atajos recursivos, en el parámetro `{rhs}` podremos usar otros atajos definidos por nosotros mismos o por plugins. Con los atajos "no recursivos" sólo tendremos acceso a funcionalidades definidas directamente por Neovim.
+Con los atajos recursivos, podremos usar otros atajos definidos por nosotros mismos o por plugins en el parámetro `{rhs}`. Con los atajos "no recursivos" sólo tendremos acceso a los atajos definidos directamente por Neovim.
 
 Por lo general sólo queremos atajos recursivos cuando vamos a usar funcionalidades creadas por plugins.
 
@@ -500,19 +498,19 @@ Por lo general sólo queremos atajos recursivos cuando vamos a usar funcionalida
 vim.keymap.set('n', '*', '*zz')
 ```
 
-Noten que estamos usando `*` en `{lhs}` y también en `{rhs}`. Si este atajo fuera recursivo estaríamos creando un ciclo infinito donde Neovim intenta llamar a la funcionalidad atada a `*` y nunca ejecuta `zz`.
+Noten que estamos usando `*` en `{lhs}` y también en `{rhs}`. Si este atajo fuera recursivo estaríamos creando un ciclo infinito. Neovim intentará llamar a la funcionalidad atada a `*` y nunca ejecuta `zz`.
 
 ### Comandos de usuario
 
-Sí, Neovim nos permite crear nuestros propios comandos. En lua esto lo hacemos con la función `nvim_create_user_command`. Esta es la sintaxis.
+Sí, Neovim nos permite crear nuestros propios comandos. En lua usamos esta función.
 
 ```lua
 vim.api.nvim_create_user_command({name}, {command}, {opts})
 ```
 
-* `{name}` debe una cadena de texto y tiene que empezar con una letra mayúscula.
+* `{name}` es el nombre del comando, debe una cadena de texto y tiene que empezar con una letra mayúscula.
 
-* `{command}` puede una cadena de texto que contiene un fragmento de vimscript o puede ser una función de lua.
+* `{command}` es la acción que queremos ejecutar. Puede una cadena de texto que contiene un fragmento de vimscript o puede ser una función de lua.
 
 * `{opts}` debe ser una tabla de lua. No es opcional. Si no especifican ninguna opción deben colocar una tabla vacía.
 
@@ -522,10 +520,11 @@ Ejemplo, podemos crear un comando dedicado para recargar nuestra configuración.
 vim.api.nvim_create_user_command('ReloadConfig', 'source $MYVIMRC', {})
 ```
 
-Si quieren saber más detalles de los comandos de usuario revisen la documentación con el comando.
+Si quieren saber más detalles de los comandos de usuario revisen la documentación con los comandos.
 
 ```vim
 :help nvim_create_user_command()
+:help user-commands
 ```
 
 ### Autocomandos
@@ -540,7 +539,7 @@ vim.api.nvim_create_autocmd({event}, {opts})
 
 * `{event}` debe ser el nombre de un evento.
 
-* `{opts}` es una tabla de lua que contiene las opciones que determinan el comportamiento del autocomando. Estas son algunas propiedades de uso común.
+* `{opts}` es una tabla de lua. Son las opciones que determinan el comportamiento del autocomando. Estas son algunas propiedades de uso común.
 
   - `desc` es una cadena de texto que describe lo que hace el autocomando.
 
@@ -554,7 +553,7 @@ vim.api.nvim_create_autocmd({event}, {opts})
 
   - `callback` puede ser una cadena de texto con el nombre de una función de vimscript o una función de lua. Es la acción que ejecutará el autocomando. No puede usarse en combinación con `command`.
 
-Aquí les va un ejemplo.
+Aquí les va un ejemplo. Voy a crear un grupo llamado `user_cmds` y le agregaré dos autocomandos.
 
 ```lua
 local augroup = vim.api.nvim_create_augroup('user_cmds', {clear = true})
@@ -575,15 +574,21 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 ```
 
-Aquí estamos creando dos autocomandos que pertenecen al grupo `user_cmds`. Ese paso es opcional.
+Crear el grupo es opcional.
 
-El primer autocomando creará el atajo `q` para cerrar la ventana, pero sólo si archivo actual es de tipo `help` o `man`. En este ejemplo estoy usando vimscript en la propiedad `command`, pero también pude haberlo hecho usando lua con la propiedad `callback`.
+El primer autocomando creará el atajo `q` para cerrar la ventana actual, pero sólo si el archivo actual es de tipo `help` o `man`. En este ejemplo estoy usando vimscript en la propiedad `command`, pero también pude haberlo hecho usando lua con la propiedad `callback`.
 
 El segundo autocomando usa una función de lua en la propiedad `callback`. Esta función lo que hace es resaltar el texto que copiamos. Pueden probar su efecto si copian una línea usando el atajo `yy`.
 
+Para conocer más detalles de los autocomandos revisen la documentación.
+
+```vim
+:help autocmd-intro
+```
+
 ### Módulos de usuario
 
-No hay ninguna regla que nos obligue a tener toda nuestra configuración en un solo archivo. Podemos crear módulos para colocar ciertas secciones si queremos.
+No hay ninguna regla que nos obligue a tener toda nuestra configuración en un solo archivo. Podemos crear módulos para separar la configuración en piezas más pequeñas.
 
 La convención es colocar todos nuestros módulos en un "espacio único" para evitar conflictos con plugins. Muchas personas crean un módulo llamado `user` (ustedes pueden darle otro nombre si quieren). Para esto debemos ir la carpeta donde está `init.lua`, crear el directorio `lua`, y dentro creamos `user`. Podemos hacer todo eso con un comando.
 
@@ -591,10 +596,16 @@ La convención es colocar todos nuestros módulos en un "espacio único" para ev
 :call mkdir(stdpath("config") . "/lua/user", "p")
 ```
 
-Ya dentro de `/lua/user` pueden crear un script de lua. Digamos que crean uno llamado `settings.lua`. Ahora, Neovim no sabe que este script existe, no lo va a ejecutar, nosotros debemos llamarlo desde `init.lua` así.
+Ya dentro de `/lua/user` podemos crear nuestros scripts de lua. Vamos a suponer que tenemos uno llamado `settings.lua`. Ahora, Neovim no sabe que ese script existe, no lo va a ejecutar, nosotros debemos llamarlo desde `init.lua` así.
 
 ```lua
 require('user.settings')
+```
+
+Si quieren saber con detalle cómo funciona require... revisen la documentación.
+
+```vim
+:help lua-require
 ```
 
 ### La función require
@@ -628,7 +639,7 @@ Sí hacemos esto en `init.lua` el comando `source` podrá ejecutar los módulos 
 
 ## init.lua
 
-Entonces, si aplicamos (casi) todo lo que les enseñé hoy este sería el resultado.
+Entonces, si aplican (casi) todo lo que les enseñé hoy este sería el resultado.
 
 ```lua
 -- ================================================================== --
@@ -736,11 +747,11 @@ require('lualine').setup({
 
 ## ¿Qué sigue?
 
-Si ya se sienten preparados para temas más avanzados, este artículo les enseñará cómo configurar el autocompletado y agregar soporte para servidores LSP: 
+Si ya se sienten preparados para temas más avanzados, el siguiente artículo les enseñará cómo configurar el autocompletado y agregar soporte para servidores LSP: 
 
 * [Configurando nvim-lspconfig + nvim-cmp](@/tools/setup-nvim-lspconfig-plus-nvim-cmp.es.md)
 
-Si quieren recomendaciones de plugins y configuraciones les recomiendo revisar estas plantillas.
+Si quieren recomendaciones de plugins y configuraciones pueden revisar estas plantillas.
 
 * [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
 * [nvim-basic-ide](https://github.com/LunarVim/nvim-basic-ide)
