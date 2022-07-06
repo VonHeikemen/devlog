@@ -200,7 +200,7 @@ vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
   - `v`: Visual + Selection.
   - `t`: Terminal mode.
   - `o`: Operator-pending.
-  - ` `: Yes, an empty string. Is the equivalent of `n` + `v` + `o`.
+  - `''`: Yes, an empty string. Is the equivalent of `n` + `v` + `o`.
 
 * `{lhs}` is the key we want to bind.
 
