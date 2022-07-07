@@ -5,6 +5,10 @@ date = 2022-07-04
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/build-your-first-neovim-configuration-in-lua-177b"],
+]
 +++
 
 Neovim is a tool both powerful and extensible. With some effort it can do more than just modify text in a file. Today I hope I can teach you enough about Neovim's `lua` api to be able to build your configuration.

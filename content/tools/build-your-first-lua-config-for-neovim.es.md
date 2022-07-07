@@ -5,6 +5,10 @@ date = 2022-07-02
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/como-crear-tu-primera-configuracion-de-neovim-usando-lua-dah"],
+]
 +++
 
 Neovim es un editor que se caracteriza por ser extensible, con suficiente esfuerzo podemos convertirlo en algo más que un editor de texto. Hoy espero poder enseñarles suficiente sobre `lua` y la api de Neovim para poder construir una configuración que se adapte a sus necesidades.
