@@ -291,7 +291,7 @@ local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.n
 local install_plugins = false
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+  vim.cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. vim.fn.fnameescape(install_path))
   vim.cmd('packadd packer.nvim')
   install_plugins = true
 end
@@ -304,6 +304,8 @@ Presten atención a la variable `install_path`, es ahí donde instalaremos packe
 ```
 
 Si alguna vez tienen un problema instalando (o desinstalando) un plugin, revisen esa carpeta. Dentro deberán encontrar dos carpetas más: `opt` y `start`. En `opt` se encuentran los plugins "opcionales" y en `start` se encuentran los plugins que se inicializan cuando abrimos Neovim. Por defecto packer descarga los plugins en `start`.
+
+Si quieren cambiar la ruta donde se instalarán los plugins: Primero lean sobre cómo maneja Neovim los plugins, ver `:help packages`. Luego lean la [sección de configuración de packer](https://github.com/wbthomason/packer.nvim#custom-initialization).
 
 Ahora bien, para usar packer seguimos este patrón.
 
@@ -696,7 +698,7 @@ local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.n
 local install_plugins = false
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+  vim.cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. vim.fn.fnameescape(install_path))
   vim.cmd('packadd packer.nvim')
   install_plugins = true
 end
