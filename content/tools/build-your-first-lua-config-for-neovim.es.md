@@ -291,7 +291,7 @@ local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.n
 local install_plugins = false
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. vim.fn.fnameescape(install_path))
+  vim.cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. vim.fn.shellescape(install_path))
   vim.cmd('packadd packer.nvim')
   install_plugins = true
 end
@@ -698,7 +698,7 @@ local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.n
 local install_plugins = false
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  vim.cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. vim.fn.fnameescape(install_path))
+  vim.cmd('!git clone https://github.com/wbthomason/packer.nvim ' .. vim.fn.shellescape(install_path))
   vim.cmd('packadd packer.nvim')
   install_plugins = true
 end
