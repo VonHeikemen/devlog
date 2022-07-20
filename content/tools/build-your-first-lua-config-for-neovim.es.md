@@ -293,7 +293,7 @@ local install_plugins = false
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   print('Installing packer...')
   local packer_url = 'https://github.com/wbthomason/packer.nvim'
-  vim.fn.system({'git', 'clone', packer_url, install_path})
+  vim.fn.system({'git', 'clone', '--depth', '1', packer_url, install_path})
   print('Done.')
 
   vim.cmd('packadd packer.nvim')
@@ -704,7 +704,7 @@ local install_plugins = false
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   print('Installing packer...')
   local packer_url = 'https://github.com/wbthomason/packer.nvim'
-  vim.fn.system({'git', 'clone', packer_url, install_path})
+  vim.fn.system({'git', 'clone', '--depth', '1', packer_url, install_path})
   print('Done.')
 
   vim.cmd('packadd packer.nvim')
