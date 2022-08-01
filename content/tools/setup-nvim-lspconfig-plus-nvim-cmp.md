@@ -588,7 +588,7 @@ Sooner or later you are going to find out about this plugin: [mason.nvim](https:
 
 But the servers you install using this method will not be available globally. They are installed in the "data folder" of neovim. Now, some servers work fine in this setup others require extra configurations so it's recommended that you add [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim). 
 
-Once you have both plugins, you should setup mason.nvim using these functions.
+Once you have both plugins you should setup mason.nvim using these functions.
 
 ```lua
 require('mason').setup()
