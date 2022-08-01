@@ -597,6 +597,8 @@ require('mason-lspconfig').setup()
 
 After doing that you should use `lspconfig` like you usually do. Pretend mason.nvim doesn't even exists.
 
+Here is an example usage.
+
 ```lua
 require('mason').setup()
 require('mason-lspconfig').setup()
