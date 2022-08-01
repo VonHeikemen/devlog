@@ -2,6 +2,7 @@
 title = "Configurando nvim-lspconfig + nvim-cmp"
 description = "Usando nvim-lspconfig y nvim-cmp para configurar el cliente LSP de neovim"
 date = 2022-05-21
+updated = 2022-07-31
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -583,20 +584,24 @@ vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
 
 ### Instalar servidores LSP de manera "local"
 
-Tarde o temprano se van a encontrar con este plugin: [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/). Esto les permite manejar completamente sus servidores LSP dentro de neovim. Podrán instalar, actualizar y eliminar servidores usando neovim.
+Tarde o temprano se van a encontrar con este plugin: [mason.nvim](https://github.com/williamboman/mason.nvim). Esto les permite manejar completamente sus servidores LSP dentro de neovim. Podrán instalar, actualizar y eliminar servidores usando neovim.
 
-Los servidores que instalen con este método no estarán disponibles de manera global, se instalarán en la carpeta "data" de neovim. Esto significa que debemos configurar `nvim-lsp-installer` antes de usar `nvim-lspconfig`. Deben usar esta función.
+Los servidores que instalen con este método no estarán disponibles de manera global, se instalarán en la carpeta "data" de neovim. Ahora bien, algunos servidores al ser instalados con este método requieren de configuraciones extra, es por eso que también necesitamos usar [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim).
+
+Una vez que tengan todos los plugins necesarios deben configurar mason.nvim de esta manera.
 
 ```lua
-require('nvim-lsp-installer').setup({})
+require('mason').setup()
+require('mason-lspconfig').setup()
 ```
 
-Luego de configurar `nvim-lsp-installer` pueden usar `lspconfig` como si nada. Pueden fingir que nvim-lsp-installer no existe.
+Después de invocar estas funciones pueden usar `lspconfig` como si nada. Pueden fingir que mason.nvim no existe.
 
 Aquí les dejo un ejemplo de uso.
 
 ```lua
-require('nvim-lsp-installer').setup({})
+require('mason').setup()
+require('mason-lspconfig').setup()
 
 local lsp_defaults = {
   flags = {
@@ -621,8 +626,7 @@ lspconfig.util.default_config = vim.tbl_deep_extend(
 lspconfig.sumneko_lua.setup({})
 ```
 
-En está ocasión es todo lo que voy a decir sobre `nvim-lsp-installer`. Si quieren saber más detalles deben revisar su documentación.
-
+En está ocasión es todo lo que voy a decir sobre `mason.nvim`. Si quieren saber más detalles deben revisar su documentación.
 
 ## Conclusión
 
