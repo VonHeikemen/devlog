@@ -5,6 +5,11 @@ date = 2022-06-09
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/can-we-manage-neovims-lsp-client-without-plugins-3mge"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/manage-neovim-lsp-client-without-plugins"]
+]
 +++
 
 Yes, we can. The complexity of the setup will depend on what you want to achieve in your workflow. But if you know your way around lua you should be able to understand the "boilerplate" needed to get a decent setup.

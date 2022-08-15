@@ -5,6 +5,11 @@ date = 2022-06-09
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/se-puede-usar-el-cliente-lsp-de-neovim-sin-plugins-44ha"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/manage-neovim-lsp-client-without-plugins-es"]
+]
 +++
 
 Sí se puede. La complejidad de la configuración dependerá del flujo de trabajo que queremos utilizar. Pero si `lua` les resulta fácil de leer podrán entender la "estructura" necesaria para obtener una configuración decente.
