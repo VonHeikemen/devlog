@@ -8,6 +8,7 @@ tags = ["vim", "neovim", "shell"]
 [extra]
 shared = [
   ["dev.to", "https://dev.to/vonheikemen/como-crear-tu-primera-configuracion-de-neovim-usando-lua-dah"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/build-your-first-neovim-configuration-in-lua-es"]
 ]
 +++
 
