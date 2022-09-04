@@ -764,6 +764,10 @@ require('lualine').setup({
 
 ## What's next?
 
+Maybe install some popular plugins to add fancy features to Neovim.
+
+* [Plugins to get started](@/tools/neovim-plugins-to-get-started.md)
+
 If you feel prepared to tackle more advanced topics you can read this other tutorial. It teaches how to setup an autocompletion engine and also add support for LSP:
 
 * [Setup nvim-lspconfig + nvim-cmp](@/tools/setup-nvim-lspconfig-plus-nvim-cmp.md)
