@@ -636,7 +636,7 @@ We had the chance to assemble a configuration for `nvim-cmp` from scratch. We ex
 
 Finally, we made some additional customizations to diagnostics. Learned a little something about configuring lsp handlers, specifically the ones using floating windows. And we took a brief look at a method to install language servers locally.
 
-You can find all the configuration code here: [nvim-lspconfig + nvim-cmp](https://gist.github.com/VonHeikemen/8fc2aa6da030757a5612393d0ae060bd)
+You can find all the configuration code here: [nvim-starter - branch: 03-lsp](https://github.com/VonHeikemen/nvim-starter/tree/03-lsp)
 
 ## Sources
 
