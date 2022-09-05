@@ -9,6 +9,8 @@ tags = ["neovim", "vim", "shell"]
 
 So you want to customize Neovim but you don't know where to start? Let me help you with that. I'll show you some plugins many people in the Neovim community have been using for a while now.
 
+All the configuration shown in this post will be in this repository: [nvim-starter - branch: 02-opinionated](https://github.com/VonHeikemen/nvim-starter/tree/02-opinionated).
+
 ## Requirements
 
 If you're completely new to Neovim I recommend you learn lua's syntax. If you don't want to learn everything at least have a [reference](https://learnxinyminutes.com/docs/lua/) to know what is valid. All the plugins I'll share here are configured using lua.
