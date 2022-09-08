@@ -5,6 +5,10 @@ date = 2022-09-03
 lang = "es"
 [taxonomies]
 tags = ["neovim", "vim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/neovim-plugins-para-empezar-c39"],
+]
 +++
 
 ¿Quieren personalizar Neovim a su gusto pero no saben por dónde empezar? Puedo ayuderles con eso. Voy compartir con ustedes una lista de plugins que muchas personas en la comunidad de Neovim usan con frecuencia.

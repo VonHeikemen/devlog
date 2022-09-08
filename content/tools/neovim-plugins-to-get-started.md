@@ -5,6 +5,10 @@ date = 2022-09-03
 lang = "en"
 [taxonomies]
 tags = ["neovim", "vim", "shell"]
+[extra]
+shared = [
+  ["dev.to", "https://dev.to/vonheikemen/neovim-plugins-to-get-started-5f77"],
+]
 +++
 
 So you want to customize Neovim but you don't know where to start? Let me help you with that. I'll show you some plugins many people in the Neovim community have been using for a while now.
