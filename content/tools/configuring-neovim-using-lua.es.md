@@ -2,7 +2,7 @@
 title = "Todo lo que necesitan saber para configurar neovim usando lua"
 description = "Tus primeros pasos hacia una configuración creada en lua"
 date = 2021-07-29
-updated = 2022-04-21
+updated = 2022-09-26
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
