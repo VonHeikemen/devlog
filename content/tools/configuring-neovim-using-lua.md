@@ -15,7 +15,9 @@ shared = [
 
 After a long time in development neovim 0.5 was finally released as a stable version. Among the new exciting features we have better lua support and the promise of a stable api to create our configuration using this language. So today I'm going to share with you everything I learned while I was migrating my own configuration from vimscript to lua.
 
-I'm going to talk about the things we can do with lua and its interaction with vimscript. I will be showing a lot of examples but I will not tell you what options you should set with what value. Also, this won't be a tutorial on "how to turn neovim into an IDE", I'll avoid anything that is language specific. What I want to do is teach you enough about lua and the neovim api so you can migrate your own configuration.
+If you are new to neovim and want to start your configuration from scratch, I recommend you read this: [Build your first Neovim configuration in lua](@/tools/build-your-first-lua-config-for-neovim.md).
+
+Here I'm going to talk about the things we can do with lua and its interaction with vimscript. I will be showing a lot of examples but I will not tell you what options you should set with what value. Also, this won't be a tutorial on "how to turn neovim into an IDE", I'll avoid anything that is language specific. What I want to do is teach you enough about lua and the neovim api so you can migrate your own configuration.
 
 I will assume your operating system is linux (or something close to it) and that your configuration is located at `~/.config/nvim/init.vim`. Everything that I will show should work on every system in which neovim can be installed, just keep in mind that the path to the `init.vim` file might be different in your case.
 
