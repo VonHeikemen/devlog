@@ -626,7 +626,8 @@ Recap time. We learned how to use lua from vimscript. We now know how to use vim
 For those who want to see a real world usage or whatever, I'll share a link to my current config in github:
 
 * [neovim (v0.6)](https://github.com/VonHeikemen/dotfiles/tree/057f4d604e31ad121c4b4b36fd7e4148483d50c8/my-configs/neovim)
-* [neovim (v0.7+)](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim)
+* [neovim (v0.7)](https://github.com/VonHeikemen/dotfiles/tree/18fb9ab01d171a3d862d2438cd0f8fd2612a3e52/my-configs/neovim)
+* [neovim (v0.8+)](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim)
 
 ## Sources
 

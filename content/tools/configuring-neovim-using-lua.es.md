@@ -624,7 +624,8 @@ Aprendimos cómo usar lua desde vimscript. Sabemos cómo usar vimscript desde lu
 Para los que quieran ver un ejemplo de la vida real, aquí les dejo un enlace a mi configuración en github:
 
 * [neovim (v0.6)](https://github.com/VonHeikemen/dotfiles/tree/057f4d604e31ad121c4b4b36fd7e4148483d50c8/my-configs/neovim)
-* [neovim (v0.7+)](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim)
+* [neovim (v0.7)](https://github.com/VonHeikemen/dotfiles/tree/18fb9ab01d171a3d862d2438cd0f8fd2612a3e52/my-configs/neovim)
+* [neovim (v0.8+)](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim)
 
 ## Fuentes
 
