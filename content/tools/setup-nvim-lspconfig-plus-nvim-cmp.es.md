@@ -636,7 +636,9 @@ Tuvimos la oportunidad de armar una configuración de `nvim-cmp` desde cero. Exp
 
 Finalmente vimos algunas opciones que nos permiten modificar la presentación de los diagnósticos (mensajes de error, advertencia, etc). Aprendimos a modificar los handlers que muestran ventanas flotantes. Y, dimos un vistazo a un método para instalar servidores de manera local.
 
-Pueden encontrar todo el código de configuración aquí: [nvim-starter - branch: 03-lsp](https://github.com/VonHeikemen/nvim-starter/tree/03-lsp)
+Pueden encontrar todo el código de configuración aquí: [nvim-lspconfig + nvim-cmp](https://gist.github.com/VonHeikemen/8fc2aa6da030757a5612393d0ae060bd).
+
+Y aquí les dejo una configuración de Neovim completamente funcional: [nvim-starter - branch: 03-lsp](https://github.com/VonHeikemen/nvim-starter/tree/03-lsp).
 
 ## Fuentes
 
