@@ -638,7 +638,7 @@ Finally, we made some additional customizations to diagnostics. Learned a little
 
 You can find all the configuration code here: [nvim-lspconfig + nvim-cmp](https://gist.github.com/VonHeikemen/8fc2aa6da030757a5612393d0ae060bd). 
 
-And here you can a fully functional neovim setup: [nvim-starter - branch: 03-lsp](https://github.com/VonHeikemen/nvim-starter/tree/03-lsp).
+And here you can find a fully functional neovim setup: [nvim-starter - branch: 03-lsp](https://github.com/VonHeikemen/nvim-starter/tree/03-lsp).
 
 ## Sources
 
