@@ -2,6 +2,7 @@
 title = "Se puede usar el cliente LSP de neovim sin plugins?"
 description = "Vamos a descubrir qué necesitamos para usar el cliente LSP de neovim en nuestros proyectos"
 date = 2022-06-09
+updated = 2022-10-16
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -30,6 +31,7 @@ local launch_tsserver = function()
     cmd = {'typescript-language-server', '--stdio'},
     name = 'tsserver',
     root_dir = vim.fn.getcwd(),
+    capabilities = vim.lsp.protocol.make_client_capabilities(),
   }
 
   local client_id = vim.lsp.start_client(config)
@@ -56,12 +58,12 @@ Con esto creamos el comando `LaunchTsserver`, al ejecutarlo podremos usar el ser
 
 ```lua
 local filetypes = {
-  'typescript',
   'javascript',
-  'typescriptreact',
   'javascriptreact',
-  'typescript.tsx',
   'javascript.jsx'
+  'typescript',
+  'typescriptreact',
+  'typescript.tsx',
 }
 
 local buf_attach = function()
@@ -91,18 +93,19 @@ Si aplicamos todo este conocimiento a nuestro ejemplo, la función `launch_tsser
 local launch_tsserver = function()
   local autocmd
   local filetypes = {
-    'typescript',
     'javascript',
-    'typescriptreact',
     'javascriptreact',
-    'typescript.tsx',
     'javascript.jsx'
+    'typescript',
+    'typescriptreact',
+    'typescript.tsx',
   }
 
   local config = {
     cmd = {'typescript-language-server', '--stdio'},
     name = 'tsserver',
     root_dir = vim.fn.getcwd(),
+    capabilities = vim.lsp.protocol.make_client_capabilities(),
   }
 
   config.on_init = function(client, results)
@@ -131,53 +134,18 @@ local launch_tsserver = function()
 end
 ```
 
-## Configuraciones de servidor
-
-Nuestro ejemplo aún no está completo. La mayoría de los servidores LSP tienen una serie de opciones únicas, para habilitar funcionalidades o modificar algún comportamiento. Justo ahora no le estamos enviando esa información al servidor.
-
-Después de que el servidor esté listo podemos enviarle una "notificación" con los datos que queremos. Entonces, en la función `on_init` agregamos esto.
-
-```lua
-if results.offsetEncoding then
-  client.offset_encoding = results.offsetEncoding
-end
-
-if client.config.settings then
-  client.notify('workspace/didChangeConfiguration', {
-    settings = client.config.settings
-  })
-end
-```
-
-La documentación de neovim sugiere que debemos configurar la codificación del cliente antes de enviar cualquier petición o notificación. Entonces si el servidor nos devuelve esta información en `results` lo usamos en el cliente.
-
-Si la instancia del cliente tiene la propiedad `settings` nos aseguramos de enviarla al servidor. Vale la pena mencionar que `client.config` es una copia del argumento que le pasamos a la función `vim.lsp.start_client()`.
-
 ## ¿Cuándo definimos los atajos?
 
-No podemos olvidarnos de los atajos. ¿Cómo debemos proceder? La documentación nos sugiere que usemos la función `on_attach` para definir los atajos y cualquier otro comando. Pero yo tengo otra sugerencia, yo digo que usemos un "evento de usuario" así podemos definir los atajos en cualquier lugar de nuestra configuración.
+No podemos olvidarnos de los atajos. ¿Cómo debemos proceder? La documentación dice que podemos usar el evento `LspAttach`, de esta manera podremos definirlos en cualquier lugar de nuestra configuración.
 
 ```lua
-config.on_attach = function(client, bufnr)
-  vim.api.nvim_exec_autocmds('User', {pattern = 'LspAttached'})
-end
-```
-
-Ahora podemos definir nuestros atajos en otro lugar.
-
-```lua
-vim.api.nvim_create_autocmd('User', {
-  pattern = 'LspAttached',
+vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'Acciones LSP',
   callback = function()
     local bufmap = function(mode, lhs, rhs)
       local opts = {buffer = true}
       vim.keymap.set(mode, lhs, rhs, opts)
     end
-
-    -- Configura sugerencias del servidor
-    -- se activan presionando Ctrl-x + Ctrl-o en modo de inserción
-    vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
 
     -- Muestra información sobre símbolo debajo del cursor
     bufmap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
@@ -227,12 +195,12 @@ Si aplicamos todos estos cambios a nuestro ejemplo obtendremos esto.
 local launch_tsserver = function()
   local autocmd
   local filetypes = {
-    'typescript',
     'javascript',
-    'typescriptreact',
     'javascriptreact',
-    'typescript.tsx',
     'javascript.jsx'
+    'typescript',
+    'typescriptreact',
+    'typescript.tsx',
   }
 
   local config = {
@@ -242,21 +210,7 @@ local launch_tsserver = function()
     capabilities = vim.lsp.protocol.make_client_capabilities(),
   }
 
-  config.on_attach = function(client, bufnr)
-    vim.api.nvim_exec_autocmds('User', {pattern = 'LspAttached'})
-  end
-
   config.on_init = function(client, results)
-    if results.offsetEncoding then
-      client.offset_encoding = results.offsetEncoding
-    end
-
-    if client.config.settings then
-      client.notify('workspace/didChangeConfiguration', {
-        settings = client.config.settings
-      })
-    end
-
     local buf_attach = function()
       vim.lsp.buf_attach_client(0, client.id)
     end
@@ -300,12 +254,12 @@ local launch_tsserver = function()
     cmd = {'typescript-language-server', '--stdio'},
     name = 'tsserver',
     filetypes = {
-      'typescript',
       'javascript',
-      'typescriptreact',
       'javascriptreact',
-      'typescript.tsx',
       'javascript.jsx'
+      'typescript',
+      'typescriptreact',
+      'typescript.tsx',
     }
   })
 
