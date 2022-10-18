@@ -132,6 +132,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 Con esto nuestros atajos serán creado cada vez que Neovim vincule un servidor LSP a un archivo.
 
+> Nota: si están usando Neovim v0.7.2 o menor, tienen que crear una función y asignarla a la opción `on_attach` de cada servidor LSP. En la documentación de lspconfig pueden encontrar un ejemplo, ejecuten el comando `:help lspconfig-keybindings`.
+
 Para terminar con esta sección aquí tienen la configuración completa para `lspconfig`.
 
 ```lua
