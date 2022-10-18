@@ -1,8 +1,8 @@
 +++
 title = "Configurando nvim-lspconfig + nvim-cmp"
-description = "Usando nvim-lspconfig y nvim-cmp para configurar el cliente LSP de neovim"
+description = "Usando nvim-lspconfig y nvim-cmp para configurar el cliente LSP de Neovim"
 date = 2022-05-21
-updated = 2022-10-15
+updated = 2022-10-17
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -13,19 +13,19 @@ shared = [
 ]
 +++
 
-Dentro de neovim se encuentra un "framework" que le permite al editor comunicarse con un servidor LSP. ¿Qué significa eso? Quiere decir que, con la configuración correcta, tendremos acceso a funcionalidades como renombrar una variable, saltar a una definición, listar referencias, etc. Características que podrían encontrar en un IDE.
+Dentro de Neovim se encuentra un "framework" que le permite al editor comunicarse con un servidor LSP. ¿Qué significa eso? Quiere decir que, con la configuración correcta, tendremos acceso a funcionalidades como renombrar una variable, saltar a una definición, listar referencias, etc. Características que podrían encontrar en un IDE.
 
 ## ¿Por qué necesitamos plugins?
 
-Por defecto neovim nos ofrece las herramientas pero no tiene ninguna opinión de cómo debemos usarlas. Es aquí donde entra [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig), este plugin escanea la "carpeta raíz" de nuestro proyecto e intenta determinar qué servidor LSP necesitamos. Pero claro, primero debemos tener instalados los servidores en nuestro sistema y luego debemos configurarlos dentro de neovim.
+Por defecto Neovim nos ofrece las herramientas pero no tiene ninguna opinión de cómo debemos usarlas. Es aquí donde entra [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig), este plugin escanea la "carpeta raíz" de nuestro proyecto e intenta determinar qué servidor LSP necesitamos. Pero claro, primero debemos tener instalados los servidores en nuestro sistema y luego debemos configurarlos dentro de Neovim.
 
-Y luego tenemos [nvim-cmp](https://github.com/hrsh7th/nvim-cmp), un plugin de autocompletado. ¿De verdad lo necesitamos? En realidad no. En mi opinión el autocompletado de neovim es bastante capaz. ¿Cuál es el problema? Digamos que requiere de mucha intervención manual. Los editores de código modernos nos tienen acostumbrados a un flujo donde todo ocurre de manera automática. `nvim-cmp` nos permite tener ese autocompletado cómodo e inteligente.
+Y luego tenemos [nvim-cmp](https://github.com/hrsh7th/nvim-cmp), un plugin de autocompletado. ¿De verdad lo necesitamos? En realidad no. En mi opinión el autocompletado de Neovim es bastante capaz. ¿Cuál es el problema? Digamos que requiere de mucha intervención manual. Los editores de código modernos nos tienen acostumbrados a un flujo donde todo ocurre de manera automática. `nvim-cmp` nos permite tener ese autocompletado cómodo e inteligente.
 
 Ahora que sabemos el porqué de las cosas pongamos manos a la obra.
 
 ## Requisitos
 
-* Neovim v0.7 o mayor.
+* Neovim v0.8 o mayor. v0.7 también puede funcionar, pero con algunas modificaciones.
 * Un servidor LSP.
 * Instalar [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig).
 * Instalar plugins para el autocompletado:
@@ -41,39 +41,20 @@ En la documentación de `nvim-lspconfig` pueden encontrar instrucciones de cómo
 
 ## Configuración LSP
 
-Lo primero que haremos será crear una configuración global, una serie de opciones que todos nuestros servidores compartirán.
-
-```lua
-local lsp_defaults = {
-  flags = {
-    debounce_text_changes = 150,
-  },
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
-  on_attach = function(client, bufnr)
-    vim.api.nvim_exec_autocmds('User', {pattern = 'LspAttached'})
-  end
-}
-```
-
-¿Qué tenemos aquí?
-
-* `flags.debounce_text_changes`: Es la cantidad de milisegundos que neovim esperará para notificar cambios en el documento al servidor.
-
-* `capabilities`: Esta opción anuncia las funcionalidades que neovim puede manejar. `vim.lsp.protocol.make_client_capabilities()` son las opciones que neovim soporta por defecto. Ya que `nvim-cmp` agrega más funcionalidades al editor necesitamos enviar una versión actualizada de estas "capacidades".
-
-* `on_attach`: Función que se ejecutará cuando un servidor se vincule a un buffer. Por lo general aquí creamos comandos y atajos de teclado vinculados a funciones al servidor LSP. Personalmente me gusta usar `nvim_exec_autocmds` para enviar un "evento", así puedo tener mis atajos de LSP junto a mis atajos normales.
-
-Ahora bien, `lsp_defaults` sólo es una variable, no tiene nada de especial. Necesitamos mezclarlo con las opciones globales de `lspconfig`. Estas opciones globales las podemos encontrar en `util.default_config`. Vamos a usar la función `vim.tbl_deep_extend` para mezclar las dos variables de manera segura.
+Lo primero que haremos será declarar las "capacidades" que tiene el editor. Normalmente tendríamos que pasar esta configuración manualmente a cada servidor, pero podemos ahorrarnos ese procedimiento si las agregamos directamente a la variable `util.default_config` de nvim-lspconfig.
 
 ```lua
 local lspconfig = require('lspconfig')
+local lsp_defaults = lspconfig.util.default_config
 
-lspconfig.util.default_config = vim.tbl_deep_extend(
+lsp_defaults.capabilities = vim.tbl_deep_extend(
   'force',
-  lspconfig.util.default_config,
-  lsp_defaults
+  lsp_defaults.capabilities,
+  require('cmp_nvim_lsp').default_capabilities()
 )
 ```
+
+Aquí utilizamos `vim.tbl_deep_extend` para mezclar de manera segura las capacidades que ofrece `lspconfig` con las capacidades que agrega `nvim-cmp`.
 
 El siguiente paso será llamar los servidores que tenemos instalados en nuestro sistema. Con `lspconfig` debemos llamar la función `.setup()` del servidor que queremos configurar.
 
@@ -85,25 +66,23 @@ Para en lenguaje `lua` tenemos disponible el servidor `sumneko_lua`. Luego de in
 lspconfig.sumneko_lua.setup({})
 ```
 
-Si necesitan agregar más opciones a un servidor deben agregar propiedades al argumento de `.setup()`.
+Si necesitan agregar más opciones a un servidor deben agregar propiedades al argumento de `.setup()`, así.
 
 ```lua
 lspconfig.sumneko_lua.setup({
   single_file_support = true,
-  on_attach = function(client, bufnr)
-    print('hola')
-    lspconfig.util.default_config.on_attach(client, bufnr)
-  end
+  flags = {
+    debounce_text_changes = 150,
+  },
 })
 ```
 
-Noten que en este ejemplo el nuevo `on_attach` está llamando al `on_attach` de `default_config`. Debemos hacer esto porque las opciones que declaramos en `.setup()` sobreescriben lo que tenemos en la configuración global. También podríamos usar `lsp_defaults.on_attach` si está disponible en el ámbito de la función.
+Para conocer las opciones disponibles en la función `.setup()` revisen la documentación con el comando `:help lspconfig-setup`.
 
-Ahora lo más importante, los atajos de teclado. En esta configuración en particular podemos declararlos con un "autocomando". Pueden colocar esto en cualquier parte de su configuración.
+Ahora lo más importante, los atajos de teclado. Para esto utilizaremos un autocomando, esto nos dará la libertad de colocar nuestros atajos en cualquier lugar de nuestra configuración.
 
 ```lua
-vim.api.nvim_create_autocmd('User', {
-  pattern = 'LspAttached',
+vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'Acciones LSP',
   callback = function()
     local bufmap = function(mode, lhs, rhs)
@@ -151,29 +130,22 @@ vim.api.nvim_create_autocmd('User', {
 })
 ```
 
-Aquí les muestro la configuración completa necesaria para `lspconfig`.
+Con esto nuestros atajos serán creado cada vez que Neovim vincule un servidor LSP a un archivo.
+
+Para terminar con esta sección aquí tienen la configuración completa para `lspconfig`.
 
 ```lua
 ---
 -- Configuración global
 ---
 
-local lsp_defaults = {
-  flags = {
-    debounce_text_changes = 150,
-  },
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
-  on_attach = function(client, bufnr)
-    vim.api.nvim_exec_autocmds('User', {pattern = 'LspAttached'})
-  end
-}
-
 local lspconfig = require('lspconfig')
+local lsp_defaults = lspconfig.util.default_config
 
-lspconfig.util.default_config = vim.tbl_deep_extend(
+lsp_defaults.capabilities = vim.tbl_deep_extend(
   'force',
-  lspconfig.util.default_config,
-  lsp_defaults
+  lsp_defaults.capabilities,
+  require('cmp_nvim_lsp').default_capabilities()
 )
 
 ---
@@ -305,7 +277,7 @@ Lista de atajos de teclado. Aquí necesitamos declarar una lista de pares propie
 
 ```lua
 mapping = {
-  ['<CR>'] = cmp.mapping.confirm({select = true}),
+  ['<CR>'] = cmp.mapping.confirm({select = false}),
 }
 ```
 
@@ -339,7 +311,7 @@ Estas son algunas acciones comunes:
 * Confirma la selección.
 
 ```lua
-['<CR>'] = cmp.mapping.confirm({select = true}),
+['<CR>'] = cmp.mapping.confirm({select = false}),
 ```
 
 * Salta al próximo placeholder de un snippet.
@@ -450,7 +422,7 @@ cmp.setup({
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
 
     ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({select = true}),
+    ['<CR>'] = cmp.mapping.confirm({select = false}),
 
     ['<C-d>'] = cmp.mapping(function(fallback)
       if luasnip.jumpable(1) then
@@ -580,9 +552,9 @@ vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
 
 ### Instalar servidores LSP de manera "local"
 
-Tarde o temprano se van a encontrar con este plugin: [mason.nvim](https://github.com/williamboman/mason.nvim). Esto les permite manejar completamente sus servidores LSP dentro de neovim. Podrán instalar, actualizar y eliminar servidores usando neovim.
+Tarde o temprano se van a encontrar con este plugin: [mason.nvim](https://github.com/williamboman/mason.nvim). Esto les permite manejar completamente sus servidores LSP dentro de Neovim. Podrán instalar, actualizar y eliminar servidores usando Neovim.
 
-Los servidores que instalen con este método no estarán disponibles de manera global, se instalarán en la carpeta "data" de neovim. Ahora bien, algunos servidores al ser instalados con este método requieren de configuraciones extra, es por eso que también necesitamos usar [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim).
+Los servidores que instalen con este método no estarán disponibles de manera global, se instalarán en la carpeta "data" de Neovim. Ahora bien, algunos servidores al ser instalados con este método requieren de configuraciones extra, es por eso que también necesitamos usar [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim).
 
 Una vez que tengan todos los plugins necesarios deben configurar mason.nvim de esta manera.
 
@@ -599,22 +571,13 @@ Aquí les dejo un ejemplo de uso.
 require('mason').setup()
 require('mason-lspconfig').setup()
 
-local lsp_defaults = {
-  flags = {
-    debounce_text_changes = 150,
-  },
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
-  on_attach = function(client, bufnr)
-    vim.api.nvim_exec_autocmds('User', {pattern = 'LspAttached'})
-  end
-}
-
 local lspconfig = require('lspconfig')
+local lsp_defaults = lspconfig.util.default_config
 
-lspconfig.util.default_config = vim.tbl_deep_extend(
+lsp_defaults.capabilities = vim.tbl_deep_extend(
   'force',
-  lspconfig.util.default_config,
-  lsp_defaults
+  lsp_defaults.capabilities,
+  require('cmp_nvim_lsp').default_capabilities()
 )
 
 lspconfig.sumneko_lua.setup({})
