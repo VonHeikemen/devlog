@@ -8,6 +8,7 @@ tags = ["neovim", "vim", "shell"]
 [extra]
 shared = [
   ["dev.to", "https://dev.to/vonheikemen/neovim-plugins-to-get-started-5f77"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/neovim-plugins-to-get-started"],
 ]
 +++
 
@@ -21,7 +22,7 @@ If you're completely new to Neovim I recommend you learn lua's syntax. If you do
 
 If you haven't created a configuration for Neovim, do it now. Here is a guide with everything you need to know: [Build your first Neovim configuration in lua](@/tools/build-your-first-lua-config-for-neovim.md).
 
-You'll need Neovim's latest stable version. You can download it from the [release section](https://github.com/neovim/neovim/releases) of github. From now on I'll assume you are using Neovim v0.7.
+You'll need Neovim's latest stable version. You can download it from the [release section](https://github.com/neovim/neovim/releases) of github. From now on I'll assume you are using Neovim v0.7 or greater.
 
 ## How do we install plugins?
 

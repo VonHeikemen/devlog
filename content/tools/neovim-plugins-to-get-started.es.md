@@ -8,6 +8,7 @@ tags = ["neovim", "vim", "shell"]
 [extra]
 shared = [
   ["dev.to", "https://dev.to/vonheikemen/neovim-plugins-para-empezar-c39"],
+  ["Hashnode", "https://vonheikemen.hashnode.dev/neovim-plugins-to-get-started-es"],
 ]
 +++
 
@@ -21,7 +22,7 @@ Si ustedes son completamente nuevos en Neovim les recomiendo que aprendan [la si
 
 Si todavía no han creado un archivo de configuración para Neovim, háganlo ahora. Aquí les dejo una guía con todo lo que necesitan saber: [Cómo crear tu primera configuración de Neovim usando lua](@/tools/build-your-first-lua-config-for-neovim.es.md).
 
-Les recomiendo descargar la versión estable más reciente de Neovim. Pueden descargarla desde la [sección releases](https://github.com/neovim/neovim/releases) en github. De aquí en adelante voy a asumir que están usando la versión 0.7.2.
+Les recomiendo descargar la versión estable más reciente de Neovim. Pueden descargarla desde la [sección releases](https://github.com/neovim/neovim/releases) en github. De aquí en adelante voy a asumir que están usando la versión 0.7 o mayor.
 
 ## ¿Cómo instalamos un plugin?
 
