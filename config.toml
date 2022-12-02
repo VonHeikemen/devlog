@@ -38,7 +38,7 @@ title_tags = "Explore tags"
 published_in = "Originally published at"
 read_in = "Read in english"
 buymeacoffee="Thank you for reading. If you find this article useful and want to support my efforts, buy me a coffee ☕"
-reach_out = "or reach out to me on twitter"
+reach_out = "You can reach out to me on social media:"
 leave_comment = "Have any question? Feel free to leave a comment"
 leave_comment_single_platform = "on"
 leave_comment_multi_platform = "in one of these platform where I have shared this:"
@@ -58,7 +58,7 @@ title_tags = "Explorar tags"
 published_in = "Originalmente publicado en"
 read_in = "Leer en español"
 buymeacoffee="Gracias por su tiempo. Si este artículo les pareció útil y quieren apoyar mis esfuerzos para crear más contenido, pueden dejar una propina en buy me a coffee ☕."
-reach_out = "o puedes contactarme en twitter"
+reach_out = "Puedes contactarme por las redes sociales:"
 leave_comment = "¿Tienen alguna pregunta? Pueden dejar un comentario"
 leave_comment_single_platform = "en"
 leave_comment_multi_platform = "en cualquiera de estas plataformas:"
@@ -75,4 +75,5 @@ hyde_sticky = true
 hyde_reverse = false
 hyde_links = [ {url = "/", name = "whoami"} ]
 twitter = {user = "@VonHeikemen_", link = "https://twitter.com/VonHeikemen_"}
+mastodon = {user = "@vonheikemen@hachyderm.io", link = "https://hachyderm.io/@vonheikemen"}
 

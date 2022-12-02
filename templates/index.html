@@ -50,6 +50,14 @@
         <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ get_url(path="rss.xml", trailing_slash=false) }}">
       {% endif %}
 
+      {% if config.extra.mastodon %}
+        <link rel="me" href="{{ config.extra.mastodon.link }}">
+      {% endif %}
+
+      {% if config.extra.twitter %}
+        <link rel="me" href="{{ config.extra.twitter.link }}">
+      {% endif %}
+
       {% block extra_head %}
         <meta name="keywords" content="{{ config.extra.site_keywords | join(sep=', ') }}">
         {% if config.extra.meta_description %}

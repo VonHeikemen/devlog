@@ -60,10 +60,6 @@
           <a rel="noopener" target="_blank" href="{{ page.extra.shared[0][1] }}">
             {{ page.extra.shared[0][0] }}
           </a>. 
-          {{ trans(key="reach_out", lang=page.lang) | capitalize }} 
-          <a rel="noopener" target="_blank" href="{{ config.extra.twitter.link }}">
-            {{ config.extra.twitter.user }}
-          </a>
         </p>
       {% else %}
         <p>
@@ -75,14 +71,22 @@
           <li><a rel="noopener" target="_blank" href="{{ platform[1] }}">{{ platform[0] }}</a></li>
           {% endfor %}
         </ul>
-        <p>
-          {{ trans(key="reach_out", lang=page.lang) | capitalize }} 
-          <a rel="noopener" target="_blank" href="{{ config.extra.twitter.link }}">
-            {{ config.extra.twitter.user }}
-          </a>
-        </p>
       {% endif %}
     {% endif %}
+
+    <p>{{ trans(key="reach_out", lang=page.lang) | capitalize }}</p>
+    <ul>
+      {% if config.extra.twitter %}
+        <li>Twitter <a rel="noopener me" target="_blank" href="{{ config.extra.twitter.link }}">
+          {{ config.extra.twitter.user }}
+        </a></li> 
+      {% endif %}
+      {% if config.extra.mastodon %}
+      <li>Mastodon <a rel="noopener me" target="_blank" href="{{ config.extra.mastodon.link }}">
+        {{ config.extra.mastodon.user }}
+      </a></li>
+      {% endif %}
+    </ul>
 
     <p>{{ trans(key="buymeacoffee", lang=page.lang) }}</p>
     <a href="{{ config.extra.buymeacoffee_link }}"
