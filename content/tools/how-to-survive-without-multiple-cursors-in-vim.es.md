@@ -16,8 +16,6 @@ Vamos a repasar las situaciones donde podríamos usar cursores múltiples y veam
 
 ## Reemplazar palabra debajo del cursor
 
-En Sublime Text y VSCode se empieza presionando `Ctrl + d` para seleccionar la palabra y luego repiten la misma combinación tantas veces sea necesario para seleccionar las otras ocurrencias. Finalmente cambian el texto.
-
 En vim debemos comenzar el proceso buscando la palabra debajo del cursor, para esto presionamos `*`. Luego presionamos `cgn` para reemplazar la próxima ocurrencia. Si queremos repetir la acción presionamos `.`, sí, el punto. Si no queremos reemplazar la ocurrencia actual podemos ignorarla y pasar a la siguiente presionando `n`.
 
 Si hay algo que vim hace extremadamente bien es automatizar las teclas que podemos presionar. Podemos hacer este proceso más rápido si creamos un atajo de teclado.
@@ -192,16 +190,16 @@ Otra forma interesante de aplicar un macro es con el comando `g`. Este comando e
 Digamos que queremos buscar todas las líneas con la palabra `vim` y ejecutar un macro. Podemos hacer algo así.
 
 ```vim
-:g/\<vim\>/normal @i
+:g/vim/normal @i
 ```
 
 Si quieren asegurarse de que su búsqueda tiene los resultados esperados pueden omitir la sección que va después de la búsqueda.
 
 ```vim
-:g/\<vim\>/
+:g/vim/
 ```
 
-Ejecutando podremos revisar todas las líneas donde hay una ocurrencia. Si todo está bien agregamos `normal @i`.
+Si todo está bien agregamos `normal @i`.
 
 ### Aplicar un macro en una selección
 
@@ -210,6 +208,8 @@ No estamos obligados a usar el comando `g`, podemos utilizar el comando `normal 
 ```vim
 '<,'>normal @i
 ```
+
+> Nota: No se preocupen por recordar la sintaxis `'<,'>`, vim lo agregará automáticamente cuando pasamos de modo visual a modo de comando.
 
 Esto ejecutará el macro en `i` sobre cada línea de la selección. Deben tener en cuenta que cada macro comenzará con el cursor al principio de la línea.
 
