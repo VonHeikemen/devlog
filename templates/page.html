@@ -72,9 +72,12 @@
           {% endfor %}
         </ul>
       {% endif %}
+
+      <p>{{ trans(key="reach_out", lang=page.lang) | capitalize }}</p>
+    {% else %}
+      <p>{{ trans(key="reach_out_share", lang=page.lang) | capitalize }}</p>
     {% endif %}
 
-    <p>{{ trans(key="reach_out", lang=page.lang) | capitalize }}</p>
     <ul>
       {% if config.extra.twitter %}
         <li>Twitter <a rel="noopener me" target="_blank" href="{{ config.extra.twitter.link }}">
