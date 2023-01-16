@@ -1,9 +1,8 @@
 +++
 title = "Cómo sobrevivir sin cursores múltiples en vim" 
 description = "Patrones alternativos que podemos usar en vim en lugar de cursores múltiples"
-date = 2022-12-31
+date = 2023-01-15
 lang = "es"
-draft = true
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
 [extra]
@@ -12,13 +11,13 @@ shared = []
 
 Sí, los cursores múltiples son mágicos. Son convenientes, fácil de usar y están presente en muchos editores modernos. Para bien o para mal, vim no los tiene. Pero está bien, podemos ser felices sin ellos. Bueno... yo puedo y voy decirles cómo.
 
-Vamos a repasar las situaciones donde podríamos usar cursores múltiples y veamos qué alternativas tenemos en vim.
+Vamos a repasar las situaciones donde podríamos usar cursores múltiples y veremos qué alternativas tenemos en vim.
 
 ## Reemplazar palabra debajo del cursor
 
 En vim debemos comenzar el proceso buscando la palabra debajo del cursor, para esto presionamos `*`. Luego presionamos `cgn` para reemplazar la próxima ocurrencia. Si queremos repetir la acción presionamos `.`, sí, el punto. Si no queremos reemplazar la ocurrencia actual podemos ignorarla y pasar a la siguiente presionando `n`.
 
-Si hay algo que vim hace extremadamente bien es automatizar las teclas que podemos presionar. Podemos hacer este proceso más rápido si creamos un atajo de teclado.
+Podemos hacer este proceso más rápido si creamos un atajo de teclado que agrupe los primeros dos pasos.
 
 ```vim
 nnoremap <leader>j *``cgn
@@ -55,9 +54,9 @@ Si ustedes usan vim pueden probar estos plugins:
 
 ## Reemplazar selección
 
-Tal vez el texto que queremos reemplazar no es una palabra, tal vez es una oración o una etiqueta de html. En este caso no tenemos una funcionalidad nativa que nos ayude pero podemos implementar nuestra propia solución.
+Tal vez el texto que queremos reemplazar no es una palabra, tal vez es una oración o un atributo de html. En este caso no tenemos una funcionalidad nativa que nos ayude pero podemos implementar nuestra propia solución.
 
-Lo que haremos será colocar la selección actual en el "registro de búsqueda" de vim.
+Lo primero que haremos será colocar la selección actual en el "registro de búsqueda" de vim.
 
 ```vim
 let @/=escape(@", '/')
@@ -272,7 +271,7 @@ local function load(name)
 end
 ```
 
-Con esta función puedo reducir el código necesario. Ahora utilizar `config` de esta manera.
+Con esta función puedo reducir el código necesario para utilizar `config`. Puedo hacer esto.
 
 ```lua
 config = load('lualine')
