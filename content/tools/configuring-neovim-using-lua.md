@@ -2,7 +2,7 @@
 title = "Everything you need to know to configure neovim using lua"
 description = "Your first steps into a lua configuration"
 date = 2021-08-01
-updated = 2022-09-26
+updated = 2023-02-15
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -613,11 +613,15 @@ A plugin manager that is simple and fast. I'm serious, this thing has less than 
 
 * [packer](https://github.com/wbthomason/packer.nvim)
 
-If you want more features `packer` is the alternative. It has the basic features you would expect, it offers lazy-loading capabilities, has support for `luarocks` (which is like a package manager for lua), it can handle "local plugins". And does other things I don't understand, but the point is that is a feature complete plugin manager.
+It has the basic features you would expect, it also offers lazy-loading capabilities, has support for `luarocks` (which is like a package manager for lua), it can handle "local plugins". And does other things I don't understand, but the point is that is a feature complete plugin manager.
+
+* [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+Has emerged as an alternative to `packer.nvim`. It advertises automatic lazy-loading that allows fast startup times. It lets you manage your plugins with a very nice interface. You can also split your plugins into modules where you can specify dependencies, configurations, version and other things.
 
 * [vim-packager](https://github.com/kristijanhusak/vim-packager)
 
-This one is not written in lua but I want to add it because it does offer a lua api. It offers more features than `paq` but not as much a `packer`, so if you are looking for a middle ground between those two, this might be a good choice.
+This one is not written in lua but I want to add it because it does offer a lua api. It offers more features than `paq` but not as much a `packer` or `lazy.nvim`, so if you are looking for a middle ground between those, this might be a good choice.
 
 ## Conclusion
 
