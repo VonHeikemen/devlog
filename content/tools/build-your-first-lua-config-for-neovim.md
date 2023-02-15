@@ -2,6 +2,7 @@
 title = "Build your first Neovim configuration in lua"
 description = "The one where we learn how to customize Neovim and add plugins"
 date = 2022-07-04
+updated = 2023-02-15
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -12,15 +13,15 @@ shared = [
 ]
 +++
 
-Neovim is a tool both powerful and extensible. With some effort it can do more than just modify text in a file. Today I hope I can teach you enough about Neovim's `lua` api to be able to build your configuration.
+Neovim is a tool both powerful and extensible. With some effort it can do more than just modify text in a file. Today I hope I can teach you enough about Neovim's `lua` api to be able to build your own configuration.
 
-We will create a simple configuration file called `init.lua`, add a couple of plugins and I'll tell you how to make your own commands.
+We will create a configuration file called `init.lua`, add a couple of plugins and I'll tell you how to make your own commands.
 
 This tutorial is meant for people totally new to Neovim. If you already have a configuration written in vimscript and want to migrate to lua, you might find this other article more useful: [Everything you need to know to configure neovim using lua](@/tools/configuring-neovim-using-lua.md).
 
 ## Some advice
 
-Before we start, I suggest you install the latest stable version of Neovim. You can go to the [release page](https://github.com/neovim/neovim/releases) in the github repository and download it from there. From now on I will assume you are using version 0.7.
+Before we start, I suggest you install the latest stable version of Neovim. You can go to the [release page](https://github.com/neovim/neovim/releases) in the github repository and download it from there. From now on I will assume you are using version 0.8 or greater.
 
 If you don't feel comfortable using Neovim as an editor, follow the tutorial that comes bundled with it. You can start it using this command in the terminal.
 
@@ -283,145 +284,129 @@ vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>')
 
 ## Plugin manager
 
-Right now the most popular plugin manager is [packer.nvim](https://github.com/wbthomason/packer.nvim). I'll show some basic usage examples.
+We are going to use [lazy.nvim](https://github.com/folke/lazy.nvim). This plugin manager allows for "simple" configurations but also supports splitting your plugin config in modules. Today I'll just show some basic usage examples.
 
-First step is to install it from github. It just so happens we can do this using lua. In packer's documentation they show us how to do it. We add this to our config.
+First step is to install it from github. It just so happens we can do this using lua. In lazy.nvim's documentation they show us how to do it.
 
 ```lua
-local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-local install_plugins = false
+local lazy = {}
 
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  print('Installing packer...')
-  local packer_url = 'https://github.com/wbthomason/packer.nvim'
-  vim.fn.system({'git', 'clone', '--depth', '1', packer_url, install_path})
-  print('Done.')
+function lazy.install(path)
+  if not vim.loop.fs_stat(path) then
+    print('Installing lazy.nvim....')
+    vim.fn.system({
+      'git',
+      'clone',
+      '--filter=blob:none',
+      'https://github.com/folke/lazy.nvim.git',
+      '--branch=stable', -- latest stable release
+      path,
+    })
+  end
+end
 
-  vim.cmd('packadd packer.nvim')
-  install_plugins = true
+function lazy.setup(plugins)
+  -- You can "comment out" the line below after lazy.nvim is installed
+  lazy.install(lazy.path)
+
+  vim.opt.rtp:prepend(lazy.path)
+  require('lazy').setup(plugins, lazy.opts)
 end
 ```
 
-Pay attention to `install_path`, this variable controls where we install packer. But more than that it also shows where all our plugins will be installed, you'll want to know where that is. Execute this command.
+For the moment this piece of code doesn't do anything. They are functions waiting to be called. Why do this? Is my personal preference. This way I can isolate the boilerplate needed to get the plugin manager working.
+
+Now we are free to place our configuration. We need to specify the path where our plugins are going to live, that is `lazy.path`. If you want to configure lazy.nvim itself, use the variable `lazy.opts` (I don't do anything with it so for me is an empty table). Finally we add the list of plugins as an argument to `lazy.setup`.
+
+```lua
+lazy.path = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+lazy.opts = {}
+
+lazy.setup({
+  ---
+  -- List of plugins
+  ---
+})
+```
+
+Notice in `lazy.path` we use `stdpath('data')`, this will return the path to Neovim's data folder. So now we don't need to worry changing our paths depending on the operating system, Neovim will do that for us. If you want to inspect the path, use this command.
 
 ```vim
-:echo stdpath('data') . '/site/pack/packer'
+:echo stdpath('data') . '/lazy/lazy.nvim'
 ```
 
-If you ever have a problem with the install (or removal) of a plugin, check that folder. Inside you'll find two folders: `opt` and `start`. In the `opt` folder you'll find "optional plugins" and the `start` folder will have all the plugins that Neovim will load at startup. Packer by default install all plugins in the `start` folder.
-
-If you wish to customize the install path of plugins: First read the help page of "packages" `:help packages`. Then read about [packer initialization options](https://github.com/wbthomason/packer.nvim#custom-initialization).
-
-Now, to actually use packer we can follow this pattern.
+Now let's download a plugin, a colorscheme to make Neovim look better. We are going to add this in `lazy.setup`.
 
 ```lua
-require('packer').startup(function(use)
-
-  use 'github-user/repo'
-
-  if install_plugins then
-    require('packer').sync()
-  end
-end)
+{'folke/tokyonight.nvim'},
 ```
 
-The `.startup` function in packer takes another function as an argument. Inside that function we can list our plugins. We call the function `use` to tell packer what plugins we want. Default behavior of packer makes it easy to download plugins from github, we just have to specify the user and the name of the repository.
+This is the minimum data lazy.nvim needs to download a plugin from github. Which is just the name of the user in github and the name of the repository.
 
-That little `if` section we have at the bottom is the one that downloads plugins for the first time. If `install_plugins` has the value `true` packer will do its thing.
-
-If your entire configuration is in one file, meaning you don't have any extra modules, I suggest you stop the execution of the script while plugins are being downloaded the first time. Like this.
+Your configuration should look like this.
 
 ```lua
-require('packer').startup(function(use)
-  ---
-  -- List of plugins...
-  ---
+lazy.path = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+lazy.opts = {}
 
-  if install_plugins then
-    require('packer').sync()
-  end
-end)
-
-if install_plugins then
-  return
-end
+lazy.setup({
+  {'folke/tokyonight.nvim'},
+})
 ```
 
-Notice the second `if` block has the keyword `return`, that will stop the script and save you the trouble of Neovim trying to configure plugins that aren't installed.
-
-Now let's download a plugin, a colorscheme to make Neovim look better.
-
-```lua
-require('packer').startup(function(use)
-  -- Package manager
-  use 'wbthomason/packer.nvim'
-
-  -- Theme inspired by Atom
-  use 'joshdick/onedark.vim'
-
-  if install_plugins then
-    require('packer').sync()
-  end
-end)
-
-if install_plugins then
-  return
-end
-```
-
-> Fun fact: packer can update itself if we add it to the list of plugins.
-
-Here we add `'joshdick/onedark.vim'` to the list. But we are not going to trigger the install process yet, let's add the code to apply the theme first. Add the end of the file put this.
+Now let's add the code to apply the theme. Add the end of the file put this.
 
 ```lua
 vim.opt.termguicolors = true
-
-vim.cmd('colorscheme onedark')
+vim.cmd.colorscheme('tokyonight')
 ```
 
-We enable `termguicolors` so Neovim can show the "best" version of the colorscheme. Each colorscheme can have two versions: one that works for terminals which only support 256 colors and another that specifies colors in hexadecimal codes (has way more colors).
+We enable `termguicolors` so Neovim can show the "best" version of the colorscheme. Each colorscheme can have two versions: one that works for terminals which only support 256 colors and another that specifies colors in hexadecimal code (has way more colors).
 
-We tell Neovim which theme we want by using the `colorscheme` command. Notice that we are using `vim.cmd`, that allows us to use vimscript inside lua. But why? We still don't have a lua api to apply a theme.
+We tell Neovim which theme we want using the `colorscheme` command. And yes, it looks like a lua function (it is). But under the hood is executing this vim command.
 
-We save these changes and restart Neovim, to trigger the download of packer. When Neovim start it should show a message telling us is cloning packer's repository. After it's done and packer is installed another window will show up, it'll tell us the progress of the plugins download. After plugins are installed we should restart Neovim again to see the changes.
+```vim
+colorscheme tokyonight
+```
+
+We save these changes and restart Neovim, to trigger the download of lazy.nvim. When Neovim starts it should show a message telling us is cloning the plugin manager. After it's done another window will show up, it'll tell us the progress of the plugins download. After plugins are installed they will be loaded.
 
 ## Plugin configuration
 
 Each plugin author has the freedom to create the configuration method they want. But then how do we know what to do? We have to rely on the documentation the plugin provides, we have no other choice.
 
-Most plugins have a file called `README.md` in their repository, github is kind enough to render that file in the main page. It's the main place you should look for configuration instructions.
+Most plugins have a file called `README.md` in their repository, github is kind enough to render that file in the main page. It's the first place you should look for configuration instructions.
 
-If for some reason the README doesn't have the information we are after, look for a folder called `doc`. Inside there should be a `txt` file, this is the help page. We can read it using Neovim executing the command `:help name-of-file.txt`.
+If for some reason the README doesn't have the information we are after, look for a folder called `doc`. Inside there should be a `txt` file, this is the help page. We can read it using Neovim executing the command `:help name-of-file`.
 
 ### Conventions of lua plugins
 
-Lucky for us a huge amount of plugins written in lua follow a certain pattern. They use a function called `.setup`, and that functions expects a lua table with some options. If there is something you should learn about the syntax of lua is how to create tables.
+Lucky for us a huge amount of plugins written in lua follow a certain pattern. They use a function called `.setup`, and that function expects a lua table with some options. If there is something you should learn about the syntax of lua is how to create tables.
 
-Let's configure a plugin. For this example I'll use [lualine](https://github.com/nvim-lualine/lualine.nvim), a plugin that can give us a good looking statusline. First step, add it to the list of plugins.
+Let's configure a plugin. For this example I'll use [lualine](https://github.com/nvim-lualine/lualine.nvim), a plugin that can give us a good looking statusline. First step, add `nvim-lualine/lualine.nvim` to the list of plugins.
 
 ```lua
-use 'nvim-lualine/lualine.nvim'
+lazy.setup({
+  {'folke/tokyonight.nvim'},
+  {'nvim-lualine/lualine.nvim'},
+})
 ```
-
-Now save the changes, then execute the command to reload the config and install the plugins.
-
-```vim
-:source $MYVIMRC | PackerSync
-```
-
-After that you can add the configuration.
 
 In lualine's repository we can find a `doc` folder and inside there is a file called `lualine.txt`. We can read it in Neovim using this.
 
 ```vim
-:help lualine.txt
+:help lualine
 ```
 
-This documentation  shows we can make the plugin work just by calling `setup` on the lualine module. Like this.
+This documentation shows we can make the plugin work just by calling `setup` on the lualine module. Like this.
 
 ```lua
 require('lualine').setup()
 ```
+
+Add that to the end of your configuration.
+
+If we save the changes and restart Neovim, lazy.nvim will install the plugin and apply the default configuration.
 
 But now lets pretend we want to change some options. For example, say we hate icons, we want them gone. In the documentation there is a section called `lualine-Default-configuration`, in there I can see some code that says `icon_enabled = true`. Great, let's copy all the necessary properties to modify that.
 
@@ -433,13 +418,15 @@ require('lualine').setup({
 })
 ```
 
-Looks better already. Now we don't like "component separators", how do we get rid of them? Check the docs again, there is a section `lualine-Disabling-separators`, it shows this.
+We can save the changes and reload the config using `:source $MYVIMRC`.
+
+Now we don't like "component separators", how do we get rid of them? Check the docs again, there is a section `lualine-Disabling-separators`, it shows this.
 
 ```lua
 options = { section_separators = '', component_separators = '' }
 ```
 
-Looks promising but we should not copy/paste that code as is. We need to really read it. It shows an `options` property, we already have one of those, what we should do is add these new properties to the thing we have.
+Looks promising but we should not copy/paste that code as is. We need to really read it. It shows an `options` property, we already have one of those, what we should do is add the new properties to the thing we have.
 
 ```lua
 require('lualine').setup({
@@ -451,13 +438,15 @@ require('lualine').setup({
 })
 ```
 
+Save and reload to verify the changes.
+
 So... what did we learned? To configure some plugins we need know: how to navigate to the documentation and the syntax used to create lua tables.
 
 ### Vimscript plugins
 
 There are a lot of useful plugins written in vimscript. Most of them we can configure modifying global variables. In lua we change global variables of vimscript using `vim.g`.
 
-Did you know Neovim has a file explorer? Yeah, it is plugin that comes bundled in Neovim. We can use it with the command `:Lexplore`. It is written in vimscript, so there is no `.setup` function. To know how to configure it we need to check the documentation.
+Did you know Neovim has a file explorer? Yeah, it's a plugin that comes bundled in Neovim. We can use it with the command `:Lexplore`. It is written in vimscript, so there is no `.setup` function. To know how to configure it we need to check the documentation.
 
 ```vim
 :help netrw
