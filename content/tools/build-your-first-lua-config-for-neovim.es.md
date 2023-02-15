@@ -2,6 +2,7 @@
 title = "Cómo crear tu primera configuración de Neovim usando lua"
 description = "Donde aprendemos cómo personalizar Neovim y agregar plugins"
 date = 2022-07-02
+updated = 2023-02-15
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -20,7 +21,7 @@ Este tutorial está pensado para aquellos que son totalmente nuevos en Neovim. S
 
 ## Recomendaciones
 
-Antes de empezar, les aconsejo que instalen la versión de Neovim estable más reciente. Pueden visitar la [sección releases](https://github.com/neovim/neovim/releases) del repositorio en github y descargarla de ahí. De aquí en adelante voy a asumir que están usando la version 0.7.
+Antes de empezar, les aconsejo que instalen la versión de Neovim estable más reciente. Pueden visitar la [sección releases](https://github.com/neovim/neovim/releases) del repositorio en github y descargarla de ahí. De aquí en adelante voy a asumir que están usando la version 0.8 o mayor.
 
 Si aún no se sienten cómodos usando Neovim para editar texto, hagan el tutorial interactivo que viene incluido. Pueden acceder a él ejecutando este comando en su terminal.
 
@@ -76,7 +77,7 @@ nvim --headless -c 'call mkdir(stdpath("config"), "p") | exe "edit" stdpath("con
 
 ## Opciones del editor
 
-Para acceder a las opciones de Neovim debemos usar la variable global `vim`. Bueno, más que una variable, es un módulo, ahí podemos encontrar cualquier tipo de utilidades. Pero ahora lo que nos interesa es una propiedad llamada `opt`, con eso podremos modificar cualquiera de las 351 opciones que ofrece Neovim.
+Para acceder a las opciones de Neovim debemos usar la variable global `vim`. Bueno, más que una variable, es un módulo donde podemos encontrar cualquier tipo de utilidades. Pero ahora lo que nos interesa es una propiedad llamada `opt`, con eso podremos modificar cualquiera de las 351 opciones que ofrece Neovim (en su versión 0.7).
 
 Esta es la sintaxis que deben seguir.
 
@@ -108,7 +109,7 @@ vim.opt.number = true
 
 * `mouse`
 
-Neovim (y Vim) pueden utilizar el ratón para algunas operaciones, cosas como seleccionar texto o cambiar el tamaño de una ventana. `mouse` acepta una cadena de texto (carácteres rodeados por comillas) que contiene una combinación de modos. No vamos a preocuparnos por los modos, podemos habilitarlo para todos así:
+Neovim (y Vim) puede utilizar el ratón para algunas operaciones, cosas como seleccionar texto o cambiar el tamaño de una ventana. `mouse` acepta una cadena de texto (carácteres rodeados por comillas) que contiene una combinación de modos. No vamos a preocuparnos por los modos, podemos habilitarlo para todos así:
 
 ```lua
 vim.opt.mouse = 'a'
@@ -283,107 +284,94 @@ vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<CR>')
 
 ## Plugin manager
 
-Actualmente el manejador de plugins más popular es [packer.nvim](https://github.com/wbthomason/packer.nvim). Voy a mostrarles la estructura básica para usarlo.
+Vamos a usar [lazy.nvim](https://github.com/folke/lazy.nvim). Me agrada porque podemos crear una configuración simple donde solamente escribimos una lista de plugins, pero también podemos crear módulos para la configuración de plugins. Por el momento mostraré el uso más simple.
 
-Nuestro primer paso será instalarlo y usaremos lua para esto. En la documentación de packer.nvim nos enseñan cómo hacerlo. Agregamos esto en nuestra configuración.
+Nuestro primer paso será instalar lazy.nvim. En la documentación nos muestran cómo hacerlo usando lua. Vamos a agregar esto.
 
 ```lua
-local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-local install_plugins = false
+local lazy = {}
 
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  print('Installing packer...')
-  local packer_url = 'https://github.com/wbthomason/packer.nvim'
-  vim.fn.system({'git', 'clone', '--depth', '1', packer_url, install_path})
-  print('Done.')
+function lazy.install(path)
+  if not vim.loop.fs_stat(path) then
+    print('Installing lazy.nvim....')
+    vim.fn.system({
+      'git',
+      'clone',
+      '--filter=blob:none',
+      'https://github.com/folke/lazy.nvim.git',
+      '--branch=stable', -- latest stable release
+      path,
+    })
+  end
+end
 
-  vim.cmd('packadd packer.nvim')
-  install_plugins = true
+function lazy.setup(plugins)
+  -- Pueden comentar la siguiente línea una vez que lazy.nvim esté instalado
+  lazy.install(lazy.path)
+
+  vim.opt.rtp:prepend(lazy.path)
+  require('lazy').setup(plugins, lazy.opts)
 end
 ```
 
-Presten atención a la variable `install_path`, es ahí donde instalaremos packer. Lo que es más importante, quiero que sepan cúal es la ruta donde sus plugins van a estar instalados. Ejecuten este comando.
+Entonces, aquí tenemos dos funciones que están esperando para ser invocadas. Yo prefiero hacerlo de esta manera porque así puedo aislar el código que viene de la documentación.
+
+Ahora tenemos que agregar nuestra configuración. Debemos especificar la ruta donde se instalarán los plugins, usamos la `lazy.path` para eso. Si quieren configurar lazy.nvim utilizan la variable `lazy.opts`, yo por el momento dejo la configuración vacía. Y para terminar vamos a colocar la lista de plugins en la función `lazy.setup`.
+
+```lua
+lazy.path = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+lazy.opts = {}
+
+lazy.setup({
+  ---
+  -- Lista de plugins
+  ---
+})
+```
+
+Aquí utilizamos `stdpath('data')` para que la ruta de los plugins quede en una carpeta manejada por Neovim. Ustedes pueden cambiar la ruta si quieren. Pero de esta manera no tenemos que preocuparnos por cambiar la ruta dependiendo del sistema operativo donde estamos.
+
+Si quieren saber donde estarán los plugins usen este comando.
 
 ```vim
-:echo stdpath('data') . '/site/pack/packer'
+:echo stdpath('data') . '/lazy/lazy.nvim'
 ```
 
-Si alguna vez tienen un problema instalando (o desinstalando) un plugin, revisen esa carpeta. Dentro deberán encontrar dos carpetas más: `opt` y `start`. En `opt` se encuentran los plugins "opcionales" y en `start` se encuentran los plugins que se inicializan cuando abrimos Neovim. Por defecto packer descarga los plugins en `start`.
-
-Si quieren cambiar la ruta donde se instalarán los plugins: Primero lean sobre cómo maneja Neovim los plugins, ver `:help packages`. Luego lean la [sección de configuración de packer](https://github.com/wbthomason/packer.nvim#custom-initialization).
-
-Ahora bien, para usar packer seguimos este patrón.
+Ahora vamos a descargar un plugin, un tema para que Neovim se vea mejor. Vamos a agregar esto en `lazy.setup`.
 
 ```lua
-require('packer').startup(function(use)
-
-  use 'github-user/repo'
-
-  if install_plugins then
-    require('packer').sync()
-  end
-end)
+{'folke/tokyonight.nvim'},
 ```
 
-La función `.startup` de packer acepta otra función como argumento. Dentro de esa función es donde especificamos la lista de plugins. Usamos el parámetro `use` para decirle a packer qué plugin queremos. Por defecto packer descarga los plugins de github, así que sólo debemos especificar el usuario y el repositorio.
+Esta es la cantidad mínima de información que lazy.nvim necesita para descargar un plugin de github. Solamente especificamos el usuario de github y el nombre del repositorio.
 
-La sección donde tenemos el `if` es la que se encarga de descargar los plugins por primera vez. Si la variable `install_plugins` tiene el valor `true` packer empezará la descarga.
-
-Si su configuración está enteramente en `init.lua`, es decir si no tienen más módulos, les aconsejo que paren la ejecución del script asi:
+Su configuración va a quedar de esta manera.
 
 ```lua
-require('packer').startup(function(use)
-  ---
-  -- Lista de plugins...
-  ---
+lazy.path = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+lazy.opts = {}
 
-  if install_plugins then
-    require('packer').sync()
-  end
-end)
-
-if install_plugins then
-  return
-end
+lazy.setup({
+  {'folke/tokyonight.nvim'},
+})
 ```
 
-Noten que el segundo `if` tiene la sentencia `return`, eso detendrá el script y se ahorraran los mensajes de error que aparecen cuando intentan configurar un plugin que no está instalado.
-
-Ahora vamos a descargar un plugin, un tema para que Neovim se vea mejor.
-
-```lua
-require('packer').startup(function(use)
-  -- Package manager
-  use 'wbthomason/packer.nvim'
-
-  -- Tema inspirado en Atom
-  use 'joshdick/onedark.vim'
-
-  if install_plugins then
-    require('packer').sync()
-  end
-end)
-
-if install_plugins then
-  return
-end
-```
-
-> Dato curioso: packer puede actualizarse a sí mismo si lo incluimos en la lista de plugins.
-
-Aquí agregamos `'joshdick/onedark.vim'` a la lista. Pero aún no vamos a instalarlo, primero vamos a aplicar el tema. Al final del archivo agregamos esto.
+Ahora vamos a agregar el código para aplicar el tema.
 
 ```lua
 vim.opt.termguicolors = true
-
-vim.cmd('colorscheme onedark')
+vim.cmd.colorscheme('tokyonight')
 ```
 
 Aquí habilitamos la opción `termguicolors` de Neovim para asegurarnos de tener la "mejor versión" del tema. Cada tema puede tener dos versiones, una para terminales que sólo soportan 256 colores y otra que utiliza códigos en hexadecimal (tiene más variedad de colores).
 
-Para decirle a Neovim qué tema queremos usamos el comando `colorscheme`. Noten que aquí usamos la función `vim.cmd`, esta nos permite utilizar vimscript dentro de lua. ¿Pero por qué? Todavía no hay una api accesible desde lua para seleccionar el tema del editor.
+Para decirle a Neovim qué tema queremos usamos el comando `colorscheme`. Okey... técnicamente estamos usando una función de lua, pero esa función esta ejecutando un comando de vim.
 
-Si guardamos los cambios y reiniciamos Neovim deberá aparecer un mensaje que nos muestra que se está clonando el repositorio de packer. Después de que Neovim descargue packer y lea nuestra lista de plugins debería aparecer una ventana extra, esta nos muestra la descarga de los plugins. Después de que packer termina la descarga debemos reiniciar Neovim nuevamente para ver los cambios.
+```lua
+colorscheme tokyonight
+```
+
+Si guardamos los cambios y reiniciamos Neovim deberá aparecer un mensaje que nos muestra que se está clonando el repositorio de lazy.nvim. Una vez que lazy.nvim lea nuestra lista de plugins deberá aparecer una ventana extra, esta nos muestra la descarga de los plugins. Deberíamos ver los cambios de manera inmediata luego de que lazy.nvim termine la descarga del tema.
 
 ## Configuración de plugins
 
@@ -391,30 +379,25 @@ Cada autor puede crear el método de configuración que mejor le parezca. ¿Cóm
 
 Cada plugin como mínimo debe tener un archivo llamado `README.md`. Este es el archivo que github nos muestra en la página principal del repositorio. Ahí debemos buscar las instrucciones de configuración.
 
-Si el archivo `README.md` no tiene la información que nos interesa busquen una carpeta llamada `doc`. Por lo general ahí se encuentra un archivo `txt`, esa es la página de ayuda. Podemos lear ese archivo desde github o desde Neovim si usamos el comando `:help nombre-archivo.txt`.
+Si el archivo `README.md` no tiene la información que nos interesa busquen una carpeta llamada `doc`. Por lo general ahí se encuentra un archivo `txt`, esa es la página de ayuda. Podemos lear ese archivo desde github o desde Neovim si usamos el comando `:help nombre-archivo`.
 
 ### Convenciones de plugins escritos en lua
 
 Por suerte para nosotros muchos de los plugins escritos en lua siguen un patrón, usan una función llamada `setup` que acepta una tabla de lua como argumento. Si hay algo que deben aprender para configurar plugins en lua es cómo crear tablas.
 
-Vamos a configurar un plugin. Para este ejemplo voy a usar [lualine](https://github.com/nvim-lualine/lualine.nvim), un plugin que modifica la "línea de estado" que se encuentra en el fondo de la pantalla. Para descargarlo agregamos esto a la lista de plugins.
+Vamos a configurar un plugin. Para este ejemplo voy a usar [lualine](https://github.com/nvim-lualine/lualine.nvim), un plugin que modifica la "línea de estado" que se encuentra en el fondo de la pantalla. Para descargarlo agregamos `nvim-lualine/lualine.nvim` a la lista de plugins.
 
 ```lua
-use 'nvim-lualine/lualine.nvim'
+lazy.setup({
+  {'folke/tokyonight.nvim'},
+  {'nvim-lualine/lualine.nvim'},
+})
 ```
 
-En este punto deberíamos guardar el archivo y evaluarlo. Luego usamos `PackerSync` para instalar el plugin. Podemos recargar la configuración y empezar la descarga con este comando.
-
-```lua
-:source $MYVIMRC | PackerSync
-```
-
-Esto debería hacer que packer descargue el plugin.
-
-Ahora ya podemos empezar la configuración. Si revisan en github notarán que hay un archivo llamado `lualine.txt` en la carpeta `doc`. Podemos leerlo desde Neovim usando.
+Podemos empezar la configuración. Si revisan en github notarán que hay un archivo llamado `lualine.txt` en la carpeta `doc`. Podemos leerlo desde Neovim usando.
 
 ```vim
-:help lualine.txt
+:help lualine
 ```
 
 La documentación nos dice que debemos llamar la función `setup` del módulo `lualine`. Así.
@@ -423,7 +406,9 @@ La documentación nos dice que debemos llamar la función `setup` del módulo `l
 require('lualine').setup()
 ```
 
-Eso debería ser suficiente para que funcione. Pero yo quiero modificar algunas opciones. Por ejemplo, no quiero usar íconos, ¿cómo los deshabilito? En la sección `lualine-Default-configuration` puedo ver algo que dice `icons_enabled = true`. Lo que voy a hacer es copiar las propiedades que necesito para desactivarlo.
+Eso debería ser suficiente para que funcione. Podemos guardar los cambios y reiniciar Neovim.
+
+Luce bien y todo pero yo quiero modificar algunas opciones. Por ejemplo, no quiero usar íconos, ¿cómo los deshabilito? En la sección `lualine-Default-configuration` puedo ver algo que dice `icons_enabled = true`. Lo que voy a hacer es copiar las propiedades que necesito para desactivarlo.
 
 ```lua
 require('lualine').setup({
@@ -433,7 +418,7 @@ require('lualine').setup({
 })
 ```
 
-Ahora digamos que tenemos un problema con nuestra fuente, no podemos ver los "separadores de componentes". Tenemos que desactivarlos. Si nos vamos a la  sección `lualine-Disabling-separators` nos muestra esto.
+Digamos que tenemos un problema con nuestra fuente, no podemos ver los "separadores de componentes". Tenemos que desactivarlos. Si nos vamos a la  sección `lualine-Disabling-separators` nos muestra esto.
 
 ```lua
 options = { section_separators = '', component_separators = '' }
@@ -450,6 +435,8 @@ require('lualine').setup({
   }
 })
 ```
+
+Ahora que tenemos lualine instalado podemos guardar el archivo y ejecutar `:source $MYVIMRC` para ver los cambios.
 
 En resumen, para configurar plugins debemos: saber cómo navegar en la documentación del plugin y también debemos conocer la sintaxis de lua para crear tablas.
 
