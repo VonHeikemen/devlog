@@ -2,7 +2,7 @@
 title = "Todo lo que necesitan saber para configurar neovim usando lua"
 description = "Tus primeros pasos hacia una configuración creada en lua"
 date = 2021-07-29
-updated = 2022-09-26
+updated = 2022-02-15
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -612,6 +612,10 @@ Es un manejador de plugins rápido y sencillo. No es broma, tiene menos de 300 l
 * [packer](https://github.com/wbthomason/packer.nvim)
 
 Si quieren algo con más funcionalidades `packer` es la alternativa. Aparte de lo básico este manejador ofrece opciones para cargar plugins sólo cuando son necesarios, tiene soporte para declarar y manejar plugins con dependencias, tiene soporte para `luarocks` (este es como un repositorio de paquetes de lua) y también puede manejar "plugins locales". Hace otras cosas pero creo que ya entienden el punto, es bastante completo.
+
+* [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+Es una nueva alternativa a `packer.nvim`. Este se caracteriza por optimizar el tiempo de carga de nuestros plugins. Por defecto buscará cargar nuestros plugins sólo cuando sea necesario. Ofrece una interfaz agradable para actualizar, inspeccionar y eliminar plugins. También nos permite declarar nuestros plugins usando módulos de lua. Podemos especificar versión, dependencias, configuración, entre otras cosas.
 
 * [vim-packager](https://github.com/kristijanhusak/vim-packager)
 
