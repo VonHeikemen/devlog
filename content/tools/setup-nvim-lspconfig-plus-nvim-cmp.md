@@ -2,7 +2,7 @@
 title = "Setup nvim-lspconfig + nvim-cmp"
 description = "Let's configure Neovim's builtin LSP client with nvim-lspconfig and nvim-cmp"
 date = 2022-05-23
-updated = 2022-10-17
+updated = 2023-02-15
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -60,16 +60,16 @@ The next step is to call the language servers we have installed. The way we do t
 
 How do we know which one we have available? Again, lspconfig's documentation has the answer. You can find the list of valid names using `:help lspconfig-server-configurations`.
 
-For the language `lua` we can use a server called `sumneko_lua`. Install it and then call it in your config like this.
+For the language `lua` we can use a server called `lua_ls`. Install it and then call it in your config like this.
 
 ```lua
-lspconfig.sumneko_lua.setup({})
+lspconfig.lua_ls.setup({})
 ```
 
 If you need to customize its behavior you need to add some keys to `.setup()`'s argument, like this.
 
 ```lua
-lspconfig.sumneko_lua.setup({
+lspconfig.lua_ls.setup({
   single_file_support = true,
   flags = {
     debounce_text_changes = 150,
@@ -109,7 +109,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     bufmap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
 
     -- Displays a function's signature information
-    bufmap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+    bufmap('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
 
     -- Renames all references to the symbol under the cursor
     bufmap('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
@@ -154,7 +154,7 @@ lsp_defaults.capabilities = vim.tbl_deep_extend(
 -- LSP Servers
 ---
 
-lspconfig.sumneko_lua.setup({})
+lspconfig.lua_ls.setup({})
 ```
 
 ## Snippets
@@ -219,7 +219,7 @@ In my personal configuration I have the sources setup this way.
 ```lua
 sources = {
   {name = 'path'},
-  {name = 'nvim_lsp', keyword_length = 3},
+  {name = 'nvim_lsp', keyword_length = 1},
   {name = 'buffer', keyword_length = 3},
   {name = 'luasnip', keyword_length = 2},
 },
@@ -301,7 +301,7 @@ Here is a list of common keybindings:
 
 ```lua
 ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-['<C-f>'] = cmp.mapping.scroll_docs(4),
+['<C-d>'] = cmp.mapping.scroll_docs(4),
 ```
 
 * Cancel completion.
@@ -313,13 +313,14 @@ Here is a list of common keybindings:
 * Confirm selection.
 
 ```lua
+['<C-y>'] = cmp.mapping.confirm({select = true}),
 ['<CR>'] = cmp.mapping.confirm({select = false}),
 ```
 
 * Jump to the next placeholder in the snippet.
 
 ```lua
-['<C-d>'] = cmp.mapping(function(fallback)
+['<C-f>'] = cmp.mapping(function(fallback)
   if luasnip.jumpable(1) then
     luasnip.jump(1)
   else
@@ -392,7 +393,7 @@ cmp.setup({
   },
   sources = {
     {name = 'path'},
-    {name = 'nvim_lsp', keyword_length = 3},
+    {name = 'nvim_lsp', keyword_length = 1},
     {name = 'buffer', keyword_length = 3},
     {name = 'luasnip', keyword_length = 2},
   },
@@ -421,12 +422,13 @@ cmp.setup({
     ['<C-n>'] = cmp.mapping.select_next_item(select_opts),
 
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
 
     ['<C-e>'] = cmp.mapping.abort(),
+    ['<C-y>'] = cmp.mapping.confirm({select = true}),
     ['<CR>'] = cmp.mapping.confirm({select = false}),
 
-    ['<C-d>'] = cmp.mapping(function(fallback)
+    ['<C-f>'] = cmp.mapping(function(fallback)
       if luasnip.jumpable(1) then
         luasnip.jump(1)
       else
@@ -528,8 +530,6 @@ vim.diagnostic.config({
   float = {
     border = 'rounded',
     source = 'always',
-    header = '',
-    prefix = '',
   },
 })
 ```
@@ -582,7 +582,7 @@ lsp_defaults.capabilities = vim.tbl_deep_extend(
   require('cmp_nvim_lsp').default_capabilities()
 )
 
-lspconfig.sumneko_lua.setup({})
+lspconfig.lua_ls.setup({})
 ```
 
 Right now this is all I have to say about `mason.nvim`. If you want to know more about it you'll have read their documentation.

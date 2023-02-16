@@ -2,7 +2,7 @@
 title = "Configurando nvim-lspconfig + nvim-cmp"
 description = "Usando nvim-lspconfig y nvim-cmp para configurar el cliente LSP de Neovim"
 date = 2022-05-21
-updated = 2022-10-17
+updated = 2023-02-15
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -60,16 +60,16 @@ El siguiente paso será llamar los servidores que tenemos instalados en nuestro 
 
 ¿Pero cómo sabemos qué servidores tenemos disponibles? En la documentación de `lspconfig` pueden encontrar la lista completa, pueden navegar a ella usando el comando `:help lspconfig-server-configurations`.
 
-Para en lenguaje `lua` tenemos disponible el servidor `sumneko_lua`. Luego de instalarlo en nuestro sistema podemos configurarlo de la siguiente manera.
+Para en lenguaje `lua` tenemos disponible el servidor `lua_ls`. Luego de instalarlo en nuestro sistema podemos configurarlo de la siguiente manera.
 
 ```lua
-lspconfig.sumneko_lua.setup({})
+lspconfig.lua_ls.setup({})
 ```
 
 Si necesitan agregar más opciones a un servidor deben agregar propiedades al argumento de `.setup()`, así.
 
 ```lua
-lspconfig.sumneko_lua.setup({
+lspconfig.lua_ls.setup({
   single_file_support = true,
   flags = {
     debounce_text_changes = 150,
@@ -109,7 +109,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     bufmap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
 
     -- Mostrar argumentos de función
-    bufmap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+    bufmap('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
 
     -- Renombrar símbolo
     bufmap('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
@@ -154,7 +154,7 @@ lsp_defaults.capabilities = vim.tbl_deep_extend(
 -- Servidores LSP
 ---
 
-lspconfig.sumneko_lua.setup({})
+lspconfig.lua_ls.setup({})
 ```
 
 ## Snippets
@@ -219,7 +219,7 @@ En mi configuración personal tengo las fuentes configuradas de esta manera.
 ```lua
 sources = {
   {name = 'path'},
-  {name = 'nvim_lsp', keyword_length = 3},
+  {name = 'nvim_lsp', keyword_length = 1},
   {name = 'buffer', keyword_length = 3},
   {name = 'luasnip', keyword_length = 2},
 },
@@ -301,7 +301,7 @@ Estas son algunas acciones comunes:
 
 ```lua
 ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-['<C-f>'] = cmp.mapping.scroll_docs(4),
+['<C-d>'] = cmp.mapping.scroll_docs(4),
 ```
 
 * Cancelar el autocompletado.
@@ -313,13 +313,14 @@ Estas son algunas acciones comunes:
 * Confirma la selección.
 
 ```lua
+['<C-y>'] = cmp.mapping.confirm({select = true}),
 ['<CR>'] = cmp.mapping.confirm({select = false}),
 ```
 
 * Salta al próximo placeholder de un snippet.
 
 ```lua
-['<C-d>'] = cmp.mapping(function(fallback)
+['<C-f>'] = cmp.mapping(function(fallback)
   if luasnip.jumpable(1) then
     luasnip.jump(1)
   else
@@ -392,7 +393,7 @@ cmp.setup({
   },
   sources = {
     {name = 'path'},
-    {name = 'nvim_lsp', keyword_length = 3},
+    {name = 'nvim_lsp', keyword_length = 1},
     {name = 'buffer', keyword_length = 3},
     {name = 'luasnip', keyword_length = 2},
   },
@@ -421,12 +422,13 @@ cmp.setup({
     ['<C-n>'] = cmp.mapping.select_next_item(select_opts),
 
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
 
     ['<C-e>'] = cmp.mapping.abort(),
+    ['<C-y>'] = cmp.mapping.confirm({select = true}),
     ['<CR>'] = cmp.mapping.confirm({select = false}),
 
-    ['<C-d>'] = cmp.mapping(function(fallback)
+    ['<C-f>'] = cmp.mapping(function(fallback)
       if luasnip.jumpable(1) then
         luasnip.jump(1)
       else
@@ -528,8 +530,6 @@ vim.diagnostic.config({
   float = {
     border = 'rounded',
     source = 'always',
-    header = '',
-    prefix = '',
   },
 })
 ```
@@ -582,7 +582,7 @@ lsp_defaults.capabilities = vim.tbl_deep_extend(
   require('cmp_nvim_lsp').default_capabilities()
 )
 
-lspconfig.sumneko_lua.setup({})
+lspconfig.lua_ls.setup({})
 ```
 
 En está ocasión es todo lo que voy a decir sobre `mason.nvim`. Si quieren saber más detalles deben revisar su documentación.
