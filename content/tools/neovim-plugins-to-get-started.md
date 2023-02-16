@@ -2,6 +2,7 @@
 title = "Neovim: Plugins to get started"
 description = "Turn Neovim into a fancy editor with these plugins"
 date = 2022-09-03
+updated = 2023-02-15
 lang = "en"
 [taxonomies]
 tags = ["neovim", "vim", "shell"]
@@ -22,7 +23,7 @@ If you're completely new to Neovim I recommend you learn lua's syntax. If you do
 
 If you haven't created a configuration for Neovim, do it now. Here is a guide with everything you need to know: [Build your first Neovim configuration in lua](@/tools/build-your-first-lua-config-for-neovim.md).
 
-You'll need Neovim's latest stable version. You can download it from the [release section](https://github.com/neovim/neovim/releases) of github. From now on I'll assume you are using Neovim v0.7 or greater.
+You'll need Neovim's latest stable version. You can download it from the [release section](https://github.com/neovim/neovim/releases) of github. From now on I'll assume you are using Neovim v0.8 or greater.
 
 ## How do we install plugins?
 
@@ -86,10 +87,11 @@ But of course we don't have to download plugins manually, we can use a plugin ma
 
 At the moment these are the most popular plugin managers in the Neovim ecosystem.
 
+* [lazy.nvim](https://github.com/folke/lazy.nvim)
 * [packer.nvim](https://github.com/wbthomason/packer.nvim)
 * [paq.nvim](https://github.com/savq/paq-nvim) 
 
-If you prefer minimalism take a look at `paq`. If you want something full of features use `packer`.
+If you prefer minimalism take a look at `paq`. If you want something full of features use `packer` or `lazy.nvim`.
 
 Remember to read carefully the instructions of the plugin manager you choose.
 
@@ -180,6 +182,9 @@ require('lualine').setup({
     icons_enabled = true,
     component_separators = '|',
     section_separators = '',
+    disabled_filetypes = {
+      statusline = {'NvimTree'}
+    }
   },
 })
 ```
@@ -195,6 +200,8 @@ Here is what we got in `.setup()`.
 * `options.component_separators`: Is the character used between components.
 
 * `options.section_separators`: Is the character used between sections.
+
+* `options.disabled_filetypes.statusline`: Is a list of filetypes in which lualine will be disabled. We add `NvimTree` so the file explorer looks "cleaner".
 
 ### Bufferline
 

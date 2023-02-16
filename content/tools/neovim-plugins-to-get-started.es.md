@@ -2,6 +2,7 @@
 title = "Neovim: Plugins para empezar"
 description = "Explorando plugins para mejorar nuestra experiencia en Neovim"
 date = 2022-09-03
+updated = 2023-02-15
 lang = "es"
 [taxonomies]
 tags = ["neovim", "vim", "shell"]
@@ -22,7 +23,7 @@ Si ustedes son completamente nuevos en Neovim les recomiendo que aprendan [la si
 
 Si todavía no han creado un archivo de configuración para Neovim, háganlo ahora. Aquí les dejo una guía con todo lo que necesitan saber: [Cómo crear tu primera configuración de Neovim usando lua](@/tools/build-your-first-lua-config-for-neovim.es.md).
 
-Les recomiendo descargar la versión estable más reciente de Neovim. Pueden descargarla desde la [sección releases](https://github.com/neovim/neovim/releases) en github. De aquí en adelante voy a asumir que están usando la versión 0.7 o mayor.
+Les recomiendo descargar la versión estable más reciente de Neovim. Pueden descargarla desde la [sección releases](https://github.com/neovim/neovim/releases) en github. De aquí en adelante voy a asumir que están usando la versión 0.8 o mayor.
 
 ## ¿Cómo instalamos un plugin?
 
@@ -88,10 +89,11 @@ Pero claro que ustedes no tienen que descargar plugins manualmente si no quieren
 
 En la actualidad estos son los más manejadores de plugins más populares en el ecosistema de Neovim.
 
+* [lazy.nvim](https://github.com/folke/lazy.nvim)
 * [packer.nvim](https://github.com/wbthomason/packer.nvim) 
 * [paq.nvim](https://github.com/savq/paq-nvim) 
 
-Si prefieren el minimalismo les recomiendo `paq`. Si quieren algo más "completo" usen `packer.nvim`.
+Si prefieren el minimalismo les recomiendo `paq`. Si quieren algo más "completo" usen `packer.nvim` o `lazy.nvim`.
 
 Recuerden leer bien las instrucciones del manejador que decidan usar.
 
@@ -182,6 +184,9 @@ require('lualine').setup({
     icons_enabled = true,
     component_separators = '|',
     section_separators = '',
+    disabled_filetypes = {
+      statusline = {'NvimTree'}
+    }
   },
 })
 ```
@@ -197,6 +202,8 @@ Y esto es lo que tenemos en `.setup()`.
 * `options.component_separators`: Es el caracter que será usado para separar "componentes" de lualine.
 
 * `options.section_separators`: El caracter que será usado para separar secciones.
+
+* `options.disabled_filetypes.statusline`: Es una lista donde debemos colocar los tipos de archivos donde no queremos que apareca lualine. Agregamos `NvimTree` para que la interfaz del explorador de archivos se vea mejor.
 
 ### Bufferline
 
