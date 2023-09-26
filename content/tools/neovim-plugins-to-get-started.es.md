@@ -339,7 +339,7 @@ Para que treesitter pueda funcionar debemos instalar un "parser" por cada lengua
 
 Entonces, si queremos instalar el parser para javascript debemos usar este comando.
 
-```language
+```vim
 :TSInstall javascript
 ```
 
