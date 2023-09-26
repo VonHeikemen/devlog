@@ -1,13 +1,10 @@
-version: '2'
+version: '3'
 
 vars: 
   CSS_FILES:
-    tmp/poole.css
-    tmp/hyde.css
-    tmp/custom.css
-
-  OUTPUT_DIR:
-    ./public/dist
+    public/poole.css
+    public/hyde.css
+    public/custom.css
 
 tasks:
   serve:
@@ -19,29 +16,31 @@ tasks:
     desc: Build site on current directory
     cmds:
       - zola build
-      - task: html
       - task: css
-      - cp ./public/robots.txt ./tmp/robots.txt
-      - mv tmp {{.OUTPUT_DIR}}
     env:
       ENV: production
 
   preview:
     desc: Build site with localhost as base url
     cmds:
-      - zola build --base-url "http://localhost:5000/"
+      - zola build --base-url "http://localhost:3000/"
+      - task: css
       - serve ./public/
+    env:
+      ENV: production
+
+  publish:
+    desc: Build site for production
+    cmds:
+      - task: build
+      - rm -rf ../vonheikemen.github.io/devlog/
+      - mv public/ ../vonheikemen.github.io/devlog/
     env:
       ENV: production
 
   css:
     desc: Bundle css files
     cmds:
-      - minify -b -o ./tmp/styles.css {{.CSS_FILES}}
+      - minify -b -o ./public/styles.css {{.CSS_FILES}}
       - rm {{.CSS_FILES}}
-
-  html:
-    desc: Minify html files
-    cmds:
-      - minify -r -o ./tmp/ ./public
 
