@@ -2,7 +2,7 @@
 title = "Build your first Neovim configuration in lua"
 description = "The one where we learn how to customize Neovim and add plugins"
 date = 2022-07-04
-updated = 2023-02-15
+updated = 2023-09-26
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -306,11 +306,17 @@ function lazy.install(path)
 end
 
 function lazy.setup(plugins)
+  if vim.g.plugins_ready then
+    return
+  end
+
   -- You can "comment out" the line below after lazy.nvim is installed
   lazy.install(lazy.path)
 
   vim.opt.rtp:prepend(lazy.path)
+
   require('lazy').setup(plugins, lazy.opts)
+  vim.g.plugins_ready = true
 end
 ```
 
@@ -658,8 +664,10 @@ If you feel prepared to tackle more advanced topics you can read this other tuto
 If you want recommendations for plugins and other configurations I suggest you check these configuration templates.
 
 * [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
+* [nvim-starter - light](https://github.com/VonHeikemen/nvim-starter/tree/xx-light)
+* [tinyvim](https://github.com/NvChad/tinyvim)
+* [dope](https://github.com/glepnir/dope)
 * [nvim-basic-ide](https://github.com/LunarVim/nvim-basic-ide)
-* [Neovim-from-scratch](https://github.com/LunarVim/Neovim-from-scratch) 
 
 You can also check my personal configuration if you like.
 
