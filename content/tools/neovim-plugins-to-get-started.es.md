@@ -257,57 +257,37 @@ Github: [lukas-reineke/indent-blankline.nvim](https://github.com/lukas-reineke/i
 
 Añade guías de indentación a todas las líneas del archivo.
 
-Este plugin puede ser configurado modificando variables globales, así.
+Para configurarlo debemos usar la función `.setup()` del módulo `ibl`.
 
 ```lua
-vim.g.indent_blankline_char = '▏'
-```
-
-O si prefieren vimscript.
-
-```vim
-let g:indent_blankline_char = '▏'
-```
-
-Pueden ver la lista de variables disponibles con este comando.
-
-```vim
-:help indent-blankline-variables
-```
-
-También tenemos la posibilidad de configurarlo usando la función `.setup()` del módulo `indent_blankline`.
-
-```lua
-require('indent_blankline').setup({
-  char = '▏',
+require('ibl').setup({
+  indent = {
+    char = '▏',
+  },
 })
 ```
 
-Noten que aquí no necesitamos el prefijo `indent_blankline_` para las propiedades.
-
-Yo prefiero usar la función setup para la configuración. Estas son las opciones más interesantes.
+Estas son las opciones más interesantes.
 
 ```lua
-require('indent_blankline').setup({
-  char = '▏',
-  show_trailing_blankline_indent = false,
-  show_first_indent_level = false,
-  use_treesitter = true,
-  show_current_context = false
+require('ibl').setup({
+  enabled = false,
+  scope = {
+    enabled = false,
+  },
+  indent = {
+    char = '▏',
+  },
 })
 ```
 
 Aquí el valor `true` activa la funcionalidad de una opción y `false` hace lo opuesto.
 
-* `char`: es el caracter que se muestra en pantalla.
+* `enabled`: Habilita las guías de indentación.
 
-* `show_trailing_blankline_indent`: Determina si se debe mostrar el indicador en líneas vacías.
+* `scope.enabled`: Resalta el nivel de indentación del ámbito donde se encuentra el cursor.
 
-* `show_first_indent_level`: Determina si se debe mostrar el indicador en la primera columna.
-
-* `use_treesitter`: Determina si `treesitter` puede ser usado para determinar el nivel de indentación.
-
-* `show_current_context`: Resalta el nivel de indentación actual.
+* `indent.char`: es el caracter que se muestra en pantalla.
 
 ### Treesitter
 

@@ -252,58 +252,39 @@ require('bufferline').setup({
 ### indent-blankline.nvim
 
 Github: [lukas-reineke/indent-blankline.nvim](https://github.com/lukas-reineke/indent-blankline.nvim)
+Version: 3.x
 
 Adds indent guides in the current file.
 
-This plugin in particular can be configured in several ways. We can tweak its behavior modifying global variables, like this.
+To configure it use the `.setup()` function of the `ibl` module.
 
 ```lua
-vim.g.indent_blankline_char = '▏'
-```
-
-Or if you prefer vimscript.
-
-```vim
-let g: indent_blankline_char = '▏'
-```
-
-You can find the complete list of variables in the help page.
-
-```vim
-:help indent-blankline-variables
-```
-
-There is a third option: use the `.setup()` function of the `indent_blankline` module.
-
-```lua
-require('indent_blankline').setup({
-  char = '▏',
+require('ibl').setup({
+  indent = {
+    char = '▏',
+  },
 })
 ```
 
-Notice we don't need the prefix `indent_blankline_` when using `.setup()`.
-
-I prefer to use `.setup()`. And here the options I find interesting.
+And here the options I find interesting.
 
 ```lua
-require('indent_blankline').setup({
-  char = '▏',
-  show_trailing_blankline_indent = false,
-  show_first_indent_level = false,
-  use_treesitter = true,
-  show_current_context = false
+require('ibl').setup({
+  enabled = true,
+  scope = {
+    enabled = false,
+  },
+  indent = {
+    char = '▏',
+  },
 })
 ```
 
-* `char`: Is the character that will appear on the screen.
+* `enabled`: Is used to determine if indent guides should be enabled when opening a file
 
-* `show_trailing_blankline_indent`: Show indent guides in blank lines.
+* `scope.enabled`: If enabled is `true`, the indent guide for the current scope will be highlighted.
 
-* `show_first_indent_level`: Show an indent guide on the first column.
-
-* `use_treesitter`: Use treesitter to determine where the indent guide should be.
-
-* `show_current_context`: Highlight the indent level where the cursor is at.
+* `indent.char`: Is the character that will appear on the screen.
 
 ### Treesitter
 
