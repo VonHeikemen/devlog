@@ -674,7 +674,7 @@ Here are a few resources you can check, where you can find cool things about Neo
 
 * [awesome-neovim](https://github.com/rockerBOO/awesome-neovim)
 * [neovimcraft](https://neovimcraft.com/)
-* [this week in neovim](https://this-week-in-neovim.org/)
+* [this week in neovim](https://dotfyle.com/this-week-in-neovim)
 
 ## Conclusion
 

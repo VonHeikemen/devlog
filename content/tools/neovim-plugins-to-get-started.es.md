@@ -676,7 +676,7 @@ Estos son algunos recursos donde podrán encontrar información sobre el ecosist
 
 * [awesome-neovim](https://github.com/rockerBOO/awesome-neovim)
 * [neovimcraft](https://neovimcraft.com)
-* [this week in neovim](https://this-week-in-neovim.org/)
+* [this week in neovim](https://dotfyle.com/this-week-in-neovim)
 
 ## Conclusión
 
