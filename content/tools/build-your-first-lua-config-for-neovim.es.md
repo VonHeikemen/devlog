@@ -259,22 +259,25 @@ Por defecto Neovim (y Vim) no interactúa con el portapapeles. Cuando copiamos a
 Copia al portapapeles.
 
 ```lua
-vim.keymap.set({'n', 'x'}, 'cp', '"+y')
+vim.keymap.set({'n', 'x'}, 'gy', '"+y')
 ```
 
 Pegar desde el portapapeles.
 
 ```lua
-vim.keymap.set({'n', 'x'}, 'cv', '"+p')
+vim.keymap.set({'n', 'x'}, 'gp', '"+p')
 ```
 
 * Borrar texto sin alterar el registro
 
-Cuando borramos algo en modo normal o visual usando `c`, `d` o `x` ese texto se va un registro. Esto afecta el texto que podemos pegar con la tecla `p`. Lo que quiero hacer es modificar `x` para poder borrar texto sin afectar el "historial" de copias.
+Cuando borramos algo en modo normal o visual usando `c`, `d` o `x` ese texto se va un registro. Esto afecta el texto que podemos pegar con la tecla `p`. Lo que quiero hacer es modificar `x` y `X` para poder borrar texto sin afectar el "historial" de copias.
 
 ```lua
 vim.keymap.set({'n', 'x'}, 'x', '"_x')
+vim.keymap.set({'n', 'x'}, 'X', '"_d')
 ```
+
+Con estos atajos `x` puede borrar un caracter en modo normal, en modo visual va a borrar la selección actual. La `X` va a tener el mismo comportamiento del comando `d`.
 
 * Seleccionar todo el texto
 

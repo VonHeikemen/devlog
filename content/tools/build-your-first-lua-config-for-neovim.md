@@ -259,22 +259,25 @@ The default behavior in Neovim (and Vim) doesn't take into account the system cl
 Copy to clipboard.
 
 ```lua
-vim.keymap.set({'n', 'x'}, 'cp', '"+y')
+vim.keymap.set({'n', 'x'}, 'gy', '"+y')
 ```
 
 Paste from clipboard.
 
 ```lua
-vim.keymap.set({'n', 'x'}, 'cv', '"+p')
+vim.keymap.set({'n', 'x'}, 'gp', '"+p')
 ```
 
 * Delete without changing the registers
 
-When we delete text in normal mode or visual mode using `c`, `d` or `x` that text goes to a register. This affects the text we paste with the keybinding `p`. What I do is modify `x` to delete text without changing the internal registers.
+When we delete text in normal mode or visual mode using `c`, `d` or `x` that text goes to a register. This affects the text we paste with the keybinding `p`. What I do is modify `x` and `X` to delete text without changing the internal registers.
 
 ```lua
 vim.keymap.set({'n', 'x'}, 'x', '"_x')
+vim.keymap.set({'n', 'x'}, 'X', '"_d')
 ```
+
+The lower case `x` will delete one character in normal mode, in visual mode it will delete the current selection. Upper case `X` will act like `d`.
 
 * Select all text in current buffer
 
