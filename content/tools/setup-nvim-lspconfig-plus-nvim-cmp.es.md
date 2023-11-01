@@ -2,7 +2,7 @@
 title = "Configurando nvim-lspconfig + nvim-cmp"
 description = "Usando nvim-lspconfig y nvim-cmp para configurar el cliente LSP de Neovim"
 date = 2022-05-21
-updated = 2023-02-15
+updated = 2023-11-01
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -41,43 +41,33 @@ En la documentación de `nvim-lspconfig` pueden encontrar instrucciones de cómo
 
 ## Configuración LSP
 
-Lo primero que haremos será declarar las "capacidades" que tiene el editor. Normalmente tendríamos que pasar esta configuración manualmente a cada servidor, pero podemos ahorrarnos ese procedimiento si las agregamos directamente a la variable `util.default_config` de nvim-lspconfig.
-
-```lua
-local lspconfig = require('lspconfig')
-local lsp_defaults = lspconfig.util.default_config
-
-lsp_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lsp_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
-```
-
-Aquí utilizamos `vim.tbl_deep_extend` para mezclar de manera segura las capacidades que ofrece `lspconfig` con las capacidades que agrega `nvim-cmp`.
-
-El siguiente paso será llamar los servidores que tenemos instalados en nuestro sistema. Con `lspconfig` debemos llamar la función `.setup()` del servidor que queremos configurar.
+Lo que necesitamos hacer es llamar los servidores que tenemos instalados en nuestro sistema. Usamos `lspconfig` para llamar la función `.setup()` del servidor que queremos configurar.
 
 ¿Pero cómo sabemos qué servidores tenemos disponibles? En la documentación de `lspconfig` pueden encontrar la lista completa, pueden navegar a ella usando el comando `:help lspconfig-server-configurations`.
 
-Para en lenguaje `lua` tenemos disponible el servidor `lua_ls`. Luego de instalarlo en nuestro sistema podemos configurarlo de la siguiente manera.
+Por ejemplo, para el lenguaje `lua` tenemos disponible el servidor `lua_ls`. Luego de instalarlo en nuestro sistema podemos configurarlo de la siguiente manera.
 
 ```lua
 lspconfig.lua_ls.setup({})
 ```
 
-Si necesitan agregar más opciones a un servidor deben agregar propiedades al argumento de `.setup()`, así.
+Ahora bien, al momento de configurar un servidor deben tener en cuenta que vamos a usar nvim-cmp para manejar el autocompletado. Debemos modificar una opción llamada `capabilities` en cada servidor que queremos usar. Esta opción le dice al servidor qué capacidades del protocolo LSP soporta Neovim.
+
+Tenemos que utilizar el módulo `cmp_nvim_lsp` para obtener los valores apropiados para la opción `capabilities`.
+
+```lua
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+```
+
+Una vez que tenemos la variable `lsp_capabilities` podemos utilizarla en la función `.setup()` del servidor.
 
 ```lua
 lspconfig.lua_ls.setup({
-  single_file_support = true,
-  flags = {
-    debounce_text_changes = 150,
-  },
+  capabilities = lsp_capabilities,
 })
 ```
 
-Para conocer las opciones disponibles en la función `.setup()` revisen la documentación con el comando `:help lspconfig-setup`.
+Para conocer las opciones disponibles de `.setup()` revisen la documentación con el comando `:help lspconfig-setup`.
 
 Ahora lo más importante, los atajos de teclado. Para esto utilizaremos un autocomando, esto nos dará la libertad de colocar nuestros atajos en cualquier lugar de nuestra configuración.
 
@@ -116,7 +106,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- Listar "code actions" disponibles en la posición del cursor
     bufmap('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-    bufmap('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
 
     -- Mostrar diagnósticos de la línea actual
     bufmap('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
@@ -134,27 +123,15 @@ Con esto nuestros atajos serán creado cada vez que Neovim vincule un servidor L
 
 > Nota: si están usando Neovim v0.7.2 o menor, tienen que crear una función y asignarla a la opción `on_attach` de cada servidor LSP. En la documentación de lspconfig pueden encontrar un ejemplo, ejecuten el comando `:help lspconfig-keybindings`.
 
-Para terminar con esta sección aquí tienen la configuración completa para `lspconfig`.
+Para terminar con esta sección aquí tienen el código necesario para configurar un servidor usando `lspconfig`.
 
 ```lua
----
--- Configuración global
----
-
 local lspconfig = require('lspconfig')
-local lsp_defaults = lspconfig.util.default_config
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-lsp_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lsp_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
-
----
--- Servidores LSP
----
-
-lspconfig.lua_ls.setup({})
+lspconfig.lua_ls.setup({
+  capabilities = lsp_capabilities,
+})
 ```
 
 ## Snippets
@@ -489,7 +466,7 @@ end
 sign({name = 'DiagnosticSignError', text = '✘'})
 sign({name = 'DiagnosticSignWarn', text = '▲'})
 sign({name = 'DiagnosticSignHint', text = '⚑'})
-sign({name = 'DiagnosticSignInfo', text = ''})
+sign({name = 'DiagnosticSignInfo', text = '»'})
 ```
 
 ### Configuración global de diagnósticos
@@ -574,15 +551,11 @@ require('mason').setup()
 require('mason-lspconfig').setup()
 
 local lspconfig = require('lspconfig')
-local lsp_defaults = lspconfig.util.default_config
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-lsp_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lsp_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
-
-lspconfig.lua_ls.setup({})
+lspconfig.lua_ls.setup({
+  capabilities = lsp_capabilities,
+})
 ```
 
 En está ocasión es todo lo que voy a decir sobre `mason.nvim`. Si quieren saber más detalles deben revisar su documentación.

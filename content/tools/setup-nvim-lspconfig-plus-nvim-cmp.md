@@ -2,7 +2,7 @@
 title = "Setup nvim-lspconfig + nvim-cmp"
 description = "Let's configure Neovim's builtin LSP client with nvim-lspconfig and nvim-cmp"
 date = 2022-05-23
-updated = 2023-02-15
+updated = 2023-11-01
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -41,24 +41,9 @@ In `nvim-lspconfig` documentation you'll find instructions to install the langua
 
 ## LSP Config
 
-First thing you would want to do is declare the client capabilities, these announce to the LSP server what features the editor can support. To save ourselves a little bit of trouble, we are going to add them directly to lspconfig's default configuration.
+What we need to do here is use the module `lspconfig` and call the `.setup()` of the language server we want to configure.
 
-```lua
-local lspconfig = require('lspconfig')
-local lsp_defaults = lspconfig.util.default_config
-
-lsp_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lsp_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
-```
-
-Here we use `vim.tbl_deep_extend` to merge the defaults `lspconfig` provides with the capabilities `nvim-cmp` adds.
-
-The next step is to call the language servers we have installed. The way we do this with `lspconfig` is by calling the `.setup()` of the language server we want to configure.
-
-How do we know which one we have available? Again, lspconfig's documentation has the answer. You can find the list of valid names using `:help lspconfig-server-configurations`.
+How do we know which language servers are supported? lspconfig's documentation has the answer. You can find the list of valid names using `:help lspconfig-server-configurations`.
 
 For the language `lua` we can use a server called `lua_ls`. Install it and then call it in your config like this.
 
@@ -66,18 +51,23 @@ For the language `lua` we can use a server called `lua_ls`. Install it and then 
 lspconfig.lua_ls.setup({})
 ```
 
-If you need to customize its behavior you need to add some keys to `.setup()`'s argument, like this.
+There is one thing you need to keep in mind. We are going to use nvim-cmp to handle the autocompletion. So, we have to modify an option called `capabilities` in every language server we use. This option tells the language server the features Neovim supports.
+
+We are going to tell the language server what features nvim-cmp adds to Neovim. For this we call the module `cmp_nvim_lsp` and get the default capabilities.
+
+```lua
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+```
+
+Once we have this new variable `lsp_capabilities` we can add it to our setup.
 
 ```lua
 lspconfig.lua_ls.setup({
-  single_file_support = true,
-  flags = {
-    debounce_text_changes = 150,
-  },
+  capabilities = lsp_capabilities,
 })
 ```
 
-To know the available options in `.setup()` checkout the help page using `:help lspconfig-setup`.
+If want to know the available options in `.setup()` checkout the help page using `:help lspconfig-setup`.
 
 At this point to take advantage of some "LSP features" we need to create some keybindings. Neovim will emit the event `LspAttach` each time a language server is attached to a buffer, this will give us the opportunity to create our keybindings. Here is an example.
 
@@ -116,7 +106,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- Selects a code action available at the current cursor position
     bufmap('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-    bufmap('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
 
     -- Show diagnostics in a floating window
     bufmap('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
@@ -134,27 +123,15 @@ This autocommand can live anywhere in our configuration. And if we wanted to, we
 
 > Note: if you are using Neovim v0.7.2 or lower you'll need to create a function and add it to the `on_attach` option of each language server. See `:help lspconfig-keybindings` for an example.
 
-So, here is the complete code to configure `lspconfig`.
+So, here is the complete code to configure one language server using `lspconfig`.
 
 ```lua
----
--- Global Config
----
-
 local lspconfig = require('lspconfig')
-local lsp_defaults = lspconfig.util.default_config
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-lsp_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lsp_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
-
----
--- LSP Servers
----
-
-lspconfig.lua_ls.setup({})
+lspconfig.lua_ls.setup({
+  capabilities = lsp_capabilities,
+})
 ```
 
 ## Snippets
@@ -489,7 +466,7 @@ end
 sign({name = 'DiagnosticSignError', text = '✘'})
 sign({name = 'DiagnosticSignWarn', text = '▲'})
 sign({name = 'DiagnosticSignHint', text = '⚑'})
-sign({name = 'DiagnosticSignInfo', text = ''})
+sign({name = 'DiagnosticSignInfo', text = '»'})
 ```
 
 ### Diagnostics config
@@ -574,15 +551,11 @@ require('mason').setup()
 require('mason-lspconfig').setup()
 
 local lspconfig = require('lspconfig')
-local lsp_defaults = lspconfig.util.default_config
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-lsp_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lsp_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
-
-lspconfig.lua_ls.setup({})
+lspconfig.lua_ls.setup({
+  capabilities = lsp_capabilities,
+})
 ```
 
 Right now this is all I have to say about `mason.nvim`. If you want to know more about it you'll have read their documentation.
