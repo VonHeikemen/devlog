@@ -64,6 +64,9 @@ local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 Una vez que tenemos la variable `lsp_capabilities` podemos utilizarla en la función `.setup()` del servidor.
 
 ```lua
+local lspconfig = require('lspconfig')
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+
 lspconfig.lua_ls.setup({
   capabilities = lsp_capabilities,
 })
