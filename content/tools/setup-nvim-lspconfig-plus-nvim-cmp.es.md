@@ -48,6 +48,8 @@ Lo que necesitamos hacer es llamar los servidores que tenemos instalados en nues
 Por ejemplo, para el lenguaje `lua` tenemos disponible el servidor `lua_ls`. Luego de instalarlo en nuestro sistema podemos configurarlo de la siguiente manera.
 
 ```lua
+local lspconfig = require('lspconfig')
+
 lspconfig.lua_ls.setup({})
 ```
 

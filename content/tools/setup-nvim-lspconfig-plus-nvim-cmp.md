@@ -48,6 +48,8 @@ How do we know which language servers are supported? lspconfig's documentation h
 For the language `lua` we can use a server called `lua_ls`. Install it and then call it in your config like this.
 
 ```lua
+local lspconfig = require('lspconfig')
+
 lspconfig.lua_ls.setup({})
 ```
 
@@ -62,6 +64,8 @@ local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 Once we have this new variable `lsp_capabilities` we can add it to our setup.
 
 ```lua
+local lspconfig = require('lspconfig')
+
 lspconfig.lua_ls.setup({
   capabilities = lsp_capabilities,
 })
