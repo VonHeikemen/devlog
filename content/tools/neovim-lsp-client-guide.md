@@ -233,7 +233,7 @@ To read the diagnostic message of the line under the cursor we can use the funct
 vim.keymap.set('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
 ```
 
-I would love to explain all the options `vim.diagnostic.config()` supports but we don't time for that. If you want to know more you can [read the documentation](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()).
+I would love to explain all the options `vim.diagnostic.config()` supports but we don't have time for that. If you want to know more you can [read the documentation](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()).
 
 ## What else do we get for free?
 
