@@ -99,7 +99,7 @@ Inside this new file we are going to execute the function that enables intelephe
 
 ## Root directory
 
-The last thing piece of information we need is the root directory. We just have to tell the language server where is our project folder.
+The last piece of information we need is the root directory. We just have to tell the language server where is our project folder.
 
 In our filetype plugin we are going to use a function called [vim.fs.find()](https://neovim.io/doc/user/lua.html#vim.fs.find()). We will give it a list of files and it will return the path of the first match it finds.
 
