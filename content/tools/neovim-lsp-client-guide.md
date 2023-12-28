@@ -189,9 +189,25 @@ vim.lsp.start({
 })
 ```
 
+### Where to look if something goes wrong?
+
+If Neovim wasn't able to start the language server, you can take a look at the log file, execute this command inside Neovim:
+
+```lua
+:lua vim.cmd.edit(vim.lsp.get_log_path())
+```
+
+Look for the lines that start with `[ERROR]`. Maybe there is an error message with some useful information.
+
+If you want the logs to have more details, increase the log level. Add this in your `init.lua` file.
+
+```lua
+vim.lsp.set_log_level('debug')
+```
+
 ## About the diagnostics
 
-So the diagnostics signs... by default the space needed to render that sign is hidden, and when there is a sign the whole screen shifts to the right. That behavior can be configured in the `init.lua` file.
+So the diagnostics signs, the thing Neovim uses to tell us there is an error in our source code... by default the space needed to render that sign is hidden, and when there is a sign the whole screen shifts to the right. That behavior can be configured in the `init.lua` file.
 
 If you set the option `signcolumn` to the string `yes`, Neovim will reserve the space for the sign. You will have a whitespace reserved for any type of signs in the gutter.
 
