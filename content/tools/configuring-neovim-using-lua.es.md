@@ -364,7 +364,7 @@ Sé que hay un montón de gente que utiliza [vim-plug](https://github.com/junegu
 ```lua
 local Plug = vim.fn['plug#']
 
-vim.call('plug#begin', '~/.config/nvim/plugged')
+vim.call('plug#begin')
 
 -- Los plugins van aquí
 -- ....
@@ -377,7 +377,7 @@ Esas tres líneas de código es todo lo que necesitan. Pueden probarlo, esto fun
 ```lua
 local Plug = vim.fn['plug#']
 
-vim.call('plug#begin', '~/.config/nvim/plugged')
+vim.call('plug#begin')
 
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-surround'

@@ -366,7 +366,7 @@ I know there is a lot of people out there who use [vim-plug](https://github.com/
 ```lua
 local Plug = vim.fn['plug#']
 
-vim.call('plug#begin', '~/.config/nvim/plugged')
+vim.call('plug#begin')
 
 -- List of plugins goes here
 -- ....
@@ -379,7 +379,7 @@ Those 3 lines of code are the only thing you need. You can try it, this works.
 ```lua
 local Plug = vim.fn['plug#']
 
-vim.call('plug#begin', '~/.config/nvim/plugged')
+vim.call('plug#begin')
 
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-surround'
