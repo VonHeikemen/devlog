@@ -473,13 +473,13 @@ Important note: most language servers with formatting capabilities have their ow
 local fmt_group = vim.api.nvim_create_augroup('autoformat_cmds', {clear = true})
 
 local function setup_autoformat(event)
-  vim.api.nvim_clear_autocmds({group = fmt_group, buffer = event.buf})
-
   local id = vim.tbl_get(event, 'data', 'client_id')
   local client = id and vim.lsp.get_client_by_id(id)
   if client == nil then
     return
   end
+
+  vim.api.nvim_clear_autocmds({group = fmt_group, buffer = event.buf})
 
   local buf_format = function(e)
     vim.lsp.buf.format({
