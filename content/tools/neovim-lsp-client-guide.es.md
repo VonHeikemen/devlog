@@ -809,7 +809,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 ```
 
-## Conclusion
+## Conclusión
 
 Les mostré cómo "conectar" un servidor LSP con Neovim. Tuvimos que ejecutar 1 comando en la terminal y agregar 6 líneas de código a un archivo de lua. ¿No fue tan difícil, verdad?
 
