@@ -2,6 +2,7 @@
 title = "Guía de uso del cliente LSP de Neovim" 
 description = "Agrega funcionalidades dignas de un IDE a Neovim sin instalar plugins de terceros"
 date = 2024-01-13
+updated = 2024-01-18
 lang = "es"
 [taxonomies]
 tags = ["neovim", "shell"]
@@ -135,11 +136,14 @@ Entonces, nuestro filetype plugin para php debería tener este código.
 
 local root_files = {'composer.json'}
 local paths = vim.fs.find(root_files, {stop = vim.env.HOME})
+local root_dir = vim.fs.dirname(paths[1])
 
-vim.lsp.start({
-  cmd = {'intelephense', '--stdio'},
-  root_dir = vim.fs.dirname(paths[1]),
-})
+if root_dir then
+  vim.lsp.start({
+    cmd = {'intelephense', '--stdio'},
+    root_dir = root_dir,
+  })
+end
 ```
 
 Con esta configuración ya podremos utilizar algunas funcionalidades. Por ejemplo, si editamos un archivo php y este tiene un error, Neovim nos dirá en qué línea se encuentra el error. Debería mostrarnos algo como esto.
@@ -161,7 +165,7 @@ Para que funcione con el cliente LSP de Neovim debemos adaptar este formato a al
 ```lua
 vim.lsp.start({
   cmd = {'intelephense', '--stdio'},
-  root_dir = vim.fs.dirname(paths[1]),
+  root_dir = root_dir,
   settings = {
     intelephense = {
       files = {
@@ -179,7 +183,7 @@ Y si hay otra configuración con el mismo prefijo `intelephense.files` simplemen
 ```lua
 vim.lsp.start({
   cmd = {'intelephense', '--stdio'},
-  root_dir = vim.fs.dirname(paths[1]),
+  root_dir = root_dir,
   settings = {
     intelephense = {
       files = {
@@ -401,11 +405,16 @@ En este script vamos a adaptar la configuración que se encuentra en el [reposit
 local function start_tsserver()
   local root_files = {'package.json', 'tsconfig.json', 'jsconfig.json'}
   local paths = vim.fs.find(root_files, {stop = vim.env.HOME})
+  local root_dir = vim.fs.dirname(paths[1])
+
+  if root_dir == nil then
+    return
+  end
 
   vim.lsp.start({
     name = 'tsserver',
     cmd = {'typescript-language-server', '--stdio'},
-    root_dir = vim.fs.dirname(paths[1]),
+    root_dir = root_dir,
     init_options = {hostInfo = 'neovim'},
   })
 end
@@ -811,7 +820,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 ## Conclusión
 
-Les mostré cómo "conectar" un servidor LSP con Neovim. Tuvimos que ejecutar 1 comando en la terminal y agregar 6 líneas de código a un archivo de lua. ¿No fue tan difícil, verdad?
+Les mostré cómo "conectar" un servidor LSP con Neovim. Tuvimos que ejecutar 1 comando en la terminal y agregar 9 líneas de código a un archivo de lua. ¿No fue tan difícil, verdad?
 
 La parte que realmente requiere esfuerzo es aprender todo el contexto necesario. ¿Qué significa LSP? ¿Qué es un servidor LSP? ¿Filetype plugin? Pero una vez que tienen conocimiento de todas las piezas involucradas todo se hace más fácil.
 

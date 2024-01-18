@@ -2,6 +2,7 @@
 title = "A guide on Neovim's LSP client" 
 description = "Enable IDE-like features in Neovim without installing any additional plugins"
 date = 2023-12-25
+updated = 2024-01-18
 lang = "en"
 [taxonomies]
 tags = ["neovim", "shell"]
@@ -133,11 +134,14 @@ Our php filetype plugin should look like this.
 
 local root_files = {'composer.json'}
 local paths = vim.fs.find(root_files, {stop = vim.env.HOME})
+local root_dir = vim.fs.dirname(paths[1])
 
-vim.lsp.start({
-  cmd = {'intelephense', '--stdio'},
-  root_dir = vim.fs.dirname(paths[1]),
-})
+if root_dir then
+  vim.lsp.start({
+    cmd = {'intelephense', '--stdio'},
+    root_dir = root_dir,
+  })
+end
 ```
 
 With this setup we should get "diagnostics" out the box. If there is an error in a php file Neovim will show what line has the error, and also the message. Something like this.
@@ -159,7 +163,7 @@ We would need to adapt this so it works with Neovim's LSP client. Let me show yo
 ```lua
 vim.lsp.start({
   cmd = {'intelephense', '--stdio'},
-  root_dir = vim.fs.dirname(paths[1]),
+  root_dir = root_dir,
   settings = {
     intelephense = {
       files = {
@@ -177,7 +181,7 @@ If there was another setting with the same namespace `intelephense.files`, we ju
 ```lua
 vim.lsp.start({
   cmd = {'intelephense', '--stdio'},
-  root_dir = vim.fs.dirname(paths[1]),
+  root_dir = root_dir,
   settings = {
     intelephense = {
       files = {
@@ -402,11 +406,17 @@ In `tsserver.lua` we are going to adapt the configuration in [nvim-lspconfig's s
 local function start_tsserver()
   local root_files = {'package.json', 'tsconfig.json', 'jsconfig.json'}
   local paths = vim.fs.find(root_files, {stop = vim.env.HOME})
+  local root_dir = vim.fs.dirname(paths[1])
+
+  if root_dir == nil then
+    -- root directory was not found
+    return
+  end
 
   vim.lsp.start({
     name = 'tsserver',
     cmd = {'typescript-language-server', '--stdio'},
-    root_dir = vim.fs.dirname(paths[1]),
+    root_dir = root_dir,
     init_options = {hostInfo = 'neovim'},
   })
 end
@@ -808,7 +818,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 ## Conclusion
 
-Hopefully I showed is not difficult to "connect" a language server with Neovim. Think about it, 1 shell commmand and 6 lines of lua code is all it takes to get intelephense working in Neovim.
+Hopefully I showed is not difficult to "connect" a language server with Neovim. Think about it, 1 shell commmand and 9 lines of lua code is all it takes to get intelephense working in Neovim.
 
 The hard part is gathering all the context inside your head. What does LSP even mean? What's a language server? Filetype plugin? hardly know her. But once you know about the moving pieces and where to find the information you need, it gets easier.
 
