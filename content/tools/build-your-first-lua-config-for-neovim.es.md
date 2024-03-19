@@ -2,7 +2,7 @@
 title = "Cómo crear tu primera configuración de Neovim usando lua"
 description = "Donde aprendemos cómo personalizar Neovim y agregar plugins"
 date = 2022-07-02
-updated = 2023-09-26
+updated = 2024-03-19
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -663,10 +663,10 @@ Si ya se sienten preparados para temas más avanzados, el siguiente artículo le
 Si quieren recomendaciones de plugins y configuraciones pueden revisar estas plantillas.
 
 * [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
-* [nvim-starter - light](https://github.com/VonHeikemen/nvim-starter/tree/xx-light)
+* [nvim-light](https://github.com/VonHeikemen/nvim-light)
 * [tinyvim](https://github.com/NvChad/tinyvim)
 * [dope](https://github.com/glepnir/dope)
-* [nvim-basic-ide](https://github.com/LunarVim/nvim-basic-ide)
+* [Launch.nvim](https://github.com/LunarVim/Launch.nvim)
 
 Si quieren revisar mi configuración personal:
 

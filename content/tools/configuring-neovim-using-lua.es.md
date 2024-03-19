@@ -2,7 +2,7 @@
 title = "Todo lo que necesitan saber para configurar neovim usando lua"
 description = "Tus primeros pasos hacia una configuración creada en lua"
 date = 2021-07-29
-updated = 2023-02-14
+updated = 2024-03-19
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -625,7 +625,13 @@ No está escrito en lua pero quise agregarlo porque ofrece una interfaz para lua
 
 Aprendimos cómo usar lua desde vimscript. Sabemos cómo usar vimscript desde lua. Ahora tenemos todas las herramientas para activar, desactivar y modificar cualquier tipo de opción o variable disponible en neovim. Conocemos los métodos para crear nuestros atajos de teclado. Aprendimos sobre comandos y autocomandos. Sabemos cómo usar un manejador de plugins desde lua ya sea que esté escrito en lua o no. Ya estamos listos.
 
-Para los que quieran ver un ejemplo de la vida real, aquí les dejo un enlace a mi configuración en github:
+Para los que quieran ver un ejemplo de la vida real, aquí les algunos recursos.
+
+Esta es una "plantilla" que pueden copiar y modificar a su gusto:
+
+* [nvim-light](https://github.com/VonHeikemen/nvim-light)
+
+Y esta es mi configuración personal en github:
 
 * [neovim (v0.6)](https://github.com/VonHeikemen/dotfiles/tree/057f4d604e31ad121c4b4b36fd7e4148483d50c8/my-configs/neovim)
 * [neovim (v0.7)](https://github.com/VonHeikemen/dotfiles/tree/18fb9ab01d171a3d862d2438cd0f8fd2612a3e52/my-configs/neovim)

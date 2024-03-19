@@ -2,7 +2,7 @@
 title = "Everything you need to know to configure neovim using lua"
 description = "Your first steps into a lua configuration"
 date = 2021-08-01
-updated = 2023-02-14
+updated = 2024-03-19
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -627,7 +627,13 @@ This one is not written in lua but I want to add it because it does offer a lua 
 
 Recap time. We learned how to use lua from vimscript. We now know how to use vimscript from lua. We have the tools to activate, deactivate and modify all sorts of options and variables in neovim. We got to know the methods we have available to create our keymaps. We learned about commands and autocommands. We figure out how to use plugin managers that aren't written in lua, and saw a few alternatives that are written in lua. I say we are ready to use lua in neovim.
 
-For those who want to see a real world usage or whatever, I'll share a link to my current config in github:
+For those who want to see a real world usage or whatever, I'll share some links 
+
+This is a "starter template" you can copy and use as your own config:
+
+* [nvim-light](https://github.com/VonHeikemen/nvim-light) 
+
+And this my personal config in github:
 
 * [neovim (v0.6)](https://github.com/VonHeikemen/dotfiles/tree/057f4d604e31ad121c4b4b36fd7e4148483d50c8/my-configs/neovim)
 * [neovim (v0.7)](https://github.com/VonHeikemen/dotfiles/tree/18fb9ab01d171a3d862d2438cd0f8fd2612a3e52/my-configs/neovim)
