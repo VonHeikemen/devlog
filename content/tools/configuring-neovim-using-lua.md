@@ -607,21 +607,17 @@ To know more details about autocommands checkout the documentation, see [:help n
 
 You might want a plugin manager that is written in lua, just because. It appears that right now these are your options:
 
-* [paq](https://github.com/savq/paq-nvim/)
+* [paq-nvim](https://github.com/savq/paq-nvim/)
 
-A plugin manager that is simple and fast. I'm serious, this thing has less than 300 lines of code. It was created to download, update and remove plugins. That's it. If you don't need anything else, look no further, this is the plugin manager you want.
-
-* [packer](https://github.com/wbthomason/packer.nvim)
-
-It has the basic features you would expect, it also offers lazy-loading capabilities, has support for `luarocks` (which is like a package manager for lua), it can handle "local plugins". And does other things I don't understand, but the point is that is a feature complete plugin manager.
+A plugin manager that is simple and fast. I'm serious, this thing is around 500 lines of code. It was created to download, update and remove plugins. That's it. If you don't need anything else, look no further, this is the plugin manager you want.
 
 * [lazy.nvim](https://github.com/folke/lazy.nvim)
 
-Has emerged as an alternative to `packer.nvim`. It advertises automatic lazy-loading that allows fast startup times. It lets you manage your plugins with a very nice interface. You can also split your plugins into modules where you can specify dependencies, configurations, version and other things.
+It advertises automatic lazy-loading that allows fast startup times. It lets you manage your plugins with a very nice interface. You can also split your plugins into modules where you can specify dependencies, configurations, version and other things.
 
-* [vim-packager](https://github.com/kristijanhusak/vim-packager)
+* [mini.deps](https://github.com/echasnovski/mini.deps)
 
-This one is not written in lua but I want to add it because it does offer a lua api. It offers more features than `paq` but not as much a `packer` or `lazy.nvim`, so if you are looking for a middle ground between those, this might be a good choice.
+This is a middle ground between `paq-nvim` and `lazy.nvim`. It has some useful features like the ability to rollback a plugin to a previous version, but it doesn't offer advanced lazy loading options like `lazy.nvim` does.
 
 ## Conclusion
 

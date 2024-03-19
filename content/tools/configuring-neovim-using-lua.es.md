@@ -605,27 +605,23 @@ Para conocer más detalles de los autocomandos pueden leer la documentación, [:
 
 Tal vez quieran usar un plugin manager que este escrito en lua sólo porque sí. Por lo que he visto estas son sus opciones:
 
-* [paq](https://github.com/savq/paq-nvim/)
+* [paq-nvim](https://github.com/savq/paq-nvim/)
 
-Es un manejador de plugins rápido y sencillo. No es broma, tiene menos de 300 líneas de código y fue creado para descargar, actualizar y eliminar plugins. Es todo. Si eso es todo lo que necesitan no busquen más, este es el manejador que quieren.
-
-* [packer](https://github.com/wbthomason/packer.nvim)
-
-Si quieren algo con más funcionalidades `packer` es la alternativa. Aparte de lo básico este manejador ofrece opciones para cargar plugins sólo cuando son necesarios, tiene soporte para declarar y manejar plugins con dependencias, tiene soporte para `luarocks` (este es como un repositorio de paquetes de lua) y también puede manejar "plugins locales". Hace otras cosas pero creo que ya entienden el punto, es bastante completo.
+Es un manejador de plugins rápido y sencillo. No es broma, tiene alrededor de 500 líneas de código y fue creado para descargar, actualizar y eliminar plugins. Es todo. Si eso es lo único que necesitan no busquen más, este es el manejador que quieren.
 
 * [lazy.nvim](https://github.com/folke/lazy.nvim)
 
-Es una nueva alternativa a `packer.nvim`. Este se caracteriza por optimizar el tiempo de carga de nuestros plugins. Por defecto buscará cargar nuestros plugins sólo cuando sea necesario. Ofrece una interfaz agradable para actualizar, inspeccionar y eliminar plugins. También nos permite declarar nuestros plugins usando módulos de lua. Podemos especificar versión, dependencias, configuración, entre otras cosas.
+Este se caracteriza por optimizar el tiempo de carga de nuestros plugins. Por defecto buscará cargar nuestros plugins sólo cuando sea necesario. Ofrece una interfaz agradable para actualizar, inspeccionar y eliminar plugins. También nos permite declarar nuestros plugins usando módulos de lua. Podemos especificar versión, dependencias, configuración, entre otras cosas.
 
-* [vim-packager](https://github.com/kristijanhusak/vim-packager)
+* [mini.deps](https://github.com/echasnovski/mini.deps)
 
-No está escrito en lua pero quise agregarlo porque ofrece una interfaz para lua. También quise listarlo porque ofrece más funcionalidades que `paq` pero menos que `packer`, así que si buscan un punto intermedio este puede ser una buena opción.
+Ofrece un punto intermedio entre `paq-nvim` y `lazy.nvim`. Tiene funcionalidades útiles que no se encuentran en `paq.nvim`, por ejemplo, la habilidad de devolver un plugin a una version anterior. Pero `mini.deps` no tiene opciones avanzadas como `lazy.nvim`.
 
 ## Conclusión
 
 Aprendimos cómo usar lua desde vimscript. Sabemos cómo usar vimscript desde lua. Ahora tenemos todas las herramientas para activar, desactivar y modificar cualquier tipo de opción o variable disponible en neovim. Conocemos los métodos para crear nuestros atajos de teclado. Aprendimos sobre comandos y autocomandos. Sabemos cómo usar un manejador de plugins desde lua ya sea que esté escrito en lua o no. Ya estamos listos.
 
-Para los que quieran ver un ejemplo de la vida real, aquí les algunos recursos.
+Para los que quieren ver un ejemplo de la vida real, aquí les algunos recursos.
 
 Esta es una "plantilla" que pueden copiar y modificar a su gusto:
 
