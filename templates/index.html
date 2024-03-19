@@ -46,8 +46,8 @@
       {% endif%}
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
 
-      {% if config.generate_rss %}
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ get_url(path="rss.xml", trailing_slash=false) }}">
+      {% if config.generate_feed %}
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="{{ get_url(path="atom.xml", trailing_slash=false) }}">
       {% endif %}
 
       {% if config.extra.mastodon %}
@@ -95,6 +95,7 @@
                         {% endfor %}
 
                         <li class="sidebar-nav-item"><a href="{{ change_base_url }}">{{ trans(key="change_language_link", lang=other_lang) }}</a></li>
+                        <li class="sidebar-nav-item"><a href="{{ get_url(path="atom.xml", trailing_slash=false) }}">RSS</a></li>
                         {% endblock sidebar_nav %}
                     </ul>
                     {% if current_year == config.extra.creation_year %}

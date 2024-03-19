@@ -26,6 +26,9 @@ minify_html = true
 # When set to "true", a feed is automatically generated.
 generate_feed = true
 
+# The default author for pages
+author = "Heiker Curiel"
+
 [markdown]
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
