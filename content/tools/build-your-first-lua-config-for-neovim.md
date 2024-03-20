@@ -658,7 +658,7 @@ If we apply (almost) everything we learned here in a single configuration file t
 
 Create a development environment that feels comfortable. Find out what plugins the Neovim community likes to use.
 
-I know is difficult to start from scratch so here is a "starter template" you can check, or even use as your own base configuration. This will give you a hint on what plugins people use.
+I know is difficult to start from scratch so here is a "starter template" you can check, or even use as your own base configuration.
 
 * [nvim-light](https://github.com/VonHeikemen/nvim-light)
 
