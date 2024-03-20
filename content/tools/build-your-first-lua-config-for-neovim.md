@@ -2,7 +2,7 @@
 title = "Build your first Neovim configuration in lua"
 description = "The one where we learn how to customize Neovim and add plugins"
 date = 2022-07-04
-updated = 2024-03-19
+updated = 2024-03-20
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -656,23 +656,17 @@ If we apply (almost) everything we learned here in a single configuration file t
 
 ## What's next?
 
-Maybe install some popular plugins to add fancy features to Neovim.
+Create a development environment that feels comfortable. Find out what plugins the Neovim community likes to use.
 
-* [Plugins to get started](@/tools/neovim-plugins-to-get-started.md)
+I know is difficult to start from scratch so here is a "starter template" you can check, or even use as your own base configuration. This will give you a hint on what plugins people use.
 
-If you feel prepared to tackle more advanced topics you can read this other tutorial. It teaches how to setup an autocompletion engine and also add support for LSP:
-
-* [Setup nvim-lspconfig + nvim-cmp](@/tools/setup-nvim-lspconfig-plus-nvim-cmp.md)
-
-If you want recommendations for plugins and other configurations I suggest you check these configuration templates.
-
-* [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
 * [nvim-light](https://github.com/VonHeikemen/nvim-light)
-* [tinyvim](https://github.com/NvChad/tinyvim)
-* [dope](https://github.com/glepnir/dope)
-* [Launch.nvim](https://github.com/LunarVim/Launch.nvim)
 
-You can also check my personal configuration if you like.
+Another great option is [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). The author of this configuration has a video that explain every line of code in it. It's a good resource to learn about popular plugins and how to configure them.
+
+* [Complete Neovim setup guide](https://www.youtube.com/watch?v=m8C0Cq9Uv9o)
+
+And if you want, you can check my personal configuration.
 
 * [neovim config](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim)
 

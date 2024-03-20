@@ -2,7 +2,7 @@
 title = "Cómo crear tu primera configuración de Neovim usando lua"
 description = "Donde aprendemos cómo personalizar Neovim y agregar plugins"
 date = 2022-07-02
-updated = 2024-03-19
+updated = 2024-03-20
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -652,25 +652,19 @@ Entonces, si aplican (casi) todo lo que les enseñé hoy este sería el resultad
 
 ## ¿Qué sigue?
 
-Tal vez instalar otros plugins, tengo otro artículo que habla sobre plugins populares y cómo configurarlos.
+El siguiente paso es crear un ambiente de desarrollo en el que se sientan productivos. Investiguen qué plugins utiliza la comunidad de Neovim.
 
-* [Plugins para empezar](@/tools/neovim-plugins-to-get-started.es.md)
+Este paso puede ser difícil si no saben dónde empezar, por eso he creado una "plantilla" que pueden revisar o incluso usar como base para su propia configuración personal.
 
-Si ya se sienten preparados para temas más avanzados, el siguiente artículo les enseñará cómo configurar el autocompletado y agregar soporte para servidores LSP: 
-
-* [Configurando nvim-lspconfig + nvim-cmp](@/tools/setup-nvim-lspconfig-plus-nvim-cmp.es.md)
-
-Si quieren recomendaciones de plugins y configuraciones pueden revisar estas plantillas.
-
-* [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim)
 * [nvim-light](https://github.com/VonHeikemen/nvim-light)
-* [tinyvim](https://github.com/NvChad/tinyvim)
-* [dope](https://github.com/glepnir/dope)
-* [Launch.nvim](https://github.com/LunarVim/Launch.nvim)
 
-Si quieren revisar mi configuración personal:
+Otra buena opción sería ir al proyecto [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). El autor de esta configuración tiene un video donde explica cada línea de código. Es un buen recurso para aprender sobre cómo configurar plugins populares.
 
-* [neovim config](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim).
+* [Complete Neovim setup guide](https://www.youtube.com/watch?v=m8C0Cq9Uv9o)
+
+Si quieren, también pueden revisar mi configuración personal.
+
+* [neovim config](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim)
 
 ## Conclusión
 
