@@ -625,7 +625,7 @@ Para los que quieren ver un ejemplo de la vida real, aquí les algunos recursos.
 
 Esta es una "plantilla" que pueden copiar y modificar a su gusto:
 
-* [nvim-light](https://github.com/VonHeikemen/nvim-light)
+* nvim-light: [init.lua](https://github.com/VonHeikemen/nvim-light/blob/main/init.lua) | [github link](https://github.com/VonHeikemen/nvim-light)
 
 Y esta es mi configuración personal en github:
 

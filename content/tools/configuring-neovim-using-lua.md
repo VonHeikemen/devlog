@@ -627,7 +627,7 @@ For those who want to see a real world usage or whatever, I'll share some links
 
 This is a "starter template" you can copy and use as your own config:
 
-* [nvim-light](https://github.com/VonHeikemen/nvim-light) 
+* nvim-light: [init.lua](https://github.com/VonHeikemen/nvim-light/blob/main/init.lua) | [github link](https://github.com/VonHeikemen/nvim-light)
 
 And this my personal config in github:
 

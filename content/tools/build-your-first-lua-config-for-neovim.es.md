@@ -656,7 +656,7 @@ El siguiente paso es crear un ambiente de desarrollo en el que se sientan produc
 
 Este paso puede ser difícil si no saben dónde empezar, por eso he creado una "plantilla" que pueden revisar o incluso usar como base para su propia configuración personal.
 
-* [nvim-light](https://github.com/VonHeikemen/nvim-light)
+* nvim-light: [init.lua](https://github.com/VonHeikemen/nvim-light/blob/main/init.lua) | [github link](https://github.com/VonHeikemen/nvim-light)
 
 Otra buena opción sería ir al proyecto [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). El autor de esta configuración tiene un video donde explica cada línea de código. Es un buen recurso para aprender sobre cómo configurar plugins populares.
 

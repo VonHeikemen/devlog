@@ -660,7 +660,7 @@ Create a development environment that feels comfortable. Find out what plugins t
 
 I know is difficult to start from scratch so here is a "starter template" you can check, or even use as your own base configuration.
 
-* [nvim-light](https://github.com/VonHeikemen/nvim-light)
+* nvim-light: [init.lua](https://github.com/VonHeikemen/nvim-light/blob/main/init.lua) | [github link](https://github.com/VonHeikemen/nvim-light)
 
 Another great option is [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). The author of this configuration has a video that explain every line of code in it. It's a good resource to learn about popular plugins and how to configure them.
 
