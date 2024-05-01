@@ -719,6 +719,7 @@ Some language servers can provide snippets in their code completions, but right 
 
 local function expand_snippet(event)
   local comp = vim.v.completed_item
+  local kind = vim.lsp.protocol.CompletionItemKind
   local item = vim.tbl_get(comp, 'user_data', 'nvim', 'lsp', 'completion_item')
 
   -- Check that we were given a snippet
@@ -726,7 +727,10 @@ local function expand_snippet(event)
     not item
     or not item.insertTextFormat
     or item.insertTextFormat == 1
-    or not (item.kind == vim.lsp.protocol.CompletionItemKind.Snippet)
+    or not (
+      item.kind == kind.Snippet
+      or item.kind == kind.Keyword
+    )
   ) then
     return
   end
@@ -735,8 +739,18 @@ local function expand_snippet(event)
   local cursor = vim.api.nvim_win_get_cursor(0)
   local line = vim.api.nvim_get_current_line()
   local lnum = cursor[1] - 1
-  local start_char = cursor[2] - #comp.word
-  vim.api.nvim_buf_set_text(event.buf, lnum, start_char, lnum, #line, {''})
+  local start_col = cursor[2] - #comp.word
+
+  if start_col < 0 then
+    return
+  end
+
+  local set_text = vim.api.nvim_buf_set_text
+  local ok = pcall(set_text, bufnr, lnum, start_col, lnum, #line, {''})
+
+  if not ok then
+    return
+  end
 
   -- Insert snippet
   local snip_text = vim.tbl_get(item, 'textEdit', 'newText') or item.insertText
