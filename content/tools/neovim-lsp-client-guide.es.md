@@ -2,7 +2,7 @@
 title = "Guía de uso del cliente LSP de Neovim" 
 description = "Agrega funcionalidades dignas de un IDE a Neovim sin instalar plugins de terceros"
 date = 2024-01-13
-updated = 2024-01-18
+updated = 2024-05-01
 lang = "es"
 [taxonomies]
 tags = ["neovim", "shell"]
@@ -761,7 +761,7 @@ Con el módulo `vim.snippet` también podemos saltar entre placeholders dentro d
 -- Control + f: Saltar al siguiente placeholder
 vim.keymap.set({'i', 's'}, '<C-f>', function()
   -- advertencia: api inestable
-  if vim.snippet.jumpable(1) then
+  if vim.snippet.active({direction = 1}) then
     return '<cmd>lua vim.snippet.jump(1)<cr>'
   else
     return '<C-f>'
@@ -771,7 +771,7 @@ end, {expr = true})
 -- Control + b: Saltar al placeholder anterior
 vim.keymap.set({'i', 's'}, '<C-b>', function()
   -- advertencia: api inestable
-  if vim.snippet.jumpable(-1) then
+  if vim.snippet.active({direction = -1}) then
     return '<cmd>lua vim.snippet.jump(-1)<cr>'
   else
     return '<C-b>'
@@ -813,7 +813,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
 
     -- advertencia: api inestable
-    vim.lsp.inlay_hint.enable(event.buf, true)
+    vim.lsp.inlay_hint.enable(true, {bufnr = event.buf})
   end,
 })
 ```

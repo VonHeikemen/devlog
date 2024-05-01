@@ -2,7 +2,7 @@
 title = "A guide on Neovim's LSP client" 
 description = "Enable IDE-like features in Neovim without installing any additional plugins"
 date = 2023-12-25
-updated = 2024-01-18
+updated = 2024-05-01
 lang = "en"
 [taxonomies]
 tags = ["neovim", "shell"]
@@ -761,7 +761,7 @@ vim.api.nvim_create_autocmd('CompleteDone', {
 -- Control + f: Jump to next snippet placeholder
 vim.keymap.set({'i', 's'}, '<C-f>', function()
   -- warning: this api is not stable yet
-  if vim.snippet.jumpable(1) then
+  if vim.snippet.active({direction = 1}) then
     return '<cmd>lua vim.snippet.jump(1)<cr>'
   else
     return '<C-f>'
@@ -771,7 +771,7 @@ end, {expr = true})
 -- Control + b: Jump to previous snippet placeholder
 vim.keymap.set({'i', 's'}, '<C-b>', function()
   -- warning: this api is not stable yet
-  if vim.snippet.jumpable(-1) then
+  if vim.snippet.active({direction = -1}) then
     return '<cmd>lua vim.snippet.jump(-1)<cr>'
   else
     return '<C-b>'
@@ -811,7 +811,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
 
     -- warning: this api is not stable yet
-    vim.lsp.inlay_hint.enable(event.buf, true)
+    vim.lsp.inlay_hint.enable(true, {bufnr = event.buf})
   end,
 })
 ```
