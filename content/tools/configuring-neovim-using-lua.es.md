@@ -2,7 +2,7 @@
 title = "Todo lo que necesitan saber para configurar neovim usando lua"
 description = "Tus primeros pasos hacia una configuración creada en lua"
 date = 2021-07-29
-updated = 2024-03-19
+updated = 2024-07-27
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -629,9 +629,7 @@ Esta es una "plantilla" que pueden copiar y modificar a su gusto:
 
 Y esta es mi configuración personal en github:
 
-* [neovim (v0.6)](https://github.com/VonHeikemen/dotfiles/tree/057f4d604e31ad121c4b4b36fd7e4148483d50c8/my-configs/neovim)
-* [neovim (v0.7)](https://github.com/VonHeikemen/dotfiles/tree/18fb9ab01d171a3d862d2438cd0f8fd2612a3e52/my-configs/neovim)
-* [neovim (v0.8+)](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim)
+* [neovim (v0.10)](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim)
 
 ## Fuentes
 
