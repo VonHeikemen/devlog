@@ -2,7 +2,7 @@
 title = "A guide on Neovim's LSP client" 
 description = "Enable IDE-like features in Neovim without installing any additional plugins"
 date = 2023-12-25
-updated = 2024-05-01
+updated = 2024-07-27
 lang = "en"
 [taxonomies]
 tags = ["neovim", "shell"]
@@ -211,7 +211,7 @@ vim.lsp.set_log_level('debug')
 
 ## About the diagnostics
 
-So the diagnostics signs, the thing Neovim uses to tell us there is an error in our source code... by default the space needed to render that sign is hidden, and when there is a sign the whole screen shifts to the right. That behavior can be configured in the `init.lua` file.
+So the diagnostics signs, the thing Neovim uses to tell us there is an error in our source code... by default the space needed to render that sign is hidden and when there is a sign the whole screen shifts to the right. That behavior can be configured in the `init.lua` file.
 
 If you set the option `signcolumn` to the string `yes`, Neovim will reserve the space for the sign. You will have a whitespace reserved for any type of signs in the gutter.
 
@@ -247,13 +247,15 @@ vim.diagnostic.config({
 })
 ```
 
-To read the diagnostic message of the line under the cursor we can use the function [vim.diagnostic.open_float()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.open_float()) in a keybinding.
+If you have **Neovim v0.10 or greater** you can read the diagnostic message under the cursor with the keybinding `<C-w>d` (control + w then d). This will trigger the function [vim.diagnostic.open_float()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.open_float()).
+
+When using **Neovim v0.9.5 or lower** you'll have to create that keybinding yourself.
 
 ```lua
-vim.keymap.set('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
+vim.keymap.set('n', '<C-w>d', '<cmd>lua vim.diagnostic.open_float()<cr>')
 ```
 
-I would love to explain all the options `vim.diagnostic.config()` supports but we don't have time for that. If you want to know more you can [read the documentation](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()).
+Now, I would love to explain all the options `vim.diagnostic.config()` supports but we don't have time for that. If you want to know more you can [read the documentation](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()).
 
 ## What else do we get for free?
 
@@ -261,7 +263,7 @@ These are things Neovim does when a language server active in the buffer.
 
 **Since Neovim v0.8**
 
-* There is an LSP powered `tagfunc`. That means we can jump to the definition of a function or class using the keybinding `<C-]>` (Control + ]). And can jump back to where we were using `<C-t>`.
+* There is an LSP powered `tagfunc`. That means we can jump to the definition of a function or class using the keybinding `<C-]>` (control + ]). And can jump back to where we were using `<C-t>`.
 
 * The `formatexpr` option is set to a function that uses the language server. This means the `gq` operator can format a piece of code. We can enter visual mode, select a piece of text, press `gq` and Neovim will request the language server to format the code.
 
@@ -275,6 +277,22 @@ These are things Neovim does when a language server active in the buffer.
 
 * In normal mode, if we don't have a custom keybinding for `K` then it will display the available documentation for the symbol under the cursor.
 
+* In normal mode, `<C-w>d` opens a floating window showing the diagnostics in the line under the cursor.
+
+* In normal mode, `[d` and `]d` can be used to move the cursor to the previous and next diagnostic of the current file.
+
+**Since Neovim v0.11**
+
+> v0.11 is still under development. Everything in this section is subject to change.
+
+* In normal mode, `grn` renames all references of the symbol under the cursor.
+
+* In normal mode, `gra` shows a list of code actions available in the line under the cursor.
+
+* In normal mode, `grr` lists all the references of the symbol under the cursor.
+
+* In insert mode, `<Ctrl-s>` displays the function signature of the symbol under the cursor.
+
 ## Let's get some easy wins
 
 Here's a list of features we can use without too much effort, pretty much the only thing we have to do is call a lua function.
@@ -287,8 +305,6 @@ Here's a list of features we can use without too much effort, pretty much the on
 * Rename all references to the symbol under the cursor
 * Format current file (or selected range)
 * List and execute a code action
-* Show diagnostic details
-* Move between diagnostics
 
 All of these can be used in custom keybindings.
 
@@ -302,16 +318,6 @@ So this is one way to setup custom keybindings.
 
 ```lua
 -- you can add this in your init.lua
--- (note: diagnostics are not exclusive to LSP)
-
--- Show diagnostics in a floating window
-vim.keymap.set('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
-
--- Move to the previous diagnostic
-vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
-
--- Move to the next diagnostic
-vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
 
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
@@ -362,7 +368,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 ## Fair warning
 
-Not every language server implements the entire LSP specification. The features they offer depend on the implementation.
+Not every language server implements the entire LSP specification. The features of LSP servers may not be consistent between servers.
 
 For example, intelephense can show diagnostics in real time, there is no need to save the file to get new diagnostics. But [rust-analyzer](https://github.com/rust-lang/rust-analyzer), the language server for rust, can only update diagnostics after saving the file.
 
@@ -378,7 +384,7 @@ At this point I'd say you have all the essential knowledge needed to be producti
 
 Sometimes a language server can support multiple filetypes. An example of this is [tsserver](https://github.com/typescript-language-server/typescript-language-server), the language server for javascript and typescript. In this case a filetype plugin can still work but there is an easier way to go about it.
 
-One option to consider is a "plugin script." In there we can configure the language server in the callback function of a `FileType` autocommand.
+One option to consider is a "global plugin." In there we can configure the language server in the callback function of a `FileType` autocommand.
 
 If you want follow along, install tsserver using this command in the terminal.
 
@@ -430,7 +436,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 This will work exactly like a filetype plugin, except here we are executing one lua function and not an entire file. The advantage of the autocommand is we can define multipe filetypes in the `pattern` property.
 
-By the way, this doesn't have to be a plugin script, we can setup the autocommand in the `init.lua` file.
+By the way, this doesn't have to be a global plugin, we can setup the autocommand in the `init.lua` file.
 
 ### Add borders to floating windows
 
@@ -474,11 +480,11 @@ vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
 
 The only thing we will do here is trigger the function [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()) before Neovim saves a file. And of course, we only do it when there is an active language server.
 
-Important note: most language servers with formatting capabilities have their own style settings. For example, we can have 2 space indent in our Neovim config, but maybe the language server formats the code with 4 space indent. So it's a good idea to check the documentation of the language server to see how to configure that.
+Important note: most language servers with formatting capabilities have their own style settings. For example, we can have 2 space indent in our Neovim config but maybe the language server formats the code with 4 space indent. So it's a good idea to check the documentation of the language server to see how to configure that.
 
 ```lua
 -- You can add this in your init.lua
--- or a plugin script
+-- or a global plugin
 
 local fmt_group = vim.api.nvim_create_augroup('autoformat_cmds', {clear = true})
 
@@ -515,11 +521,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 ### Change diagnostics sign text
 
-When using **Neovim v0.9 or lower** we need to call the function [vim.fn.sign_define()](https://neovim.io/doc/user/builtin.html#sign_define()).
+When using **Neovim v0.9.5 or lower** we need to call the function [vim.fn.sign_define()](https://neovim.io/doc/user/builtin.html#sign_define()).
 
 ```lua
 -- You can add this in your init.lua
--- or a plugin script
+-- or a global plugin
 
 local function sign_define(args)
   vim.fn.sign_define(args.name, {
@@ -539,7 +545,7 @@ When using **Neovim v0.10 or greater** we should do this with `vim.diagnostic.co
 
 ```lua
 -- You can add this in your init.lua
--- or a plugin script
+-- or a global plugin
 
 vim.diagnostic.config({
   signs = {
@@ -561,7 +567,7 @@ This is the code **I use** to disable diagnostics right after going into insert 
 
 ```lua
 -- You can add this in your init.lua
--- or a plugin script
+-- or a global plugin
 
 vim.api.nvim_create_autocmd('ModeChanged', {
   pattern = {'n:i', 'v:s'},
@@ -584,15 +590,13 @@ Neovim's documentation suggest that we "clear" the highlight groups of the `@lsp
 -- You can add this in your init.lua
 -- this should be executed before setting the colorscheme
 
-local function hide_semantic_highlights()
-  for _, group in ipairs(vim.fn.getcompletion('@lsp', 'highlight')) do
-    vim.api.nvim_set_hl(0, group, {})
-  end
-end
-
 vim.api.nvim_create_autocmd('ColorScheme', {
   desc = 'Clear LSP highlight groups',
-  callback = hide_semantic_highlights,
+  callback = function()
+    for _, group in ipairs(vim.fn.getcompletion('@lsp', 'highlight')) do
+      vim.api.nvim_set_hl(0, group, {})
+    end
+  end,
 })
 ```
 
@@ -618,7 +622,7 @@ vim.api.nvim_set_hl(0, 'LspReferenceWrite', {link = 'Search'})
 
 ```lua
 -- You can add this in your init.lua
--- or a plugin script
+-- or a global plugin
 
 -- time it takes to trigger the `CursorHold` event
 vim.opt.updatetime = 400
@@ -657,13 +661,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 In this one we will use the `Tab` (and shift tab) key to navigate between the items in the completion menu. When the completion menu is not visible and the cursor is in a whitespace character, it will insert a tab character. Else, it will trigger the completion menu.
 
-When the language server can provide code completion, it'll use that. Otherwise, it will try to suggest words found in the current buffer.
+When the language server can provide code completion it'll use that. Otherwise, it will try to suggest words found in the current buffer.
 
 Note that you can use the Enter key or `<C-y>` to confirm the current item in the completion menu
 
 ```lua
 -- You can add this in your init.lua
--- or a plugin script
+-- or a global plugin
 
 vim.opt.completeopt = {'menu', 'menuone', 'noselect', 'noinsert'}
 vim.opt.shortmess:append('c')
@@ -709,14 +713,43 @@ vim.keymap.set('i', '<S-Tab>', tab_prev, {expr = true})
 
 ### Expand snippets
 
-> Unstable feature. Neovim v0.10 or greater is required.
+**Neovim v0.11** introduced a new module called [vim.lsp.completion](https://neovim.io/doc/user/lsp.html#lsp-completion), this will extend the behavior of the builtin completion so it can support "additional text edits" a language server can provide. Additional edits can be things like adding missing import statements or expanding code snippets.
 
-Some language servers can provide snippets in their code completions, but right now Neovim doesn't have a mechanism to expand them automatically. Neovim's developers are making progress on this front though, since Neovim v0.10 there is a new module called [vim.snippet](https://neovim.io/doc/user/lua.html#vim.snippet). For the moment it doesn't have any "deep integration" with the completion menu, but in it's current state we can use it to implement our own expand autocommand.
+Right now you have to opt-in to the features `vim.lsp.completion` provides. So, when a language server is active you have to call the [vim.lsp.completion.enable()](https://neovim.io/doc/user/lsp.html#vim.lsp.completion.enable()) function.
 
 ```lua
 -- You can add this in your init.lua
--- or a plugin script
+-- or a global plugin
+vim.opt.completeopt = {'menu', 'menuone', 'noinsert', 'noselect'}
 
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'Enable vim.lsp.completion',
+  callback = function(event)
+    local client_id = vim.tbl_get(event, 'data', 'client_id')
+    if client_id == nil then
+      return
+    end
+
+    -- warning: this api is unstable
+    vim.lsp.completion.enable(true, client_id, event.buf, {autotrigger = false})
+
+    -- warning: this api is unstable
+    -- Trigger lsp completion manually using Ctrl + Space
+    vim.keymap.set('i', '<C-Space>', '<cmd>lua vim.lsp.completion.trigger()<cr>')
+  end
+})
+```
+
+Notice in the last argument to `.enable()` there is a property called `autotrigger`. `false` is the default value so I just leave it like that. If you set it to `true` Neovim will trigger the completion menu when it finds a trigger character. Trigger characters change depending on the language server. In lua for example, the completion will be triggered automatically after a `.` or `:` character.
+
+If you are using **Neovim v0.10** you don't have access to `vim.lsp.completion` but you do have access to the module `vim.snippet`. You can use that to implement your own snippet expand autocommand.
+
+```lua
+-- You can add this in your init.lua
+-- or a global plugin
+
+-- note: this doesn't support "additional text edits" like
+-- adding missing import statements.
 local function expand_snippet(event)
   local comp = vim.v.completed_item
   local kind = vim.lsp.protocol.CompletionItemKind
@@ -754,10 +787,7 @@ local function expand_snippet(event)
 
   -- Insert snippet
   local snip_text = vim.tbl_get(item, 'textEdit', 'newText') or item.insertText
-
   assert(snip_text, "Language server indicated it had a snippet, but no snippet text could be found!")
-
-  -- warning: this api is not stable yet
   vim.snippet.expand(snip_text)
 end
 
@@ -767,14 +797,15 @@ vim.api.nvim_create_autocmd('CompleteDone', {
 })
 ```
 
-`vim.snippet` also supports snippet placeholders. This means we can jump to different places in the current active snippet. Here are some keybindings that we can use.
+`vim.snippet` also supports snippet placeholders. This means we can jump to different places in the current active snippet. In **Neovim v0.11** the default keybindings to navigate between snippets are `Tab` and `Shift + Tab`.
+
+If you are using **Neovim v0.10**, here are some keybindings that you can use.
 
 ```lua
 -- You can add this in your init.lua
 
 -- Control + f: Jump to next snippet placeholder
 vim.keymap.set({'i', 's'}, '<C-f>', function()
-  -- warning: this api is not stable yet
   if vim.snippet.active({direction = 1}) then
     return '<cmd>lua vim.snippet.jump(1)<cr>'
   else
@@ -784,7 +815,6 @@ end, {expr = true})
 
 -- Control + b: Jump to previous snippet placeholder
 vim.keymap.set({'i', 's'}, '<C-b>', function()
-  -- warning: this api is not stable yet
   if vim.snippet.active({direction = -1}) then
     return '<cmd>lua vim.snippet.jump(-1)<cr>'
   else
@@ -794,7 +824,6 @@ end, {expr = true})
 
 -- Control + l: Exit current snippet
 vim.keymap.set({'i', 's'}, '<C-l>', function()
-  -- warning: this api is not stable yet
   if vim.snippet.active() then
     return '<cmd>lua vim.snippet.exit()<cr>'
   else
@@ -805,15 +834,15 @@ end, {expr = true})
 
 ### Enable inlay hints
 
-> Unstable feature. Neovim v0.10 or greater is required.
+> Neovim v0.10 or greater is required.
 
-For this we can use the function [vim.lsp.inlay_hint.enable()](https://neovim.io/doc/user/lsp.html#vim.lsp.inlay_hint.enable()). This one needs to be called on a per file basis. But that's not a problem, we can always use the good old `LspAttach` autocommand.
+For this we can use the function [vim.lsp.inlay_hint.enable()](https://neovim.io/doc/user/lsp.html#vim.lsp.inlay_hint.enable()).
 
 Note that some language servers may have inlay hints disabled by default. The settings needed to enable hints should be in the documentation of the language server.
 
 ```lua
 -- You can add this in your init.lua
--- or a plugin script
+-- or a global plugin
 
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'Enable inlay hints',
@@ -824,7 +853,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
       return
     end
 
-    -- warning: this api is not stable yet
     vim.lsp.inlay_hint.enable(true, {bufnr = event.buf})
   end,
 })
@@ -836,5 +864,5 @@ Hopefully I showed is not difficult to "connect" a language server with Neovim. 
 
 The hard part is gathering all the context inside your head. What does LSP even mean? What's a language server? Filetype plugin? hardly know her. But once you know about the moving pieces and where to find the information you need, it gets easier.
 
-One last thing, don't ignore the basics. Take your time and learn lua, read [Neovim's lua guide](https://neovim.io/doc/user/lua-guide.html), learn how to navigate Neovim's documentation with the `:help` command.
+One last thing, don't ignore the basics. Take your time and learn lua, read [Neovim's lua guide](https://neovim.io/doc/user/lua-guide.html) and learn how to navigate Neovim's documentation with the `:help` command.
 
