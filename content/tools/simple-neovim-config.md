@@ -9,9 +9,9 @@ tags = ["vim", "neovim", "shell"]
 
 Can I offer you a nice Neovim configuration in this trying time?
 
-40 lines of code. That's all you need to have a solid starting point. Believe it or not, even those IDE-like features people talk about online can be enabled using just **1 plugin** and few keymaps.
+40 lines of code. That's all you need to have a solid starting point. Believe it or not, even those IDE-like features people talk about online can be enabled using just **1 plugin** and a few keymaps.
 
-You can try [this simple config](#init-lua) and then add new things to it based on the problems you encounter along the way. Or just read the post and learn about the basics of Neovim configuration.
+You can try [this simple config](#init-lua) and then add new things to it based on the problems you encounter along the way. Or just take this as an oportunity to learn about the basics of Neovim configuration.
 
 ## Installing Neovim
 
@@ -277,7 +277,7 @@ require('mini.files').setup({
 
 This will change the keymap that shows the help window. Instead of `g?` now is `gh` (get help).
 
-These custom settings are in a "lua table." If there is piece of syntax that you should learn is that one. Knowing the correct syntax of a lua table will save you so many headaches.
+These custom settings are in a "lua table." If there is piece of syntax that you should learn is that one. Knowing the correct syntax of a lua table will prevent so many headaches.
 
 And how did I know those settings exists?
 
@@ -289,9 +289,9 @@ In Neovim's command-line I executed this command.
 
 That took me to [the help page of mini.files](https://github.com/echasnovski/mini.nvim/blob/main/doc/mini-files.txt).
 
-Remember when we installed the plugins? We generated some called help tags. These tags allow you to navigate to the internal documentation of the plugin: the help page.
+Remember when we installed the plugins? We generated some called help tags. These tags allow you to navigate to the "offline" documentation of the plugin: the help page.
 
-The tab complete feature of the `:help` is really good too. You can type `:help mini` and then press the `Tab` key, Neovim will show you all the help tags that start with `mini`.
+The tab complete feature of the `:help` command is really good too. You can type `:help mini` and then press the `Tab` key, Neovim will show you all the help tags that start with `mini`.
 
 ## Navigating between files
 
@@ -391,7 +391,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 The Neovim community has created a resource where we can find a list of language servers. This list is in `nvim-lspconfig` documentation: [server_configurations.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
 
-I need some examples for the next step so I'm going to show the install commands for the `go` language server and the `rust` language server.
+Since I need some examples for the next step so I'm going to show the install commands for the `go` language server and the `rust` language server.
 
 If you have the toolchain for the [go programming language](https://go.dev/) you can download its language server (`gopls`) using this command.
 
@@ -432,7 +432,7 @@ Some language servers were created for VS Code, the fact that Neovim and other e
 
 ## Honorable mention
 
-[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is a plugin that has been around for 4 years now. A lot of people will say this is essential to your Neovim experience, and I do agree to some extend. It is incredibly useful... for plugin authors. It allows Neovim to gather more information about source code of the current file. Plugin authors can do really cool things that. For "normal users" like you and me, there [some modules](https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#available-modules) we can enable. One of them can be used to enhance the syntax highlight of many programming languages. That I think **the** feature `nvim-treesitter` is known for.
+[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is a plugin that has been around for 4 years now. A lot of people will say this is essential to your Neovim experience, and I do agree to some extend. It is incredibly useful... for plugin authors. It allows Neovim to gather more information about source code of the current file. Plugin authors can do really cool things that. For "normal users" like you and me there are [some modules](https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#available-modules) we can enable. One of them can be used to enhance the syntax highlight of many programming languages. That I think **the** feature `nvim-treesitter` is known for.
 
 There are things you need to be aware of:
 
@@ -442,7 +442,7 @@ There are things you need to be aware of:
   - It can drop the support for previous versions of Neovim really fast.
 * Is considered experimental.
   - It can introduce breaking changes at any point in time.
-  - It does use `git tags` to track [specific versions](https://github.com/nvim-treesitter/nvim-treesitter/tags), in case you need them.
+  - They do use `git tags` to [track versions](https://github.com/nvim-treesitter/nvim-treesitter/tags), in case you need a specific version.
 
 To know more about `tree-sitter` watch this video: [tree-sitter explained (15 min)](https://www.youtube.com/watch?v=09-9LltqWLY).
 
