@@ -209,11 +209,15 @@ Now navigate to that location using your terminal. You will want to execute the 
 
 * Install [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
 
+We will use this plugin to help us enable IDE-like features.
+
 ```
 git clone https://github.com/neovim/nvim-lspconfig
 ```
 
 * Install [mini.nvim](https://github.com/echasnovski/mini.nvim) 
+
+`mini.nvim` is a collection of lua modules aim to solve common problems and enhance some of Neovim builtin features.
 
 ```
 git clone --filter=blob:none https://github.com/echasnovski/mini.nvim
@@ -331,6 +335,22 @@ require('mini.completion').setup({})
 This is kind of a wrapper around Neovim's builtin completion mechanism. Neovim makes you press specific keybindings depending on the type of completion you want to get. And what `mini.completion` can do is take that burden away from you, by triggering the completion automatically as you type. In other words, it adds true autocompletion to Neovim.
 
 By default you just get suggestions based on words of the current file. But whenever possible it'll try to use the LSP client to provide smart code completion.
+
+To control the completion menu we use Neovim's default keybindings:
+
+* `<Down>`: Select the next item on the list.
+
+* `<Up>`:  Select previous item on the list.
+
+* `<Ctrl-n>`: Select and insert text of the next item on the list.
+
+* `<Ctrl-p>`: Select and insert text of the previous item on the list.
+
+* `<Ctrl-y>`: Confirm selected item.
+
+* `<Ctrl-e>`: Cancel the completion.
+
+* `<Enter>`: If item was selected using `<Up>` or `<Down>` it confirms selection. If no item is selected, hides completion menu. Else, inserts a newline character.
 
 ## The LSP client
 
