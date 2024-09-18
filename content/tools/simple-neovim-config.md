@@ -411,7 +411,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 The Neovim community has created a resource where we can find a list of language servers. This list is in `nvim-lspconfig` documentation: [server_configurations.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
 
-Since I need some examples for the next step so I'm going to show the install commands for the `go` language server and the `rust` language server.
+Since I need some examples for the next step I'm going to show the install commands for the `go` language server and the `rust` language server.
 
 If you have the toolchain for the [go programming language](https://go.dev/) you can download its language server (`gopls`) using this command.
 
@@ -452,7 +452,7 @@ Some language servers were created for VS Code, the fact that Neovim and other e
 
 ## Honorable mention
 
-[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is a plugin that has been around for 4 years now. A lot of people will say this is essential to your Neovim experience, and I do agree to some extend. It is incredibly useful... as a dependency for other plugins. It allows Neovim to gather more information about source code of the current file, and plugin authors can do really cool things that. For "normal users" like you and me there are [some modules](https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#available-modules) we can enable. One of them can be used to enhance the syntax highlight of many programming languages. That I think **the** feature `nvim-treesitter` is known for.
+[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is a plugin that has been around for 4 years now. A lot of people will say this is essential to your Neovim experience, and I do agree to some extend. It is incredibly useful... as a dependency for other plugins. It allows Neovim to gather more information about source code of the current file, and plugin authors can do really cool things with that. For "normal users" like you and me there are [some modules](https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#available-modules) we can enable. One of them can be used to enhance the syntax highlight of many programming languages. That I think **the** feature `nvim-treesitter` is known for.
 
 There are things you need to be aware of:
 
