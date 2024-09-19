@@ -2,6 +2,7 @@
 title = "Simple Neovim config"
 description = "Learn the basics of Neovim configuration in lua"
 date = 2024-09-12
+updated = 2024-09-19
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -46,10 +47,10 @@ There is no need to memorize everything or become a lua expert, just review the 
 
 ## Editor settings
 
-Neovim's defaults are actually good but there are still a few options that need to be enabled/changed. To do this we use [vim.opt](https://neovim.io/doc/user/lua-guide.html#_options). We access a property through `vim.opt` and assign a value to it. Like this.
+Neovim's defaults are actually good but there are still a few options that need to be enabled/changed. To do this in lua [vim.o](https://neovim.io/doc/user/lua-guide.html#_vim.o) is the [recommended method](https://github.com/neovim/neovim/issues/30383#issuecomment-2351519326). We access a property through `vim.o` and assign a value to it. Like this.
 
 ```lua
-vim.opt.option_name = value
+vim.o.option_name = value
 ```
 
 Where `option_name` can be anything on this list: [Quickref - option list](https://neovim.io/doc/user/quickref.html#option-list).
@@ -59,39 +60,39 @@ Here's some basic settings that you may find useful:
 * Enable line numbers.
 
 ```lua
-vim.opt.number = true
+vim.o.number = true
 ```
 
 * Disable line wrapping
 
 ```lua
-vim.opt.wrap = false
+vim.o.wrap = false
 ```
 
 * Adjust the width of the tab character.
 
 ```lua
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
 ```
 
 * Ignore case when the search pattern is all lowercase
 
 ```lua
-vim.opt.smartcase = true
-vim.opt.ignorecase = true
+vim.o.smartcase = true
+vim.o.ignorecase = true
 ```
 
 * Clear search highlights after submit
 
 ```lua
-vim.opt.hlsearch = false
+vim.o.hlsearch = false
 ```
 
 * Reserve a space in the gutter for signs. Some plugins use this to show icons.
 
 ```lua
-vim.opt.signcolumn = 'yes'
+vim.o.signcolumn = 'yes'
 ```
 
 ## Changing Neovim's theme
@@ -187,11 +188,15 @@ vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Exit vim'})
 
 ## Installing plugins
 
-We are going to keep it simple here. No plugin managers (for now), we are going to use [vim packages](https://vonheikemen.github.io/devlog/tools/installing-neovim-plugins-without-a-plugin-manager/). Since you are just getting started, I going to recommend that you just `git clone` plugins in your Neovim config folder. Later on, if you decide that you actually like Neovim you can choose a plugin manager.
+In Neovim there is something called [vim packages](https://vonheikemen.github.io/devlog/tools/installing-neovim-plugins-without-a-plugin-manager/). Long story short, we can put plugins in a folder in they should work.
 
-Where exactly do we download plugins?
+We are going to keep it simple here. 2 plugins is all we want to get started. And because of this I will say we can download the plugins manually.
 
-We are going to use Neovim in headless mode again, this time to create the folder were we can download plugins.
+I going to recommend that you `git clone` plugins in your Neovim config folder (for now). Of course, this means **you** will be in charge of updating and removing plugins manually. But at this point I think the focus should be using Neovim for coding. If you decide that you actually like Neovim then you search for a plugin manager.
+
+Okay. Where exactly do we download plugins?
+
+Let's use Neovim in headless mode again, this time to create the folder were we can download plugins.
 
 This command will create the folder we need.
 
@@ -322,6 +327,7 @@ Then create keymaps to start the search between files.
 ```lua
 vim.keymap.set('n', '<leader><space>', '<cmd>Pick buffers<cr>', {desc = 'Search open files'})
 vim.keymap.set('n', '<leader>ff', '<cmd>Pick files<cr>', {desc = 'Search all files'})
+vim.keymap.set('n', '<leader>fh', '<cmd>Pick help<cr>', {desc = 'Search help tags'})
 ```
 
 ## Code completion
@@ -364,7 +370,7 @@ What do we need to do here? We follow these 3 steps.
 
 ### Step 1: keymaps
 
-The keymaps I'm about to show you are based on the work the Neovim team is doing right now. On `v0.11` and greater they want to enable more keymaps by default, but they haven't decided what is the best "prefix" they can use just yet. At the moment they are trying the prefix `gr` for some of the LSP features.
+Some of the keymaps I'm about to show are based on Neovim's defaults, they do a similar thing as the default keymap but use the LSP client. And the rest will use the prefix `<leader>l`.
 
 We create these keymaps on the autocommand `LspAttach` because we want to follow the same pattern Neovim has, that is enable these features only when there is a language server active in the file.
 
@@ -380,29 +386,29 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Jump to the definition
     vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
 
-    -- Jump to declaration
-    vim.keymap.set('n', 'grd', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-
-    -- Lists all the implementations for the symbol under the cursor
-    vim.keymap.set('n', 'gri', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-
-    -- Jumps to the definition of the type symbol
-    vim.keymap.set('n', 'grt', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-
-    -- Lists all the references
-    vim.keymap.set('n', 'grr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-
-    -- Renames all references to the symbol under the cursor
-    vim.keymap.set('n', 'grn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-
-    -- Selects a code action available at the current cursor position
-    vim.keymap.set('n', 'gra', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+    -- Format current file
+    vim.keymap.set({'n', 'x'}, 'gq', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
 
     -- Displays a function's signature information
     vim.keymap.set('i', '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
 
-    -- Format current file
-    vim.keymap.set({'n', 'x'}, 'gq', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+    -- Jump to declaration
+    vim.keymap.set('n', '<leader>ld', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+
+    -- Lists all the implementations for the symbol under the cursor
+    vim.keymap.set('n', '<leader>li', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+
+    -- Jumps to the definition of the type symbol
+    vim.keymap.set('n', '<leader>lt', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+
+    -- Lists all the references
+    vim.keymap.set('n', '<leader>lr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+
+    -- Renames all references to the symbol under the cursor
+    vim.keymap.set('n', '<leader>ln', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+
+    -- Selects a code action available at the current cursor position
+    vim.keymap.set('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
   end,
 })
 ```
@@ -485,14 +491,14 @@ And this is it. I believe that's all you need to know to get started.
 -- Learn about Neovim's lua api
 -- https://neovim.io/doc/user/lua-guide.html
 
-vim.opt.number = true
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.smartcase = true
-vim.opt.ignorecase = true
-vim.opt.wrap = false
-vim.opt.hlsearch = false
-vim.opt.signcolumn = 'yes'
+vim.o.number = true
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
+vim.o.smartcase = true
+vim.o.ignorecase = true
+vim.o.wrap = false
+vim.o.hlsearch = false
+vim.o.signcolumn = 'yes'
 
 -- Space as the leader key
 vim.g.mapleader = vim.keycode('<Space>')
@@ -515,6 +521,7 @@ vim.keymap.set('n', '<leader>e', '<cmd>lua MiniFiles.open()<cr>', {desc = 'File 
 require('mini.pick').setup({})
 vim.keymap.set('n', '<leader><space>', '<cmd>Pick buffers<cr>', {desc = 'Search open files'})
 vim.keymap.set('n', '<leader>ff', '<cmd>Pick files<cr>', {desc = 'Search all files'})
+vim.keymap.set('n', '<leader>fh', '<cmd>Pick help<cr>', {desc = 'Search help tags'})
 
 -- List of compatible language servers is here:
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
@@ -532,29 +539,29 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Jump to the definition
     vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
 
-    -- Jump to declaration
-    vim.keymap.set('n', 'grd', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-
-    -- Lists all the implementations for the symbol under the cursor
-    vim.keymap.set('n', 'gri', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-
-    -- Jumps to the definition of the type symbol
-    vim.keymap.set('n', 'grt', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-
-    -- Lists all the references
-    vim.keymap.set('n', 'grr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-
-    -- Renames all references to the symbol under the cursor
-    vim.keymap.set('n', 'grn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-
-    -- Selects a code action available at the current cursor position
-    vim.keymap.set('n', 'gra', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+    -- Format current file
+    vim.keymap.set({'n', 'x'}, 'gq', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
 
     -- Displays a function's signature information
     vim.keymap.set('i', '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
 
-    -- Format current file
-    vim.keymap.set({'n', 'x'}, 'gq', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+    -- Jump to declaration
+    vim.keymap.set('n', '<leader>ld', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+
+    -- Lists all the implementations for the symbol under the cursor
+    vim.keymap.set('n', '<leader>li', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+
+    -- Jumps to the definition of the type symbol
+    vim.keymap.set('n', '<leader>lt', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+
+    -- Lists all the references
+    vim.keymap.set('n', '<leader>lr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+
+    -- Renames all references to the symbol under the cursor
+    vim.keymap.set('n', '<leader>ln', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+
+    -- Selects a code action available at the current cursor position
+    vim.keymap.set('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
   end,
 })
 ```
