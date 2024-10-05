@@ -2,7 +2,7 @@
 title = "Setup nvim-lspconfig + nvim-cmp"
 description = "Let's configure Neovim's builtin LSP client with nvim-lspconfig and nvim-cmp"
 date = 2022-05-23
-updated = 2023-11-01
+updated = 2024-10-05
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -37,13 +37,13 @@ Now you know the why, let's move on to the how.
   * [LuaSnip](https://github.com/L3MON4D3/LuaSnip)
   * [friendly-snippets](https://github.com/rafamadriz/friendly-snippets)
 
-In `nvim-lspconfig` documentation you'll find instructions to install the language servers it supports: [server_configurations.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md)
+In `nvim-lspconfig` documentation you'll find instructions to install the language servers it supports: [configs.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md)
 
 ## LSP Config
 
 What we need to do here is use the module `lspconfig` and call the `.setup()` of the language server we want to configure.
 
-How do we know which language servers are supported? lspconfig's documentation has the answer. You can find the list of valid names using `:help lspconfig-server-configurations`.
+How do we know which language servers are supported? lspconfig's documentation has the answer. You can find the list of valid names using `:help lspconfig-all`.
 
 For the language `lua` we can use a server called `lua_ls`. Install it and then call it in your config like this.
 

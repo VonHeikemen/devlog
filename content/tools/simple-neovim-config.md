@@ -2,7 +2,7 @@
 title = "Simple Neovim config"
 description = "Learn the basics of Neovim configuration in lua"
 date = 2024-09-12
-updated = 2024-09-19
+updated = 2024-10-05
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -415,7 +415,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 ### Step 2: Install a language server
 
-The Neovim community has created a resource where we can find a list of language servers. This list is in `nvim-lspconfig` documentation: [server_configurations.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
+The Neovim community has created a resource where we can find a list of language servers. This list is in `nvim-lspconfig` documentation: [configs.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md).
 
 Since I need some examples for the next step I'm going to show the install commands for the `go` language server and the `rust` language server.
 
@@ -524,7 +524,7 @@ vim.keymap.set('n', '<leader>ff', '<cmd>Pick files<cr>', {desc = 'Search all fil
 vim.keymap.set('n', '<leader>fh', '<cmd>Pick help<cr>', {desc = 'Search help tags'})
 
 -- List of compatible language servers is here:
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 require('lspconfig').gopls.setup({})
 require('lspconfig').rust_analyzer.setup({})
 

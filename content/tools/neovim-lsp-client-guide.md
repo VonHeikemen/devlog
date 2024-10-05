@@ -2,7 +2,7 @@
 title = "A guide on Neovim's LSP client" 
 description = "Enable IDE-like features in Neovim without installing any additional plugins"
 date = 2023-12-25
-updated = 2024-07-27
+updated = 2024-10-05
 lang = "en"
 [taxonomies]
 tags = ["neovim", "shell"]
@@ -58,16 +58,16 @@ In case you didn't click on the link to intelephense, you should know that is a 
 
 Before we write any code we should learn how to use the language server. The first piece of information we need is the command that starts the server. This should be in the official documentation of said server.
 
-If we can't find the basic usage in the documentation we can go to [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)'s github repository. In there we look for a folder called [server_configurations](https://github.com/neovim/nvim-lspconfig/tree/master/lua/lspconfig/server_configurations), this contains configuration files for a bunch of language servers.
+If we can't find the basic usage in the documentation we can go to [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)'s github repository. In there we look for a folder called [configs](https://github.com/neovim/nvim-lspconfig/tree/master/lua/lspconfig/configs), this contains configuration files for a bunch of language servers.
 
-Right now we are interested in intelephense, so we should inspect the contents of [intelephense.lua](https://github.com/neovim/nvim-lspconfig/blob/4a69ad6646eaad752901413c9a0dced73dfb562d/lua/lspconfig/server_configurations/intelephense.lua). The thing we are looking for is in a property called `default_config`. This piece of code right here:
+Right now we are interested in intelephense, so we should inspect the contents of [intelephense.lua](https://github.com/neovim/nvim-lspconfig/blob/16666f1bc40f69ce05eb1883fd8c0d076284d8a5/lua/lspconfig/configs/intelephense.lua). The thing we are looking for is in a property called `default_config`. This piece of code right here:
 
 ```lua
 default_config = {
   cmd = { 'intelephense', '--stdio' },
   filetypes = { 'php' },
   root_dir = function(pattern)
-    local cwd = vim.loop.cwd()
+    local cwd = vim.uv.cwd()
     local root = util.root_pattern('composer.json', '.git')(pattern)
 
     -- prefer cwd if root is a descendant
@@ -404,7 +404,7 @@ Next we create a lua script, it can have any name we want. We can call it `tsser
 :edit plugin/tsserver.lua | write
 ```
 
-In `tsserver.lua` we are going to adapt the configuration in [nvim-lspconfig's source code](https://github.com/neovim/nvim-lspconfig/blob/3f6d120721e3a2b2812af43e6a8ba5522aa421c5/lua/lspconfig/server_configurations/tsserver.lua).
+In `ts_ls.lua` we are going to adapt the configuration in [nvim-lspconfig's source code](https://github.com/neovim/nvim-lspconfig/blob/16666f1bc40f69ce05eb1883fd8c0d076284d8a5/lua/lspconfig/configs/ts_ls.lua).
 
 ```lua
 -- plugin/tsserver.lua
@@ -428,7 +428,7 @@ local function start_tsserver()
 end
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = {'javascript', 'javascriptreact', 'typescript', 'typescriptreact'},
+  pattern = {'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'},
   desc = 'Start typescript LSP',
   callback = start_tsserver,
 })

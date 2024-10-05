@@ -2,7 +2,7 @@
 title = "Configurando nvim-lspconfig + nvim-cmp"
 description = "Usando nvim-lspconfig y nvim-cmp para configurar el cliente LSP de Neovim"
 date = 2022-05-21
-updated = 2023-11-01
+updated = 2024-10-05
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -37,7 +37,7 @@ Ahora que sabemos el porqué de las cosas pongamos manos a la obra.
   * [LuaSnip](https://github.com/L3MON4D3/LuaSnip)
   * [friendly-snippets](https://github.com/rafamadriz/friendly-snippets)
 
-En la documentación de `nvim-lspconfig` pueden encontrar instrucciones de cómo instalar algunos servidores: [server_configurations.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md)
+En la documentación de `nvim-lspconfig` pueden encontrar instrucciones de cómo instalar algunos servidores: [configs.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md)
 
 ## Configuración LSP
 
