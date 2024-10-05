@@ -391,9 +391,9 @@ A estas alturas me atrevería a decir que ya tienen el conocimento esencial para
 
 Para esto aún podríamos usar un filetype plugin pero existe una alternativa mejor. Tenemos la opción de crear un "plugin global" y configurar el servidor usando un autocomando con el evento `FileType`.
 
-En esta ocasión vamos a utilizar [tsserver](https://github.com/typescript-language-server/typescript-language-server) como ejemplo. Y si no lo saben, `tsserver` es el servidor LSP para typescript y javascript.
+En esta ocasión vamos a utilizar [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server) como ejemplo.
 
-Si quieren probar el código que les voy a mostrar, deben instalar tsserver usando este comando.
+Si quieren probar el código que les voy a mostrar, deben instalar `typescript-language-server` usando este comando.
 
 ```sh
 npm install -g typescript typescript-language-server

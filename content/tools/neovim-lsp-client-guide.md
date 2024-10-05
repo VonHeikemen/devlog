@@ -382,11 +382,11 @@ At this point I'd say you have all the essential knowledge needed to be producti
 
 ### Configure a language server for multiple filetypes
 
-Sometimes a language server can support multiple filetypes. An example of this is [tsserver](https://github.com/typescript-language-server/typescript-language-server), the language server for javascript and typescript. In this case a filetype plugin can still work but there is an easier way to go about it.
+Sometimes a language server can support multiple filetypes. An example of this is [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server), the language server for javascript and typescript. In this case a filetype plugin can still work but there is an easier way to go about it.
 
 One option to consider is a "global plugin." In there we can configure the language server in the callback function of a `FileType` autocommand.
 
-If you want follow along, install tsserver using this command in the terminal.
+If you want follow along, install `typescript-language-server` using this command in the terminal.
 
 ```sh
 npm install -g typescript typescript-language-server
