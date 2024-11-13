@@ -2,7 +2,7 @@
 title = "A guide on Neovim's LSP client" 
 description = "Enable IDE-like features in Neovim without installing any additional plugins"
 date = 2023-12-25
-updated = 2024-10-05
+updated = 2024-11-13
 lang = "en"
 [taxonomies]
 tags = ["neovim", "shell"]
@@ -291,6 +291,10 @@ These are things Neovim does when a language server active in the buffer.
 
 * In normal mode, `grr` lists all the references of the symbol under the cursor.
 
+* In normal mode, `gri` lists all the implementations for the symbol under the cursor.
+
+* In normal mode, `gO` lists all symbols in the current buffer.
+
 * In insert mode, `<Ctrl-s>` displays the function signature of the symbol under the cursor.
 
 ## Let's get some easy wins
@@ -404,7 +408,7 @@ Next we create a lua script, it can have any name we want. We can call it `tsser
 :edit plugin/tsserver.lua | write
 ```
 
-In `ts_ls.lua` we are going to adapt the configuration in [nvim-lspconfig's source code](https://github.com/neovim/nvim-lspconfig/blob/16666f1bc40f69ce05eb1883fd8c0d076284d8a5/lua/lspconfig/configs/ts_ls.lua).
+In `tsserver.lua` we are going to adapt the configuration in [nvim-lspconfig's source code](https://github.com/neovim/nvim-lspconfig/blob/16666f1bc40f69ce05eb1883fd8c0d076284d8a5/lua/lspconfig/configs/ts_ls.lua).
 
 ```lua
 -- plugin/tsserver.lua
@@ -584,23 +588,25 @@ vim.api.nvim_create_autocmd('ModeChanged', {
 
 ### Disable semantic highlights
 
-Neovim's documentation suggest that we "clear" the highlight groups of the `@lsp` namespace. So, we can do this.
+To opt-out of this feature Neovim's documentation suggest that we "delete" a property from the LSP client instance.
 
 ```lua
 -- You can add this in your init.lua
--- this should be executed before setting the colorscheme
+-- or a global plugin
 
-vim.api.nvim_create_autocmd('ColorScheme', {
-  desc = 'Clear LSP highlight groups',
-  callback = function()
-    for _, group in ipairs(vim.fn.getcompletion('@lsp', 'highlight')) do
-      vim.api.nvim_set_hl(0, group, {})
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'Disable LSP semantic highlights',
+  callback = function(event)
+    local id = vim.tbl_get(event, 'data', 'client_id')
+    local client = id and vim.lsp.get_client_by_id(id)
+    if client == nil then
+      return
     end
+
+    client.server_capabilities.semanticTokensProvider = nil
   end,
 })
 ```
-
-The `ColorScheme` autocommand should be created before setting up the colorscheme. This way Neovim can clear the highlights even if we change the colorscheme in the middle of a coding session.
 
 ### Highlight symbol under cursor
 
@@ -825,7 +831,7 @@ end, {expr = true})
 -- Control + l: Exit current snippet
 vim.keymap.set({'i', 's'}, '<C-l>', function()
   if vim.snippet.active() then
-    return '<cmd>lua vim.snippet.exit()<cr>'
+    return '<cmd>lua vim.snippet.stop()<cr>'
   else
     return '<C-l>'
   end

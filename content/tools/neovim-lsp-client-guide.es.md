@@ -2,7 +2,7 @@
 title = "Guía de uso del cliente LSP de Neovim" 
 description = "Agrega funcionalidades dignas de un IDE a Neovim sin instalar plugins de terceros"
 date = 2024-01-13
-updated = 2024-10-05
+updated = 2024-11-13
 lang = "es"
 [taxonomies]
 tags = ["neovim", "shell"]
@@ -294,6 +294,10 @@ Cuando un servidor LSP está activo en un archivo Neovim habilita ciertas funcio
 * En modo normal, el atajo `gra` muestra una lista de "code actions" disponibles para la línea actual.
 
 * En modo normal, el atajo `grr` muestra todas las referencias del símbolo debajo del cursor.
+
+* En modo normal, el atajo `gri` muestra la implementación del símbolo debajo del cursor.
+
+* En modo normal, el atajo `gO` muestra lista todos los símbolos que existen en el archivo actual.
 
 * En modo de inserción, el atajo `<Ctrl-s>` (Control + s) muestra documentación de los argumentos de la función debajo del cursor.
 
@@ -592,23 +596,25 @@ vim.api.nvim_create_autocmd('ModeChanged', {
 
 ### Deshabilitar resaltado semántico
 
-La documentación de Neovim sugiere "despejar" los grupos de resaltado con el prefijo `@lsp`. Entonces, deberíamos hacer algo como esto.
+La documentación de Neovim sugiere modificar la instancia del cliente LSP. Debemos "eliminar" la propiedad que activa el resaltado semántico.
 
 ```lua
 -- Pueden agregar esto en su archivo `init.lua`
--- este código debe ejecutarse antes de configurar el tema del editor
+-- o un script en la carpeta plugin
 
-vim.api.nvim_create_autocmd('ColorScheme', {
+vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'Deshabilitar resaltado semántico',
-  callback = function()
-    for _, group in ipairs(vim.fn.getcompletion('@lsp', 'highlight')) do
-      vim.api.nvim_set_hl(0, group, {})
+  callback = function(event)
+    local id = vim.tbl_get(event, 'data', 'client_id')
+    local client = id and vim.lsp.get_client_by_id(id)
+    if client == nil then
+      return
     end
+
+    client.server_capabilities.semanticTokensProvider = nil
   end,
 })
 ```
-
-Debemos crear el autocomando `ColorScheme` antes de configurar el tema del editor. De esta manera Neovim puede deshabilitar el resaltado incluso si cambiamos de tema en medio de una sesión.
 
 ### Resaltar símbolo debajo del cursor
 
@@ -836,7 +842,7 @@ end, {expr = true})
 -- Control + l: "Salir" del snippet activo
 vim.keymap.set({'i', 's'}, '<C-l>', function()
   if vim.snippet.active() then
-    return '<cmd>lua vim.snippet.exit()<cr>'
+    return '<cmd>lua vim.snippet.stop()<cr>'
   else
     return '<C-l>'
   end
