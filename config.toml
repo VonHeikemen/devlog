@@ -24,7 +24,7 @@ taxonomies = [{name = "tags"}]
 minify_html = true
 
 # When set to "true", a feed is automatically generated.
-generate_feed = true
+generate_feeds = true
 
 # The default author for pages
 author = "Heiker Curiel"
