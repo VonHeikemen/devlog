@@ -3,7 +3,6 @@ title = "Una configuración simple para Neovim"
 description = "Aprende lo básico para configurar Neovim usando lua"
 date = 2024-11-23
 lang = "es"
-draft = true
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
 +++
