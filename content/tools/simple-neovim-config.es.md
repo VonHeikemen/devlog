@@ -139,7 +139,7 @@ La mayoría de las configuraciones que he visto usan la tecla `Espacio` como lí
 vim.g.mapleader = ' '
 ```
 
-Sí, colocan un espacio en blanco. Esto es lo que la genta hacía antes de que Neovim agregara la función `vim.keycode`. Pero ahora que `vim.keycode` está disponible ustedes pueden hacer esto:
+Sí, colocan un espacio en blanco. Esto es lo que la gente hacía antes de que Neovim agregara la función `vim.keycode`. Pero ahora que `vim.keycode` está disponible ustedes pueden hacer esto:
 
 ```lua
 vim.g.mapleader = vim.keycode('<Space>')
@@ -149,7 +149,7 @@ Ahora bien, para que la variable `mapleader` tenga efecto en nuestros atajos deb
 
 ## Ejecutando comandos
 
-Ya estamos listos para crear atajos que ejecuten comando de vim, lo que se conoce como [Ex-commands](https://neovim.io/doc/user/vimindex.html#_6.-ex-commands). 
+Ya estamos listos para crear atajos que ejecuten comandos de vim, lo que se conoce como [Ex-commands](https://neovim.io/doc/user/vimindex.html#_6.-ex-commands). 
 
 Podemos hacer esto de varias maneras pero esta es mi favorita:
 
@@ -157,7 +157,7 @@ Podemos hacer esto de varias maneras pero esta es mi favorita:
 <cmd>...<cr>
 ```
 
-`<cmd>` es una secuencia especial que le indica a Neovim que queremos ejecutar una expresión. Y `<cr>` represanta la tecla `Enter`, lo que marca el fin de la expresión que queremos ejecutar.
+`<cmd>` es una secuencia especial que le indica a Neovim que queremos ejecutar una expresión. Y `<cr>` representa la tecla `Enter`, lo que marca el fin de la expresión que queremos ejecutar.
 
 Por ejemplo:
 
@@ -175,7 +175,7 @@ vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Salir de vim'})
 
 ## Instalando plugins
 
-En Neovim tenemos acceso a algo llamado [vim packages](@/tools/installing-neovim-plugins-without-a-plugin-manager.es.md). Esto quiere decir que para instalar un plugin lo único que debemos hacer es descargarlo en la ubicación correcta.
+Neovim tiene una funcionalidad llamada [vim packages](@/tools/installing-neovim-plugins-without-a-plugin-manager.es.md). Esto quiere decir que para instalar un plugin lo único que debemos hacer es descargarlo en la ubicación correcta.
 
 Para no complicarnos mucho sólo vamos a descargar 2 plugins. Y ya que vamos por el camino de la simplicidad, haremos el proceso de instalación de forma manual.
 
@@ -183,7 +183,7 @@ Podemos usar el comando `git clone` para descargar plugins de Neovim que se encu
 
 Bien. ¿Cómo se descarga un plugin?
 
-Vamos a usar Neovim en modo headless otra vez. En la terminal vamos a ejecutar el comando para crear la carpeta podemos descargar los plugins.
+Vamos a usar Neovim en modo headless otra vez. En la terminal vamos a ejecutar el comando para crear la carpeta donde debemos descargar los plugins.
 
 ```sh
 nvim --headless -c 'call mkdir(stdpath("config") . "/pack/vendor/start/", "p")' -c 'quit'
@@ -233,7 +233,7 @@ nvim
 
 ## Explorador de archivos
 
-Neovim ya tiene un explorador archivos, se [llama netrw](@/tools/using-netrw-vim-builtin-file-explorer.es.md). Yo no lo uso porque tiene algunas peculiaridades que no me agradan. Aquí voy recomendarles [mini.files](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-files.md), el explorador de archivos de `mini.nvim`.
+Neovim ya tiene un explorador archivos, se [llama netrw](@/tools/using-netrw-vim-builtin-file-explorer.es.md). Yo no lo uso porque tiene algunas peculiaridades que no me agradan. Aquí voy a recomendarles [mini.files](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-files.md), el explorador de archivos de `mini.nvim`.
 
 Para usar `mini.files` debemos invocar la función `setup()` del módulo correspondiente.
 
@@ -319,9 +319,9 @@ Para esto podemos usar el módulo [mini.completion](https://github.com/echasnovs
 require('mini.completion').setup({})
 ```
 
-Este módulo utiliza el mecanismo nativo de Neovim y le hace algunas "mejoras." Por defecto ustedes deben presionar atajos específicos dependiendo del tipo de completado que quieren activar. `mini.completion` nos libera de esa carga, activando el completado de código mientras escribimos. En otras palabras, `mini.completion` hace posible tener autocompletado real dentro de Neovim.
+Este módulo utiliza el mecanismo nativo de Neovim y le hace algunas "mejoras." Por defecto debemos presionar atajos específicos dependiendo del tipo de completado que queremos activar. `mini.completion` nos libera de esa carga, activando el completado de código mientras escribimos. En otras palabras, `mini.completion` hace posible tener autocompletado real dentro de Neovim.
 
-Por defecto `mini.completion` activa las sugerencias basadas en las palabras que se encuentren en el archivo actual. Pero de ser posible utiliza el cliente LSP de Neovim para sugerencias más relevantes.
+Por defecto `mini.completion` activa las sugerencias basadas en las palabras que se encuentren en el archivo actual. Pero de ser posible utiliza el cliente LSP de Neovim para mostrar sugerencias más relevantes.
 
 Para controlar el menú de sugerencias utilizamos los atajos nativos de Neovim:
 
@@ -341,9 +341,9 @@ Para controlar el menú de sugerencias utilizamos los atajos nativos de Neovim:
 
 ## Cliente LSP
 
-El cliente LSP es lo que hace posible que Neovim obtenga funcionalidades que antes sólo podías encuentrar en un IDE. Cosas como saltar a la definición de una clase, renombrar una variable, inspeccionar los argumentos de una función. Ustedes entienden. Pero este "cliente" no funciona por sí solo, necesitamos un servidor. En este caso un "servidor" debe ser un programa externo que implementa el [protocolo LSP](https://microsoft.github.io/language-server-protocol/overviews/lsp/overview/). Si desean conocer más del protocolo LSP y los servidores LSP, pueden ver este video: [LSP explained (5 min)](https://www.youtube.com/watch?v=LaS32vctfOY).  
+El cliente LSP es lo que hace posible que Neovim obtenga funcionalidades que antes sólo podías encuentrar en un IDE. Cosas como saltar a la definición de una clase, renombrar una variable, inspeccionar los argumentos de una función. Ustedes entienden. Pero este "cliente" no funciona por sí solo, necesitamos un servidor. En este caso un "servidor" debe ser un programa externo que implementa el [protocolo LSP](https://microsoft.github.io/language-server-protocol/overviews/lsp/overview/). Si desean conocer más del protocolo LSP y los servidores LSP pueden ver este video: [LSP explained (5 min)](https://www.youtube.com/watch?v=LaS32vctfOY).  
 
-Para usar el cliente LSP vamos seguir estos pasos:
+Para usar el cliente LSP vamos a seguir estos pasos:
 
 * Crear atajos de teclado.
 * Instalar un servidor LSP.
@@ -395,7 +395,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 ### Paso 2: Instalar un servidor LSP
 
-La comunidad de Neovim ha creado un recurso donde podemos encontrar una lista de servidores LSP que podemos usar. Esta se encuentra en la documentación del plugin `nvim-lspconfig`, en el archivo [doc/configs.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md).
+La comunidad de Neovim ha creado un recurso donde podemos encontrar una lista de servidores LSP. Esta se encuentra en la documentación del plugin `nvim-lspconfig`, en el archivo [doc/configs.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md).
 
 Me gusta proveer ejemplos prácticos que ustedes pueden probar, así que voy a mostrarles los comandos para instalar el servidor LSP de los lenguajes `go` y `rust`.
 
@@ -405,7 +405,7 @@ Si ya tienen en su sistema la [herramienta para go](https://go.dev/doc/install),
 go install golang.org/x/tools/gopls@latest
 ```
 
-Para `rust`, si ya tienen instalado [rustup](https://rust-lang.github.io/rustup/) pueden instalar el servidor LSP oficial, `rust_analyzer`, usando este comando.
+Para `rust`, si ya tienen [rustup](https://rust-lang.github.io/rustup/) pueden instalar el servidor LSP `rust_analyzer`.
 
 ```
 rustup component add rust-analyzer
@@ -428,7 +428,7 @@ require('lspconfig').gopls.setup({})
 require('lspconfig').rust_analyzer.setup({})
 ```
 
-Les aconsejo que lean la documentación de cada servidor LSP que instalen. Por lo general ahí es donde pueden encontrar instrucciones de uso, pasos de instalación y métodos de configuración.
+Les aconsejo que lean la documentación de cada servidor LSP que instalen. Por lo general ahí pueden encontrar instrucciones de uso, pasos de instalación y métodos de configuración.
 
 ### Deben tener en cuenta...
 
@@ -438,13 +438,13 @@ Algunos servidores LSP fueron creados exclusivamente para VS Code. El hecho de q
 
 ## Mención honorífica
 
-[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) es un plugin que fue creado 2020. Mucha gente en la comunidad de Neovim dirá que este plugin es indispensable, y yo concuerdo hasta cierto punto. Es un plugin increíble... cuando otro plugin lo utiliza como dependencia. Verán, `tree-sitter` le permite a Neovim recopilar información sobre el archivo actual, y los autores de plugins pueden hacer cosas grandiosas con esa información. Para los "usuarios normales" como nosotros existen algunos módulos que podemos habilitar. Uno de esos módulos puede mejorar el resaltado de código de muchos lenguajes de programación. Esa es la característica principal por la que `nvim-treesitter` se volvió famoso.
+[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) es un plugin que fue creado 2020. Mucha gente en la comunidad de Neovim dirá que es indispensable, y yo concuerdo hasta cierto punto. Es un plugin increíble... cuando otro plugin lo utiliza como dependencia. Verán, `tree-sitter` le permite a Neovim recopilar información sobre el archivo actual, y los autores de plugins pueden hacer cosas grandiosas con esa información. Para los "usuarios normales" como nosotros existen algunos módulos que podemos habilitar. Uno de esos módulos puede mejorar el resaltado de código de muchos lenguajes de programación. Esa es la característica principal por la que `nvim-treesitter` se volvió famoso.
 
-Pero hay cosas que deben tener saber:
+Pero hay cosas que deben saber:
 
 * Necesita un compilador de `C`.
   - Por lo general no es problema en `linux` o `mac` pero en `windows` es un tema complicado.
-* Sólo garantiza soporte para la versión estable actual de Neovim
+* Sólo garantiza soporte para la versión estable actual de Neovim.
   - Puede dejar el soporte para versiones previas en cualquier momento.
 * Se considera como un plugin experimental.
   - Puede introducir cambios drásticos en cualquier momento.
@@ -452,7 +452,7 @@ Pero hay cosas que deben tener saber:
 
 Para conocer más detalles de `tree-sitter` pueden ver este video: [tree-sitter explained (15 min)](https://www.youtube.com/watch?v=09-9LltqWLY).
 
-Si quieren probar este plugin, pueden agregar este código para habilitar el módulo de resaltado de código.
+Si quieren probar nvim-treesitter, este es el código para habilitar el módulo de resaltado de código.
 
 ```lua
 require('nvim-treesitter.configs').setup({
