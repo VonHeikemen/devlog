@@ -86,5 +86,6 @@ hyde_sticky = true
 hyde_reverse = false
 hyde_links = [ {url = "/", name = "whoami"} ]
 twitter = {user = "@VonHeikemen_", link = "https://twitter.com/VonHeikemen_"}
+bluesky = {user = "@vonheikemen.bsky.social", link = "https://bsky.app/profile/vonheikemen.bsky.social"}
 mastodon = {user = "@vonheikemen@hachyderm.io", link = "https://hachyderm.io/@vonheikemen"}
 

@@ -84,6 +84,11 @@
           {{ config.extra.twitter.user }}
         </a></li> 
       {% endif %}
+      {% if config.extra.bluesky %}
+        <li>Bluesky <a rel="noopener me" target="_blank" href="{{ config.extra.bluesky.link }}">
+          {{ config.extra.bluesky.user }}
+        </a></li> 
+      {% endif %}
       {% if config.extra.mastodon %}
       <li>Mastodon <a rel="noopener me" target="_blank" href="{{ config.extra.mastodon.link }}">
         {{ config.extra.mastodon.user }}
