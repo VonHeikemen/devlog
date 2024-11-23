@@ -188,7 +188,7 @@ vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Exit vim'})
 
 ## Installing plugins
 
-In Neovim there is something called [vim packages](https://vonheikemen.github.io/devlog/tools/installing-neovim-plugins-without-a-plugin-manager/). Long story short, we can put plugins in a folder in they should work.
+In Neovim there is something called [vim packages](@/tools/installing-neovim-plugins-without-a-plugin-manager.md). Long story short, we can put plugins in a folder in they should work.
 
 We are going to keep it simple here. 2 plugins is all we want to get started. And because of this I will say we can download the plugins manually.
 
@@ -250,7 +250,7 @@ Remember to delete the `pack` folder when you start using a plugin manager. You'
 
 ## File explorer
 
-You should know that Neovim already has a file explorer, [it's called netrw](https://vonheikemen.github.io/devlog/tools/using-netrw-vim-builtin-file-explorer/). We are not going to use it here because it has a few quirks I dislike. Still, I think you should know it exists.
+You should know that Neovim already has a file explorer, [it's called netrw](@/tools/using-netrw-vim-builtin-file-explorer.md). We are not going to use it here because it has a few quirks I dislike. Still, I think you should know it exists.
 
 Since we have `mini.nvim` available let's use the file explorer it provides: [mini.files](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-files.md).
 
