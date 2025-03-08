@@ -2,6 +2,7 @@
 title = "Una configuración simple para Neovim"
 description = "Aprende lo básico para configurar Neovim usando lua"
 date = 2024-11-23
+updated = 2025-03-07
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -13,7 +14,9 @@ Pueden usar [esta configuración](#init-lua) como un punto de partida y luego va
 
 ## Instalando Neovim
 
-Necesitamos Neovim en su versión v0.10 o mayor. La versión v0.10 fue publicada el `16 de mayo del 2024`, no todos los "package managers" nativos de los sistemas operativos tienen esa versión disponible.
+Para la configuración que les voy a mostrar necesitamos Neovim en su versión v0.9 o mayor. Pero deben tener en cuenta que muchos plugins escritos en lua sólo garantizan soporte para la versión estable actual. En este momento sería v0.10, que fue publicada el `16 de mayo del 2024`.
+
+Si su sistema operativo está basado en linux deben prestar atención a la versión de Neovim que está disponible en su manejador de paquetes.
 
 Si saben cómo instalar ejecutables pre-compilados pueden ir a la sección [releases](https://github.com/neovim/neovim/releases) del repositorio de Neovim y descargan la versión estable actual.
 
@@ -89,7 +92,7 @@ vim.o.hlsearch = false
 Para cambiar el tema del editor debemos usar el comando `colorscheme`. Y para invocar un comando en lua usamos [vim.cmd](https://neovim.io/doc/user/lua-guide.html#_vim-commands). Entonces en nuestra configuración podemos hacer esto:
 
 ```lua
-vim.cmd.colorscheme('retrobox')
+vim.cmd.colorscheme('habamax')
 ```
 
 ## Portapapeles
@@ -139,7 +142,7 @@ La mayoría de las configuraciones que he visto usan la tecla `Espacio` como lí
 vim.g.mapleader = ' '
 ```
 
-Sí, colocan un espacio en blanco. Esto es lo que la gente hacía antes de que Neovim agregara la función `vim.keycode`. Pero ahora que `vim.keycode` está disponible ustedes pueden hacer esto:
+Sí, colocan un espacio en blanco. Esto es lo que la gente hacía antes de que Neovim agregara la función `vim.keycode`. Pero si tienen Neovim v0.10 pueden hacer esto:
 
 ```lua
 vim.g.mapleader = vim.keycode('<Space>')
@@ -313,13 +316,14 @@ vim.keymap.set('n', '<leader>fh', '<cmd>Pick help<cr>', {desc = 'Listar help tag
 
 ## Autocompletado de código
 
-Para esto podemos usar el módulo [mini.completion](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-completion.md). 
+Para esto podemos usar [mini.completion](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-completion.md) y [mini.snippets](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-snippets.md). 
 
 ```lua
+require('mini.snippets').setup({})
 require('mini.completion').setup({})
 ```
 
-Este módulo utiliza el mecanismo nativo de Neovim y le hace algunas "mejoras." Por defecto debemos presionar atajos específicos dependiendo del tipo de completado que queremos activar. `mini.completion` nos libera de esa carga, activando el completado de código mientras escribimos. En otras palabras, `mini.completion` hace posible tener autocompletado real dentro de Neovim.
+`mini.completion` utiliza el mecanismo nativo de Neovim y le hace algunas mejoras. Por defecto debemos presionar atajos específicos dependiendo del tipo de completado que queremos activar. `mini.completion` nos libera de esa carga, activando el completado de código mientras escribimos. En otras palabras, `mini.completion` hace posible tener autocompletado real dentro de Neovim.
 
 Por defecto `mini.completion` activa las sugerencias basadas en las palabras que se encuentren en el archivo actual. Pero de ser posible utiliza el cliente LSP de Neovim para mostrar sugerencias más relevantes.
 
@@ -338,6 +342,8 @@ Para controlar el menú de sugerencias utilizamos los atajos nativos de Neovim:
 * `<Ctrl-e>`: Cancela el proceso de completado y esconde el menú.
 
 * `<Enter>`: Si el item fue seleccionado con `<Up>` o `<Down>` confirma la selección. Si no hay ningún item seleccionado, esconde el menú. Si no, inserta un salto de línea.
+
+Desafortunadamente, el menú de completado de código en Neovim no ofrece ningún suporte para "snippets" de código. Para eso tenemos `mini.snippets`. Vale la pena mencionar que las nuevas versiones de Neovim sí tienen un suporte básico para snippets... pero incluso la versión más reciente no tiene tantas funcionalidades como `mini.snippets`.
 
 ## Cliente LSP
 
@@ -438,7 +444,7 @@ Algunos servidores LSP fueron creados exclusivamente para VS Code. El hecho de q
 
 ## Mención honorífica
 
-[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) es un plugin que fue creado 2020. Mucha gente en la comunidad de Neovim dirá que es indispensable, y yo concuerdo hasta cierto punto. Es un plugin increíble... cuando otro plugin lo utiliza como dependencia. Verán, `tree-sitter` le permite a Neovim recopilar información sobre el archivo actual, y los autores de plugins pueden hacer cosas grandiosas con esa información. Para los "usuarios normales" como nosotros existen algunos módulos que podemos habilitar. Uno de esos módulos puede mejorar el resaltado de código de muchos lenguajes de programación. Esa es la característica principal por la que `nvim-treesitter` se volvió famoso.
+[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) es un plugin que fue creado en 2020. Mucha gente en la comunidad de Neovim dirá que es indispensable, y yo concuerdo hasta cierto punto. Es un plugin increíble... cuando otro plugin lo utiliza como dependencia. Verán, `tree-sitter` le permite a Neovim recopilar información sobre el archivo actual, y los autores de plugins pueden hacer cosas grandiosas con esa información. Para los "usuarios casuales" como nosotros existen algunos módulos que podemos habilitar. Uno de esos módulos puede mejorar el resaltado de código de muchos lenguajes de programación. Esa es la característica principal por la que `nvim-treesitter` se volvió famoso.
 
 Pero hay cosas que deben saber:
 
@@ -479,7 +485,7 @@ vim.o.hlsearch = false
 vim.o.signcolumn = 'yes'
 
 -- Tecla Espacio como <leader>
-vim.g.mapleader = vim.keycode('<Space>')
+vim.g.mapleader = ' '
 
 -- Interación con el portapapeles
 vim.keymap.set({'n', 'x', 'o'}, 'gy', '"+y', {desc = 'Copiar al portapapel'})
@@ -490,8 +496,9 @@ vim.keymap.set('n', '<leader>w', '<cmd>write<cr>', {desc = 'Guardar'})
 vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Salir de vim'})
 
 -- Tema del editor
-vim.cmd.colorscheme('retrobox')
+vim.cmd.colorscheme('habamax')
 
+require('mini.snippets').setup({})
 require('mini.completion').setup({})
 
 require('mini.files').setup({})

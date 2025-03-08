@@ -2,7 +2,7 @@
 title = "Simple Neovim config"
 description = "Learn the basics of Neovim configuration in lua"
 date = 2024-09-12
-updated = 2024-10-05
+updated = 2025-03-07
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -16,7 +16,9 @@ You can try [this simple config](#init-lua) and then add new things to it based 
 
 ## Installing Neovim
 
-We are going to need Neovim v0.10 or greater. v0.10 was released on `May 16 2024` so it's still somewhat recent. Not every package manager will have that version available.
+We are going to need Neovim v0.9 or greater. But you must be aware a lot of plugins written in lua only guarantee support for the latest stable version. Right now that's v0.10 which was released on `May 16 2024`.
+
+If you are on linux, pay attention to the version your package manager has available.
 
 If you know how to install precompiled binaries you can download the latest version from the [github releases](https://github.com/neovim/neovim/releases).
 
@@ -100,7 +102,7 @@ vim.o.signcolumn = 'yes'
 The way we do this in lua is using [vim.cmd](https://neovim.io/doc/user/lua-guide.html#_vim-commands). Use `vim.cmd` to execute the command `colorscheme`.
 
 ```lua
-vim.cmd.colorscheme('retrobox')
+vim.cmd.colorscheme('habamax')
 ```
 
 ## Clipboard interaction
@@ -152,7 +154,7 @@ Most people use the `Space key` as their leader key.
 vim.g.mapleader = ' '
 ```
 
-Yes, that's a string with a blank space. `vim.keycode` is a recent addition to Neovim, before that function was added people just did that thing with the blank space. But you, you can be explicit if you want.
+Yes, that's a string with a blank space. `vim.keycode` was added in Neovim v0.10, so before that people just did that thing with the blank space. So if you have it, then you can make it more explicit.
 
 ```lua
 vim.g.mapleader = vim.keycode('<Space>')
@@ -332,13 +334,14 @@ vim.keymap.set('n', '<leader>fh', '<cmd>Pick help<cr>', {desc = 'Search help tag
 
 ## Code completion
 
-For this we use the [mini.completion](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-completion.md) module.
+For this we will use [mini.completion](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-completion.md) and [mini.snippets](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-snippets.md).
 
 ```lua
+require('mini.snippets').setup({})
 require('mini.completion').setup({})
 ```
 
-This is kind of a wrapper around Neovim's builtin completion mechanism. Neovim makes you press specific keybindings depending on the type of completion you want to get. And what `mini.completion` can do is take that burden away from you, by triggering the completion automatically as you type. In other words, it adds true autocompletion to Neovim.
+`mini.completion` is kind of a wrapper around Neovim's builtin completion mechanism. Neovim makes you press specific keybindings depending on the type of completion you want to get. And what `mini.completion` can do is take that burden away from you, by triggering the completion automatically as you type. In other words, it adds true autocompletion to Neovim.
 
 By default you just get suggestions based on words of the current file. But whenever possible it'll try to use the LSP client to provide smart code completion.
 
@@ -357,6 +360,8 @@ To control the completion menu we use Neovim's default keybindings:
 * `<Ctrl-e>`: Cancel the completion.
 
 * `<Enter>`: If item was selected using `<Up>` or `<Down>` it confirms selection. If no item is selected, hides completion menu. Else, inserts a newline character.
+
+Unfortunately, Neovim's builtin completion mechanism does not offer any support for snippets by default. That's why we have `mini.snippets`. But to be fair, newer versions of Neovim do have some support for snippets... but even with that, it still doesn't offer as many features as `mini.snippets`.
 
 ## The LSP client
 
@@ -458,7 +463,7 @@ Some language servers were created for VS Code, the fact that Neovim and other e
 
 ## Honorable mention
 
-[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is a plugin that has been around for 4 years now. A lot of people will say this is essential to your Neovim experience, and I do agree to some extend. It is incredibly useful... as a dependency for other plugins. It allows Neovim to gather more information about source code of the current file, and plugin authors can do really cool things with that. For "normal users" like you and me there are [some modules](https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#available-modules) we can enable. One of them can be used to enhance the syntax highlight of many programming languages. That I think **the** feature `nvim-treesitter` is known for.
+[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is a plugin that has been around since 2020. A lot of people will say it's essential to your Neovim experience, and I do agree to some extend. It is incredibly useful... as a dependency for other plugins. It allows Neovim to gather more information about source code of the current file, and plugin authors can do really cool things with that. For "regular users" like you and me there are [some modules](https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#available-modules) we can enable. One of them can be used to enhance the syntax highlight of many programming languages. That I think **the** feature `nvim-treesitter` is known for.
 
 There are things you need to be aware of:
 
@@ -501,7 +506,7 @@ vim.o.hlsearch = false
 vim.o.signcolumn = 'yes'
 
 -- Space as the leader key
-vim.g.mapleader = vim.keycode('<Space>')
+vim.g.mapleader = ' '
 
 -- Basic clipboard interaction
 vim.keymap.set({'n', 'x', 'o'}, 'gy', '"+y', {desc = 'Copy to clipboard'})
@@ -511,8 +516,9 @@ vim.keymap.set({'n', 'x', 'o'}, 'gp', '"+p', {desc = 'Paste clipboard text'})
 vim.keymap.set('n', '<leader>w', '<cmd>write<cr>', {desc = 'Save file'})
 vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Exit vim'})
 
-vim.cmd.colorscheme('retrobox')
+vim.cmd.colorscheme('habamax')
 
+require('mini.snippets').setup({})
 require('mini.completion').setup({})
 
 require('mini.files').setup({})
