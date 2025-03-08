@@ -101,8 +101,19 @@ vim.o.signcolumn = 'yes'
 
 The way we do this in lua is using [vim.cmd](https://neovim.io/doc/user/lua-guide.html#_vim-commands). Use `vim.cmd` to execute the command `colorscheme`.
 
+Ideally, we would do something like this.
+
 ```lua
-vim.cmd.colorscheme('habamax')
+vim.cmd.colorscheme('retrobox')
+```
+
+There is nothing wrong with the example above. That is the correct way to change the theme. However, `retrobox` is a recent a addition to Neovim. If you have Neovim v0.9.5 or lower the command will fail. For the sake of backwards compatibility I will recommend using a "protective call," this way you can setup a backup theme just in case.
+
+```lua
+local ok_theme = pcall(vim.cmd.colorscheme, 'retrobox')
+if not ok_theme then
+  vim.cmd.colorscheme('habamax')
+end
 ```
 
 ## Clipboard interaction
@@ -516,7 +527,10 @@ vim.keymap.set({'n', 'x', 'o'}, 'gp', '"+p', {desc = 'Paste clipboard text'})
 vim.keymap.set('n', '<leader>w', '<cmd>write<cr>', {desc = 'Save file'})
 vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Exit vim'})
 
-vim.cmd.colorscheme('habamax')
+local ok_theme = pcall(vim.cmd, 'colorscheme retrobox')
+if not ok_theme then
+  vim.cmd('colorscheme habamax')
+end
 
 require('mini.snippets').setup({})
 require('mini.completion').setup({})

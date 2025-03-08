@@ -92,7 +92,16 @@ vim.o.hlsearch = false
 Para cambiar el tema del editor debemos usar el comando `colorscheme`. Y para invocar un comando en lua usamos [vim.cmd](https://neovim.io/doc/user/lua-guide.html#_vim-commands). Entonces en nuestra configuración podemos hacer esto:
 
 ```lua
-vim.cmd.colorscheme('habamax')
+vim.cmd.colorscheme('retrobox')
+```
+
+El problema es que `retrobox` fue agregado a Neovim recientemente. Si tienen Neovim v0.9.5 o una versión menor, el comando va a fallar. Entonces, para garantizar la compatiblidad recomiendo usar la función `pcall`. Así evitamos que un posible error interrumpa la ejecución de nuestra configuración.
+
+```lua
+local ok_theme = pcall(vim.cmd.colorscheme, 'retrobox')
+if not ok_theme then
+  vim.cmd.colorscheme('habamax')
+end
 ```
 
 ## Portapapeles
@@ -496,7 +505,10 @@ vim.keymap.set('n', '<leader>w', '<cmd>write<cr>', {desc = 'Guardar'})
 vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Salir de vim'})
 
 -- Tema del editor
-vim.cmd.colorscheme('habamax')
+local ok_theme = pcall(vim.cmd.colorscheme, 'retrobox')
+if not ok_theme then
+  vim.cmd.colorscheme('habamax')
+end
 
 require('mini.snippets').setup({})
 require('mini.completion').setup({})
