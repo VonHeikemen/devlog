@@ -2,7 +2,7 @@
 title = "Una configuración simple para Neovim"
 description = "Aprende lo básico para configurar Neovim usando lua"
 date = 2024-11-23
-updated = 2025-03-07
+updated = 2025-03-08
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -292,6 +292,12 @@ Podemos navegar a la documentación "offline" de un plugin usando el comando `:h
 Ese comando los llevará a [la página de ayuda de mini.files](https://github.com/echasnovski/mini.nvim/blob/main/doc/mini-files.txt).
 
 Vale la pena mencionar que pueden usar la tecla `Tab` para autocompletar el argumento del comando `:help`. Por ejemplo, si escriben `:help mini` y luego presionan `Tab` aparecerá una lista de todos los tags que contienen la palabra `mini`. 
+
+Si la fuente (tipo de letra) que tienen configurada en su terminal no contiene "íconos" pueden usar el módulo [mini.icons](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-icons.md). En la propiedad `style` colocan el valor `ascii`.
+
+```lua
+require('mini.icons').setup({style = 'ascii'})
+```
 
 ## Navegando entre archivos
 

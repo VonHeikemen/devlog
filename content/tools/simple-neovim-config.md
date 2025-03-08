@@ -2,7 +2,7 @@
 title = "Simple Neovim config"
 description = "Learn the basics of Neovim configuration in lua"
 date = 2024-09-12
-updated = 2025-03-07
+updated = 2025-03-08
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -314,6 +314,12 @@ That took me to [the help page of mini.files](https://github.com/echasnovski/min
 Remember when we installed the plugins? We generated some called help tags. These tags allow you to navigate to the "offline" documentation of the plugin: the help page.
 
 The tab complete feature of the `:help` command is really good too. You can type `:help mini` and then press the `Tab` key, Neovim will show you all the help tags that start with `mini`.
+
+One more thing, if the font on your terminal doesn't support "icons" then you can add the [mini.icons](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-icons.md) module. Set the `style` property to `ascii`.
+
+```lua
+require('mini.icons').setup({style = 'ascii'})
+```
 
 ## Navigating between files
 
