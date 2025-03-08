@@ -527,9 +527,9 @@ vim.keymap.set({'n', 'x', 'o'}, 'gp', '"+p', {desc = 'Paste clipboard text'})
 vim.keymap.set('n', '<leader>w', '<cmd>write<cr>', {desc = 'Save file'})
 vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Exit vim'})
 
-local ok_theme = pcall(vim.cmd, 'colorscheme retrobox')
+local ok_theme = pcall(vim.cmd.colorscheme, 'retrobox')
 if not ok_theme then
-  vim.cmd('colorscheme habamax')
+  vim.cmd.colorscheme('habamax')
 end
 
 require('mini.snippets').setup({})
