@@ -2,7 +2,7 @@
 title = "Simple Neovim config"
 description = "Learn the basics of Neovim configuration in lua"
 date = 2024-09-12
-updated = 2025-03-08
+updated = 2025-05-15
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -10,13 +10,13 @@ tags = ["vim", "neovim", "shell"]
 
 Can I offer you a nice Neovim configuration in this trying time?
 
-40 lines of code. That's all you need to have a solid starting point. Believe it or not, even those IDE-like features people talk about online can be enabled using just **1 plugin** and a few keymaps.
+50 lines of code. That's all you need to have a solid starting point. Believe it or not, even those IDE-like features people talk about online can be enabled using just **1 plugin** and a few keymaps.
 
 You can try [this simple config](#init-lua) and then add new things to it based on the problems you encounter along the way. Or just take this as an oportunity to learn about the basics of Neovim configuration.
 
 ## Installing Neovim
 
-We are going to need Neovim v0.9 or greater. But you must be aware a lot of plugins written in lua only guarantee support for the latest stable version. Right now that's v0.10 which was released on `May 16 2024`.
+We are going to need Neovim v0.9 or greater. But you must be aware a lot of plugins written in lua only guarantee support for the latest stable version. Right now that's v0.11.1 which was released on `April 26, 2025`.
 
 If you are on linux, pay attention to the version your package manager has available.
 
@@ -125,13 +125,13 @@ By default when you copy some text using the `y` keymap Neovim will store that i
 Now, I like to keep the default behavior and what I do is create new keymaps to use the system clipboard.
 
 ```lua
-vim.keymap.set({'n', 'x', 'o'}, 'gy', '"+y', {desc = 'Copy to clipboard'})
-vim.keymap.set({'n', 'x', 'o'}, 'gp', '"+p', {desc = 'Paste clipboard text'})
+vim.keymap.set({'n', 'x'}, 'gy', '"+y', {desc = 'Copy to clipboard'})
+vim.keymap.set({'n', 'x'}, 'gp', '"+p', {desc = 'Paste clipboard text'})
 ```
 
 With this `gy` will be the keymap to copy content to the clipboard, and `gp` will paste content from the clipboard to Neovim.
 
-Side note: `{'n', 'x', 'o'}` is the list of vim modes where we want our keymap to be created. `n` is normal mode, `x` is visual mode and `o` is operator pending mode.
+Side note: `{'n', 'x'}` is the list of vim modes where we want our keymap to be created. `n` is normal mode and `x` is visual mode.
 
 ## The leader key
 
@@ -231,6 +231,12 @@ We will use this plugin to help us enable IDE-like features.
 
 ```
 git clone https://github.com/neovim/nvim-lspconfig
+```
+
+**Important**: `nvim-lspconfig` no longer supports older versions of Neovim. If you need support for Neovim v0.9 use the [tag v1.8.0](https://github.com/neovim/nvim-lspconfig/releases/tag/v1.8.0).
+
+```
+git switch --detach v1.8.0
 ```
 
 * Install [mini.nvim](https://github.com/echasnovski/mini.nvim) 
@@ -382,7 +388,7 @@ Unfortunately, Neovim's builtin completion mechanism does not offer any support 
 
 ## The LSP client
 
-Neovim's LSP client is the thing that enables the nice IDE-like features people like so much. Things like go to definition, rename variable, inspect function signature. You get the idea. But this "client" doesn't work on its own, it needs a server. In this case a "server" is an external program that implements the [LSP specification](https://microsoft.github.io/language-server-protocol/overviews/lsp/overview/). If you want to know more details about LSP and language servers, watch this video by TJ DeVries: [LSP explained (5 min)](https://www.youtube.com/watch?v=LaS32vctfOY).
+Neovim's LSP client is the thing that enables the nice IDE-like features. Things like go to definition, rename variable, inspect function signature. You get the idea. But this "client" doesn't work on its own, it needs a server. In this case a "server" is an external program that implements the [LSP specification](https://microsoft.github.io/language-server-protocol/overviews/lsp/overview/). If you want to know more details about LSP and language servers, watch this video by TJ DeVries: [LSP explained (5 min)](https://www.youtube.com/watch?v=LaS32vctfOY).
 
 What do we need to do here? We follow these 3 steps.
 
@@ -455,22 +461,60 @@ rustup component add rust-analyzer
 
 ### Step 3: Configure a language server
 
-For each language server you have installed in your system you have to add their setup function using this syntax.
+Now you have to "enable" each language server you have installed in your system.
+
+On **Neovim v0.11** you can use the function [vim.lsp.enable()](https://neovim.io/doc/user/lsp.html#vim.lsp.enable()).
+
+```lua
+vim.lsp.enable('example_server')
+```
+
+On **Neovim v0.10** or lower you must use the "legacy setup" function of `nvim-lspconfig`.
 
 ```lua
 require('lspconfig').example_server.setup({})
 ```
 
-Where `example_server` is the name of the language server we have installed.
-
 If you have the language server for `go` and `rust` you would do this.
+
+```lua
+vim.lsp.enable({'gopls', 'rust_analyzer'})
+```
+
+Or this.
 
 ```lua
 require('lspconfig').gopls.setup({})
 require('lspconfig').rust_analyzer.setup({})
 ```
 
-I do recommend that you read the documentation of the language server you want to use. That's usually the place were you find installation instructions, configuration settings and other stuff.
+If you want your config to be backwards compatible you can write a function that uses the correct method.
+
+```lua
+-- This function will use the "legacy setup" on older Neovim version.
+-- The new api is only available on Neovim v0.11 or greater.
+local function lsp_setup(server, opts)
+  if vim.fn.has('nvim-0.11') == 0 then
+    require('lspconfig')[server].setup(opts)
+    return
+  end
+
+  if not vim.tbl_isempty(opts) then
+    vim.lsp.config(server, opts)
+  end
+
+  vim.lsp.enable(server)
+end
+```
+
+Then you can write the setup like this:
+
+```lua
+lsp_setup('gopls', {})
+lsp_setup('rust_analyzer', {})
+```
+
+Do note there are a handful of language servers that can't be configured with `vim.lsp.enable()`. The list of missing servers is in this github issue: [nvim-lspconfig/issues/3705](https://github.com/neovim/nvim-lspconfig/issues/3705).
 
 ### Keep in mind
 
@@ -526,8 +570,8 @@ vim.o.signcolumn = 'yes'
 vim.g.mapleader = ' '
 
 -- Basic clipboard interaction
-vim.keymap.set({'n', 'x', 'o'}, 'gy', '"+y', {desc = 'Copy to clipboard'})
-vim.keymap.set({'n', 'x', 'o'}, 'gp', '"+p', {desc = 'Paste clipboard text'})
+vim.keymap.set({'n', 'x'}, 'gy', '"+y', {desc = 'Copy to clipboard'})
+vim.keymap.set({'n', 'x'}, 'gp', '"+p', {desc = 'Paste clipboard text'})
 
 -- Command shortcuts
 vim.keymap.set('n', '<leader>w', '<cmd>write<cr>', {desc = 'Save file'})
@@ -548,11 +592,6 @@ require('mini.pick').setup({})
 vim.keymap.set('n', '<leader><space>', '<cmd>Pick buffers<cr>', {desc = 'Search open files'})
 vim.keymap.set('n', '<leader>ff', '<cmd>Pick files<cr>', {desc = 'Search all files'})
 vim.keymap.set('n', '<leader>fh', '<cmd>Pick help<cr>', {desc = 'Search help tags'})
-
--- List of compatible language servers is here:
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
-require('lspconfig').gopls.setup({})
-require('lspconfig').rust_analyzer.setup({})
 
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
@@ -590,5 +629,25 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
   end,
 })
+
+-- This function will use the "legacy setup" on older Neovim version.
+-- The new api is only available on Neovim v0.11 or greater.
+local function lsp_setup(server, opts)
+  if vim.fn.has('nvim-0.11') == 0 then
+    require('lspconfig')[server].setup(opts)
+    return
+  end
+
+  if not vim.tbl_isempty(opts) then
+    vim.lsp.config(server, opts)
+  end
+
+  vim.lsp.enable(server)
+end
+
+-- List of compatible language servers is here:
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+lsp_setup('gopls', {})
+lsp_setup('rust_analyzer', {})
 ```
 

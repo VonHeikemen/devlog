@@ -2,19 +2,19 @@
 title = "Una configuración simple para Neovim"
 description = "Aprende lo básico para configurar Neovim usando lua"
 date = 2024-11-23
-updated = 2025-03-08
+updated = 2025-05-15
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
 +++
 
-40 líneas de código es suficiente para tener una buena configuración en Neovim. Y puede que no me crean esto pero sólo necesitamos **1 plugin** para tener acceso a ciertas funcionalidades que generalmente encuentran en un IDE.
+50 líneas de código es suficiente para tener una buena configuración en Neovim. Y puede que no me crean esto pero sólo necesitamos **1 plugin** para tener acceso a ciertas funcionalidades que generalmente encuentran en un IDE.
 
 Pueden usar [esta configuración](#init-lua) como un punto de partida y luego van agregando cosas nuevas cuando encuentren algún problema. O, simplemente veanlo como una oportunidad para aprender los conceptos básicos de la configuración de Neovim.
 
 ## Instalando Neovim
 
-Para la configuración que les voy a mostrar necesitamos Neovim en su versión v0.9 o mayor. Pero deben tener en cuenta que muchos plugins escritos en lua sólo garantizan soporte para la versión estable actual. En este momento sería v0.10, que fue publicada el `16 de mayo del 2024`.
+Para la configuración que les voy a mostrar necesitamos Neovim en su versión v0.9 o mayor. Pero deben tener en cuenta que muchos plugins escritos en lua sólo garantizan soporte para la versión estable actual. En este momento sería v0.11.1, que fue publicada el `26 de abril del 2025`.
 
 Si su sistema operativo está basado en linux deben prestar atención a la versión de Neovim que está disponible en su manejador de paquetes.
 
@@ -111,13 +111,13 @@ Cuando copiamos un pedazo de texto usando el atajo `y` Neovim lo guarda en un re
 Lo que hago en mi configuración personal es crear atajos específicos para interactuar con el portapapeles usando la función [vim.keymap.set()](https://neovim.io/doc/user/lua-guide.html#_mappings).
 
 ```lua
-vim.keymap.set({'n', 'x', 'o'}, 'gy', '"+y', {desc = 'Copiar al portapapel'})
-vim.keymap.set({'n', 'x', 'o'}, 'gp', '"+p', {desc = 'Pegar del portapapel'})
+vim.keymap.set({'n', 'x'}, 'gy', '"+y', {desc = 'Copiar al portapapel'})
+vim.keymap.set({'n', 'x'}, 'gp', '"+p', {desc = 'Pegar del portapapel'})
 ```
 
 Con esto el atajo `gy` copia texto de Neovim al portapapeles del sistema, y `gp` pega texto del portapapel a Neovim.
 
-Nota: `{'n', 'x', 'o'}` es la lista de modos de Neovim donde podemos ejecutar el atajo. `n` es modo normal, `x` es modo visual y `o` es el modo operador pendiente.
+Nota: `{'n', 'x'` es la lista de modos de Neovim donde podemos ejecutar el atajo. `n` es modo normal y `x` es modo visual.
 
 ## Tecla líder
 
@@ -215,6 +215,12 @@ Este es el plugin que nos ayudará a tener esas funcionalidades como las de un I
 
 ```
 git clone https://github.com/neovim/nvim-lspconfig
+```
+
+**Importante**: `nvim-lspconfig` ya no tiene soporte para versiones anteriores de Neovim. Si están usando Neovim v0.9 cambien al [tag v1.8.0](https://github.com/neovim/nvim-lspconfig/releases/tag/v1.8.0).
+
+```
+git switch --detach v1.8.0
 ```
 
 * Instalar [mini.nvim](https://github.com/echasnovski/mini.nvim)
@@ -434,22 +440,62 @@ rustup component add rust-analyzer
 
 ### Paso 3: Configurar un servidor LSP
 
-Por cada servidor LSP que tienen instalado en su sistema deben incluir la función `.setup()` correspondiente. Deben utilizar esta sintaxis.
+Ahora deben "habilitar" cada servidor LSP instalado en el sistema.
+
+En **Neovim v0.11** pueden usar la función [vim.lsp.enable()](https://neovim.io/doc/user/lsp.html#vim.lsp.enable()).
+
+```lua
+vim.lsp.enable('example_server')
+```
+
+Pero en **Neovim v0.10** o alguna versión anterior, deben usar la función `.setup()` del módulo `lspconfig`.
 
 ```lua
 require('lspconfig').example_server.setup({})
 ```
 
-Donde `example_server` debe ser el nombre del servidor.
+En estos ejemplos `example_server` debe ser el nombre del servidor.
 
-Para utilizar los servidores LSP de `go` y `rust` deben incluir estas funciones.
+Para utilizar los servidores LSP de `go` y `rust` podemos usar este método.
+
+```lua
+vim.lsp.enable({'gopls', 'rust_analyzer'})
+```
+
+O este.
 
 ```lua
 require('lspconfig').gopls.setup({})
 require('lspconfig').rust_analyzer.setup({})
 ```
 
-Les aconsejo que lean la documentación de cada servidor LSP que instalen. Por lo general ahí pueden encontrar instrucciones de uso, pasos de instalación y métodos de configuración.
+Si quieren que su configuración sea compatible en diferentes versiones de Neovim pueden crear una función que invoque el método correcto de acuerdo a la versión de Neovim que están usando.
+
+```lua
+-- Esta función utiliza el módulo lspconfig en versiones anteriores de Neovim.
+-- vim.lsp.enable() sólo está disponible en Neovim v0.11
+local function lsp_setup(server, opts)
+  if vim.fn.has('nvim-0.11') == 0 then
+    require('lspconfig')[server].setup(opts)
+    return
+  end
+
+  if not vim.tbl_isempty(opts) then
+    vim.lsp.config(server, opts)
+  end
+
+  vim.lsp.enable(server)
+end
+```
+
+Ahora pueden configurar sus servidores de esta manera:
+
+```lua
+lsp_setup('gopls', {})
+lsp_setup('rust_analyzer', {})
+```
+
+Bien. Por los momentos hay un puñado de servidores LSP que no pueden ser habilitados usando `vim.lsp.enable()`. La lista de servidores que aún no pueden usar el nuevo método está aquí: [nvim-lspconfig/issues/3705](https://github.com/neovim/nvim-lspconfig/issues/3705).
 
 ### Deben tener en cuenta...
 
@@ -527,11 +573,6 @@ vim.keymap.set('n', '<leader><space>', '<cmd>Pick buffers<cr>', {desc = 'Listar 
 vim.keymap.set('n', '<leader>ff', '<cmd>Pick files<cr>', {desc = 'Listar todos los archivos'})
 vim.keymap.set('n', '<leader>fh', '<cmd>Pick help<cr>', {desc = 'Listar help tags'})
 
--- Lista de servidores LSP:
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
-require('lspconfig').gopls.setup({})
-require('lspconfig').rust_analyzer.setup({})
-
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(event)
     local opts = {buffer = event.buf}
@@ -567,5 +608,25 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
   end,
 })
+
+-- Esta función utiliza el módulo lspconfig en versiones anteriores de Neovim.
+-- vim.lsp.enable() sólo está disponible en Neovim v0.11
+local function lsp_setup(server, opts)
+  if vim.fn.has('nvim-0.11') == 0 then
+    require('lspconfig')[server].setup(opts)
+    return
+  end
+
+  if not vim.tbl_isempty(opts) then
+    vim.lsp.config(server, opts)
+  end
+
+  vim.lsp.enable(server)
+end
+
+-- Lista de servidores LSP:
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+lsp_setup('gopls', {})
+lsp_setup('rust_analyzer', {})
 ```
 
