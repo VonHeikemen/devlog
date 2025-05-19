@@ -12,7 +12,7 @@ shared = []
 
 Maybe I should have called this "How to enable IDE-like features without third party plugins." Sounds interesting, right? That's basically what I want to show you here.
 
-I'm going to explain how to use the new configuration method that was introduced in Neovim v0.11. And I want to show it works because it's basically a layer on top of existing features. This way you can make your own setup even on older Neovim versions.
+I'm going to explain how to use the new configuration method that was introduced in Neovim v0.11. And I want to show how it works because it's basically a layer on top of existing features. This way you can make your own setup even on older Neovim versions.
 
 ## Requirements
 
