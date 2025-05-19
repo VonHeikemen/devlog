@@ -2,7 +2,7 @@
 title = "A guide on Neovim's LSP client" 
 description = "Enable IDE-like features in Neovim without installing any additional plugins"
 date = 2023-12-25
-updated = 2024-11-13
+updated = 2025-05-19
 lang = "en"
 [taxonomies]
 tags = ["neovim", "shell"]
