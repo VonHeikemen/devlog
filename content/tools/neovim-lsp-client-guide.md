@@ -12,21 +12,23 @@ shared = []
 
 Maybe I should have called this "How to enable IDE-like features without third party plugins." Sounds interesting, right? That's basically what I want to show you here.
 
-We don't need any third party plugins, but we do need this:
+I'm going to explain how to use the new configuration method that was introduced in Neovim v0.11. And I want to show it works because it's basically a layer on top of existing features. This way you can make your own setup even on older Neovim versions.
+
+## Requirements
 
 1. Neovim v0.8 or greater.
 2. A language server.
 3. Patience/Energy to write some lua code for each language server.
 
-If you want to implement any of this stuff in your own configuration, consider dedicating a little bit of time to learn the basics of lua. Here are a couple of links to help you with that:
+If you don't know anything about lua here are a couple of links that can help you learn the basics:
 
 * [Lua crash course (11 min video)](https://www.youtube.com/watch?v=NneB6GX1Els)
 * [Learn X in Y minutes: Where X = lua](https://learnxinyminutes.com/docs/lua/)
-* And... there is also [Neovim's official lua guide](https://neovim.io/doc/user/lua-guide.html)
+* [Neovim's official lua guide](https://neovim.io/doc/user/lua-guide.html)
 
 ## Let's start with the language server
 
-A language server is an external program that follows the [Language Server Protocol](https://microsoft.github.io/language-server-protocol/). The LSP specification defines what type of messages a language server can receive, and also how it should respond. The idea here is that [any tool that follows the LSP specification](https://microsoft.github.io/language-server-protocol/implementors/tools/) can communicate with a language server.
+A language server is an external program that follows the [Language Server Protocol](https://microsoft.github.io/language-server-protocol/). The LSP specification defines what type of messages a language server can receive and also how it should respond. The idea here is that [any tool that follows the LSP specification](https://microsoft.github.io/language-server-protocol/implementors/tools/) can communicate with a language server.
 
 And so the language server is the thing that analyzes our source code and it can tell the editor what to do.
 
@@ -36,164 +38,179 @@ The website for the LSP specification [has a list](https://microsoft.github.io/l
 
 ### In this particular case...
 
-I'm going to use [intelephense](https://intelephense.com/) to show the minimal configuration needed to setup a language server in Neovim.
+I want to use [Gleam](https://gleam.run/) and [LuaLS](https://github.com/LuaLS/lua-language-server) as examples.
 
-If you want to test intelephense you need to install [NodeJS](https://nodejs.org/en). And then you can install the server running this command in the terminal.
+Gleam is a toolchain. It has a compiler, a formatter and a language server. Install instructions are in the official documentation: [Getting started](https://gleam.run/getting-started/installing/).
 
-```sh
-npm install -g intelephense
-```
+LuaLS is a language server for lua. You can download it from [github releases](https://github.com/LuaLS/lua-language-server/releases/latest) or [build it from source](https://luals.github.io/wiki/build/).
 
-Once you have a language server installed it's a good idea to check if Neovim "knows" where it is. You can execute this command inside Neovim.
+Once you have a language server installed it's a good idea to check if Neovim "knows" where it is. You can check that using the function [exepath()](https://neovim.io/doc/user/builtin.html#exepath()).
+
+For Gleam you want to search for the `gleam` executable.
 
 ```vim
-:echo exepath('intelephense')
+:echo exepath('gleam')
 ```
 
-This should show you the path to the language server executable. If it doesn't, it means something went wrong during the installation.
+LuaLS' executable is called `lua-language-server`.
 
-In case you didn't click on the link to intelephense, you should know that is a language server for php. If you just want to test the code I show here, you don't need the php interpreter installed, just the source code of a php project. You can use this repository: [minicli](https://github.com/minicli/minicli), is a decent size codebase and doesn't depend on any other php libraries.
+```vim
+:echo exepath('lua-language-server')
+```
+
+This should show you the path to the executable. If it doesn't, it means something went wrong during the installation.
 
 ## Basic Usage
 
-Before we write any code we should learn how to use the language server. The first piece of information we need is the command that starts the server. This should be in the official documentation of said server.
+Before we write any code we should learn how to use the language server. This should be in the official documentation of said server.
 
-If we can't find the basic usage in the documentation we can go to [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)'s github repository. In there we look for a folder called [configs](https://github.com/neovim/nvim-lspconfig/tree/master/lua/lspconfig/configs), this contains configuration files for a bunch of language servers.
+If we can't find the basic usage in the documentation we can go to [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)'s github repository. In there we look for a folder called [lsp](https://github.com/neovim/nvim-lspconfig/tree/master/lsp), this contains configuration files for a bunch of language servers.
 
-Right now we are interested in intelephense, so we should inspect the contents of [intelephense.lua](https://github.com/neovim/nvim-lspconfig/blob/16666f1bc40f69ce05eb1883fd8c0d076284d8a5/lua/lspconfig/configs/intelephense.lua). The thing we are looking for is in a property called `default_config`. This piece of code right here:
+Say we are interested in Gleam, we should go and inspect the contents of [gleam.lua](https://github.com/neovim/nvim-lspconfig/blob/ac1dfbe3b60e5e23a2cff90e3bd6a3bc88031a57/lsp/gleam.lua#L8).
 
 ```lua
-default_config = {
-  cmd = { 'intelephense', '--stdio' },
-  filetypes = { 'php' },
-  root_dir = function(pattern)
-    local cwd = vim.uv.cwd()
-    local root = util.root_pattern('composer.json', '.git')(pattern)
-
-    -- prefer cwd if root is a descendant
-    return util.path.is_descendant(cwd, root) and cwd or root
-  end,
-},
+return {
+  cmd = { 'gleam', 'lsp' },
+  filetypes = { 'gleam' },
+  root_markers = { 'gleam.toml', '.git' },
+}
 ```
 
-The `cmd` property has the command we need to start the language server. `filetypes` is the list of languages the server can handle. And I'm going to talk about the `root_dir` in a little while.
+This shows the minimum amount of information we need to make a language server work.
 
-## Execute on filetype
+The `cmd` property has the command we need to start the language server. Remember, language servers are external programs so `gleam lsp` is a valid command you can type on the terminal. And funny enough, if you do that it'll give you this message.
 
-Since we only need intelephense in php files we can use something called a filetype plugin. That's a script that gets executed after Neovim assigns a filetype to a buffer.
+```
+This command is intended to be run by language server clients such
+as a text editor rather than being run directly in the console.
+```
 
-We create a filetype plugin in our Neovim configuration simply by adding a script in the folder `ftplugin`. Note that the name of the script needs to be the same as a valid filetype.
+`filetypes` is the list of languages the server can handle. These must be valid filetype names that Neovim supports.
 
-We can navigate to Neovim's configuration folder, open Neovim and then create the `ftplugin` folder.
+`root_markers` should be a list of files or folders. We will use this to determine the root of the project.
+
+## The lsp folder
+
+This `lsp` folder is not something unique only `nvim-lspconfig` can have. Since **Neovim v0.11** it is now part of the `runtimepath`. This means we can have an `lsp` folder inside our own personal configuration.
+
+Imagine a Neovim config folder with this structure:
+
+```
+nvim
+├── init.vim
+├── .nvim.lua
+└── lsp
+    ├── gleam.lua
+    └── luals-nvim.lua
+```
+
+The configuration inside `nvim/lsp/gleam.lua` can be the exact same thing `nvim-lspconfig` has.
+
+```lua
+-- nvim/lsp/gleam.lua
+
+return {
+  cmd = {'gleam', 'lsp'},
+  filetypes = {'gleam'},
+  root_markers = {'gleam.toml', '.git'},
+}
+```
+
+We do have some amount of freedom here. So in `luals-nvim` I want to have a configuration made specifically for a Neovim config with an `.nvim.lua` script at the root.
+
+```lua
+-- nvim/lsp/luals-nvim.lua
+
+return {
+  cmd = {'lua-language-server'},
+  filetypes = {'lua'},
+  root_markers = {'.nvim.lua'},
+  settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
+        path = {'lua/?.lua', 'lua/?/init.lua'},
+      },
+      diagnostics = {
+        globals = {'vim'},
+      },
+      telemetry = {
+        enable = false,
+      },
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME,
+        },
+      },
+    },
+  },
+}
+```
+
+Inside the `lsp` folder the files can have any name. So I made this `luals-nvim` instead of something generic like `lua` or `luals`. And the return value can be anything that the [vim.lsp.config()](https://neovim.io/doc/user/lsp.html#vim.lsp.config()) function expects.
+
+Notice in this one we have a `settings` property. That's reserved for server specific options. You'll have to search the documentation of the language server to know what options you can add there.
+
+Now, having a configuration in the `lsp` folder doesn't mean Neovim will use it. We have to be explicit. To use a language server we must call the function [vim.lsp.enable()](https://neovim.io/doc/user/lsp.html#vim.lsp.enable()).
+
+So in this example the `init.vim` looks like this.
 
 ```vim
-:call mkdir('./ftplugin', 'p')
+" nvim/init.vim
+
+set exrc
+
+lua vim.lsp.enable('gleam')
 ```
 
-We want a filetype plugin for php, so we create a new file called `php.lua`.
+*But why init.vim? What year is it, 2010?!*
 
-```vim
-:edit ftplugin/php.lua | write
+I just wanted an excuse to show is possible to execute lua code inside vimscript. Some Vim users think they have to delete their vimscript config to use lua. That's just not true.
+
+Anyway, next time we open Neovim it will look for a file that matches the pattern `lsp/gleam.lua` inside the `runtimepath`. Then it will create an autocommand using the list we provided in the `filetypes` property. So whenever we open a file with the type `gleam` Neovim will try to enable the language server.
+
+*What about LuaLS?*
+
+The config we have for LuaLS only makes sense for Neovim. So I think this is a good oportunity to use an [exrc](https://neovim.io/doc/user/options.html#'exrc') file. Vim's version of a project local config. When the `exrc` option is enabled Vim/Neovim will execute a script located in the current working directory. This is both convenient and dangerous. So Neovim's `exrc` is slightly different from Vim. Neovim will ask you if you "trust" the file, and if you say yes it'll be executed. If the content of the file remains the same Neovim won't ask again, it'll just execute it automatically.
+
+Personally, I would create an alias to enable `exrc` instead of having it in the `init` file. Something like this.
+
+```sh
+alias code='nvim --cmd "set exrc"'
 ```
 
-Inside this new file we are going to execute the function that enables intelephense.
-
-## Root directory
-
-The last piece of information we need is the root directory. We just have to tell the language server where is our project folder.
-
-In our filetype plugin we are going to use a function called [vim.fs.find()](https://neovim.io/doc/user/lua.html#vim.fs.find()). We will give it a list of files and it will return the path of the first match it finds.
-
-What do we look for? We search for common configuration files that projects have in their root folder. So, in php is very common to have a `composer.json` file. Javascript projects usually have a `package.json`. Rust projects have a `cargo.toml`. We feed this information to `vim.fs.find()` and it should give us a path we can use.
-
-We can make a test already by adding this piece of code in the newly created `php.lua`.
+Let's go back to LuaLS. After Neovim is done executing the `init` file it will search for an `.nvim.lua` in the current working directory. The one in our Neovim folder will have this.
 
 ```lua
--- ftplugin/php.lua
+-- nvim/.nvim.lua
 
-local root_files = {'composer.json'}
-local paths = vim.fs.find(root_files, {stop = vim.env.HOME})
-
-print(vim.fs.dirname(paths[1]))
+vim.lsp.enable('luals-nvim')
 ```
 
-By default `vim.fs.find()` will look in the current folder and then the parent folders. The `stop` argument tells the function it should stop the search if it hits the `home` folder (you don't want your language server to analyze your home folder by accident).
+So Neovim will not even try to use `lsp/luals-nvim.lua` if we are not inside the config folder. The downside of this approach (right now) is that we have to open Neovim in the exact location where `.nvim.lua` is stored.
 
-Since `vim.fs.find()` returns a list we just pick the first item. And to make sure we get the path to a folder we use `vim.fs.dirname()`.
+## Single file setup?
 
-We can navigate to a php project with a composer.json file and check that the project path is detected correctly.
+If you are the kind of person that has a very simple config that fits in one file, I have good news for you. You are not forced to use the `lsp` folder to configure a language server.
 
-## Start the client
+The configurations inside the `lsp` folder can be extended using the function [vim.lsp.config()](https://neovim.io/doc/user/lsp.html#vim.lsp.config()). But this can also be used to create an entire new config, without needing to create a new file.
 
-We are ready to enable the language server. Now we call the function [vim.lsp.start()](https://neovim.io/doc/user/lsp.html#vim.lsp.start()). The first time this is executed it will launch the language server as an external process. When called again with the same root directory it will only send information to the existing process.
-
-Our php filetype plugin should look like this.
+Here's an example:
 
 ```lua
--- ftplugin/php.lua
+-- nvim/init.lua
 
-local root_files = {'composer.json'}
-local paths = vim.fs.find(root_files, {stop = vim.env.HOME})
-local root_dir = vim.fs.dirname(paths[1])
-
-if root_dir then
-  vim.lsp.start({
-    cmd = {'intelephense', '--stdio'},
-    root_dir = root_dir,
-  })
-end
-```
-
-With this setup we should get "diagnostics" out the box. If there is an error in a php file Neovim will show what line has the error, and also the message. Something like this.
-
-![Example code from slimphp framework showing an error](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/xcdxdx9kj3xh90o2369u.png)
-
-The `E` in line 8 is a diagnostic sign, it indicates there is an error. And the thing after the `■` symbol is "virtual text" showing the error message.
-
-### Server settings
-
-Now, some server specific configuration should be placed in a property called `settings` in the `vim.lsp.start()` function. But here's the thing, you may find the documentation of some language servers shows them in this format:
-
-```
-intelephense.files.maxSize: 1000000
-```
-
-We would need to adapt this so it works with Neovim's LSP client. Let me show you how it should be.
-
-```lua
-vim.lsp.start({
-  cmd = {'intelephense', '--stdio'},
-  root_dir = root_dir,
-  settings = {
-    intelephense = {
-      files = {
-        maxSize = 1000000,
-      },
-    }
-  }
+vim.lsp.config('gleam', {
+  cmd = {'gleam', 'lsp'},
+  filetypes = {'gleam'},
+  root_markers = {'gleam.toml', '.git'},
 })
+
+vim.lsp.enable('gleam')
 ```
 
-Basically, each dot is a nested "lua table" we need to add.
-
-If there was another setting with the same namespace `intelephense.files`, we just add it to the existing table.
-
-```lua
-vim.lsp.start({
-  cmd = {'intelephense', '--stdio'},
-  root_dir = root_dir,
-  settings = {
-    intelephense = {
-      files = {
-        maxSize = 1000000,
-        anotherOptionExample = false,
-      },
-    }
-  }
-})
-```
-
-### Where to look if something goes wrong?
+## Where to look if something goes wrong?
 
 If Neovim wasn't able to start the language server, you can take a look at the log file, execute this command inside Neovim:
 
@@ -203,20 +220,128 @@ If Neovim wasn't able to start the language server, you can take a look at the l
 
 Look for the lines that start with `[ERROR]`. Maybe there is an error message with some useful information.
 
-If you want the logs to have more details, increase the log level. Add this in your `init.lua` file.
+If you want the logs to have more details, increase the log level using this function.
 
 ```lua
 vim.lsp.set_log_level('debug')
 ```
 
-## About the diagnostics
+## Execute on filetype
 
-So the diagnostics signs, the thing Neovim uses to tell us there is an error in our source code... by default the space needed to render that sign is hidden and when there is a sign the whole screen shifts to the right. That behavior can be configured in the `init.lua` file.
+Turns out `vim.lsp.enable()` is actually a layer on top of things we already had. We can still use a language server without plugins on older Neovim versions, we just need to know how to put the pieces together.
 
-If you set the option `signcolumn` to the string `yes`, Neovim will reserve the space for the sign. You will have a whitespace reserved for any type of signs in the gutter.
+If the server we want to use only supports one language it makes sense to use a "filetype plugin."
+
+We create a filetype plugin in our Neovim configuration simply by adding a script in the folder `ftplugin`. Note that the name of the script needs to be the same as a valid filetype.
+
+We can navigate to Neovim's configuration folder, open Neovim and then create the `ftplugin` folder.
+
+```vim
+:call mkdir('./ftplugin', 'p')
+```
+
+If we want a filetype plugin for Gleam we create a new file called `gleam.lua`.
+
+```vim
+:edit ftplugin/gleam.lua | write
+```
+
+On the other hand, if we have a language server that can work on multiple filetypes we can use an autocommand on the event `FileType`.
 
 ```lua
-vim.opt.signcolumn = 'yes'
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {'css', 'less', 'sass'},
+  callback = function()
+    ---
+    -- In here you can do whatever you want
+    ---
+  end,
+})
+```
+
+The `pattern` of the `FileType` event is a list of filetypes. The same thing you would provide in the `filetypes` property of an lsp config file.
+
+Inside the filetype plugin or the autocommand we are going to execute the function that enables the language server. But first, we need to know how recreate the logic behind `root_markers`.
+
+## Root directory
+
+Language servers need to know what is the path of our project folder and this is a problem Neovim needs to solve. 
+
+On **Neovim v0.10** we can use a function called [vim.fs.root()](https://neovim.io/doc/user/lua.html#vim.fs.root()). We will give it a list of files and it will return the parent directory of the first match.
+
+What do we look for? We search for common configuration files that projects have in the root folder. So, in a Gleam project there is always a `gleam.toml` file. Javascript projects usually have a `package.json`. Rust projects have a `cargo.toml`. We feed this information to `vim.fs.root()` and it should give us a path we can use.
+
+We can make a test already by adding this piece of code in a `gleam` filetype plugin.
+
+```lua
+-- nvim/ftplugin/gleam.lua
+-- NOTE: vim.fs.root() is only available on Neovim v0.10 or greater
+
+local root_markers = {'gleam.toml'}
+local root_dir = vim.fs.root(0, root_markers)
+
+print(root_dir)
+```
+
+On **Neovim v0.9** or lower we would have to recreate the behavior of `vim.fs.root()`. For this we can use [vim.fs.find()](https://neovim.io/doc/user/lua.html#vim.fs.find()).
+
+```lua
+-- nvim/ftplugin/gleam.lua
+-- NOTE: this code is for Neovim v0.9.5 or lower
+
+local root_markers = {'gleam.toml'}
+local buffer = vim.api.nvim_buf_get_name(0)
+local paths = vim.fs.find(root_markers, {
+  upward = true,
+  path = vim.fn.fnamemodify(buffer, ':p:h'),
+})
+
+local root_dir = vim.fs.dirname(paths[1])
+
+print(root_dir)
+```
+
+## Start the client
+
+We are ready to enable the language server. Now we call the function [vim.lsp.start()](https://neovim.io/doc/user/lsp.html#vim.lsp.start()), which is the same thing `vim.lsp.enable()` uses under the hood.
+
+The first time this is executed it will launch the language server as an external process. When called again with the same root directory it will only send information to the existing process.
+
+Our gleam filetype plugin can look like this.
+
+```lua
+-- nvim/ftplugin/gleam.lua
+-- NOTE: vim.fs.root() is only available on Neovim v0.10 or greater
+
+local root_markers = {'gleam.toml'}
+local root_dir = vim.fs.root(0, root_markers)
+
+if root_dir then
+  vim.lsp.start({
+    cmd = {'gleam', 'lsp'},
+    root_dir = root_dir,
+  })
+end
+```
+
+With this setup we should get "diagnostics" out the box. If there is an error in a gleam file Neovim will show what line has the error.
+
+## About the diagnostics
+
+So the diagnostics signs, the thing Neovim uses to tell us there is an error in our source code... by default the space needed to render that sign is hidden and when there is a sign the whole screen shifts to the right. That behavior can be configured.
+
+If you set the option `signcolumn` to the string `yes` Neovim will reserve the space for the sign. You will have a whitespace reserved for any type of signs in the gutter.
+
+In your `init.vim` you can have this.
+
+```vim
+set signcolumn=yes
+```
+
+Or, if you have an `init.lua`.
+
+```lua
+vim.o.signcolumn = 'yes'
 ```
 
 If you set `signcolumn` to the string `no`, Neovim will hide the column altogether. Don't do that unless you are fully aware of the consequences. There is a better way to hide the diagnostic signs.
@@ -225,11 +350,9 @@ If you set `signcolumn` to the string `no`, Neovim will hide the column altogeth
 
 There is a lua module dedicated specifically to diagnostics: [vim.diagnostic](https://neovim.io/doc/user/diagnostic.html). This has a [.config()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()) function we can use to configure the interface of the diagnostics.
 
-We can add the following to our `init.lua`.
-
 * Hide diagnostic signs
 
-This is the "safe" way to disable the diagnostics sign.
+This is the safe way to disable the diagnostics sign.
 
 ```lua
 vim.diagnostic.config({
@@ -237,13 +360,13 @@ vim.diagnostic.config({
 })
 ```
 
-* Disable virtual text
+* Virtual text
 
-Yes, there's also an option to hide the virtual text that contains the error message.
+There is an option to show the error message inline. This is called "virtual text." This used to be enabled by default, but now on **Neovim v0.11** is disabled.
 
 ```lua
 vim.diagnostic.config({
-  virtual_text = false,
+  virtual_text = true,
 })
 ```
 
@@ -283,8 +406,6 @@ These are things Neovim does when a language server active in the buffer.
 
 **Since Neovim v0.11**
 
-> v0.11 is still under development. Everything in this section is subject to change.
-
 * In normal mode, `grn` renames all references of the symbol under the cursor.
 
 * In normal mode, `gra` shows a list of code actions available in the line under the cursor.
@@ -297,84 +418,83 @@ These are things Neovim does when a language server active in the buffer.
 
 * In insert mode, `<Ctrl-s>` displays the function signature of the symbol under the cursor.
 
-## Let's get some easy wins
+## LSP keymaps
 
-Here's a list of features we can use without too much effort, pretty much the only thing we have to do is call a lua function.
+Neovim v0.11 has defaults keymaps for almost everything now. The good news is that older versions of Neovim have the same features as v0.11, so the only thing we have to do is create keymaps for them.
 
-* Jump to declaration
-* Lists implementations
-* Jump to type definition
-* List all references 
-* Display a function's signature information
-* Rename all references to the symbol under the cursor
-* Format current file (or selected range)
-* List and execute a code action
-
-All of these can be used in custom keybindings.
-
-### Custom keybindings
-
-Is very common for people to follow the same patterns Neovim's defaults have, that is only enable features when the language server is active. So let me introduce you to the `LspAttach` event, this is triggered everytime Neovim enables a language server in a buffer. And with the function `nvim_create_autocmd` we can tell Neovim we want to execute a callback function everytime this event happens.
-
-> You can find more details about autocommands here: [lua-guide-autocommands](https://neovim.io/doc/user/lua-guide.html#lua-guide-autocommands).
-
-So this is one way to setup custom keybindings.
+So here's the code you can add in your personal configuration.
 
 ```lua
 -- you can add this in your init.lua
 
+-- These keymaps are the defaults in Neovim v0.10
+vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+vim.keymap.set('n', '<C-w>d', '<cmd>lua vim.diagnostic.open_float()<cr>')
+vim.keymap.set('n', '<C-w><C-d>', '<cmd>lua vim.diagnostic.open_float()<cr>')
+
 vim.api.nvim_create_autocmd('LspAttach', {
-  desc = 'LSP actions',
   callback = function(event)
-    local bufmap = function(mode, lhs, rhs)
-      local opts = {buffer = event.buf}
-      vim.keymap.set(mode, lhs, rhs, opts)
+    local bufmap = function(mode, rhs, lhs)
+      vim.keymap.set(mode, rhs, lhs, {buffer = event.buf})
     end
 
-    -- You can find details of these function in the help page
-    -- see for example, :help vim.lsp.buf.hover()
-
-    -- Trigger code completion
-    bufmap('i', '<C-Space>', '<C-x><C-o>')
-
-    -- Display documentation of the symbol under the cursor
+    -- These keymaps are the defaults in Neovim v0.11
     bufmap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
+    bufmap('n', 'grr', '<cmd>lua vim.lsp.buf.references()<cr>')
+    bufmap('n', 'gri', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+    bufmap('n', 'grn', '<cmd>lua vim.lsp.buf.rename()<cr>')
+    bufmap('n', 'gra', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+    bufmap('n', 'gO', '<cmd>lua vim.lsp.buf.document_symbol()<cr>')
+    bufmap({'i', 's'}, '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
 
-    -- Jump to the definition
+    -- These are custom keymaps
     bufmap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
-
-    -- Jump to declaration
-    bufmap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
-
-    -- Lists all the implementations for the symbol under the cursor
-    bufmap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
-
-    -- Jumps to the definition of the type symbol
-    bufmap('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
-
-    -- Lists all the references 
-    bufmap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
-
-    -- Displays a function's signature information
-    bufmap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
-
-    -- Renames all references to the symbol under the cursor
-    bufmap('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
-
-    -- Format current file
-    bufmap('n', '<F3>', '<cmd>lua vim.lsp.buf.format()<cr>')
-
-    -- Selects a code action available at the current cursor position
-    bufmap('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-  end
+    bufmap('n', 'grt', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
+    bufmap('n', 'grd', '<cmd>lua vim.lsp.buf.declaration()<cr>')
+    bufmap({'n', 'x'}, 'gq', '<cmd>lua vim.lsp.buf.format({async = true})<cr>')
+  end,
 })
+```
+
+And here is the vimscript equivalent:
+
+```vim
+" you can add this in your init.vim
+
+" These keymaps are the defaults in Neovim v0.10
+nnoremap [d <cmd>lua vim.diagnostic.goto_prev()<cr>
+nnoremap ]d <cmd>lua vim.diagnostic.goto_next()<cr>
+nnoremap <C-w>d <cmd>lua vim.diagnostic.open_float()<cr>
+nnoremap <C-w><C-d> <cmd>lua vim.diagnostic.open_float()<cr>
+
+function! LspAttached() abort
+  " These keymaps are the defaults in Neovim v0.11
+  nnoremap <buffer> K <cmd>lua vim.lsp.buf.hover()<cr>
+  nnoremap <buffer> grr <cmd>lua vim.lsp.buf.references()<cr>
+  nnoremap <buffer> gri <cmd>lua vim.lsp.buf.implementation()<cr>
+  nnoremap <buffer> grn <cmd>lua vim.lsp.buf.rename()<cr>
+  nnoremap <buffer> gra <cmd>lua vim.lsp.buf.code_action()<cr>
+  nnoremap <buffer> gO <cmd>lua vim.lsp.buf.document_symbol()<cr>
+  inoremap <buffer> <C-s> <cmd>lua vim.lsp.buf.signature_help()<cr>
+  snoremap <buffer> <C-s> <cmd>lua vim.lsp.buf.signature_help()<cr>
+
+  " These are custom keymaps
+  nnoremap <buffer> gd <cmd>lua vim.lsp.buf.definition()<cr>
+  nnoremap <buffer> gq <cmd>lua vim.lsp.buf.format({async = true})<cr>
+  xnoremap <buffer> gq <cmd>lua vim.lsp.buf.format({async = true})<cr>
+  nnoremap <buffer> grd <cmd>lua vim.lsp.buf.declaration()<cr>
+  nnoremap <buffer> grt <cmd>lua vim.lsp.buf.type_definition()<cr>
+endfunction
+
+autocmd LspAttach * call LspAttached()
 ```
 
 ## Fair warning
 
-Not every language server implements the entire LSP specification. The features of LSP servers may not be consistent between servers.
+Not every language server implements the entire LSP specification. The features may not be consistent between servers.
 
-For example, intelephense can show diagnostics in real time, there is no need to save the file to get new diagnostics. But [rust-analyzer](https://github.com/rust-lang/rust-analyzer), the language server for rust, can only update diagnostics after saving the file.
+For example, Gleam can show diagnostics in real time, there is no need to save the file to get new diagnostics. But [rust-analyzer](https://github.com/rust-lang/rust-analyzer), the language server for rust, can only update diagnostics after saving the file.
 
 Here's another example: [ruff-lsp](https://github.com/astral-sh/ruff-lsp), a language server for python. It describes itself as a linter and code formatter. As far as I can tell `ruff-lsp` does not provide code completions or semantic highlights.
 
@@ -384,105 +504,9 @@ What I want say is this: read the documentation of the language server so you kn
 
 At this point I'd say you have all the essential knowledge needed to be productive. What follows are tips, configurations, and features you can implement by adding some boilerplate code in your Neovim configuration.
 
-### Configure a language server for multiple filetypes
-
-Sometimes a language server can support multiple filetypes. An example of this is [typescript-language-server](https://github.com/typescript-language-server/typescript-language-server), the language server for javascript and typescript. In this case a filetype plugin can still work but there is an easier way to go about it.
-
-One option to consider is a "global plugin." In there we can configure the language server in the callback function of a `FileType` autocommand.
-
-If you want follow along, install `typescript-language-server` using this command in the terminal.
-
-```sh
-npm install -g typescript typescript-language-server
-```
-
-For this we need to create a `plugin` folder inside Neovim's configuration folder. So, we navigate to Neovim's config folder, open Neovim, then execute this command to create the plugin folder.
-
-```vim
-:call mkdir('./plugin', 'p')
-```
-
-Next we create a lua script, it can have any name we want. We can call it `tsserver.lua`.
-
-```vim
-:edit plugin/tsserver.lua | write
-```
-
-In `tsserver.lua` we are going to adapt the configuration in [nvim-lspconfig's source code](https://github.com/neovim/nvim-lspconfig/blob/16666f1bc40f69ce05eb1883fd8c0d076284d8a5/lua/lspconfig/configs/ts_ls.lua).
-
-```lua
--- plugin/tsserver.lua
-
-local function start_tsserver()
-  local root_files = {'package.json', 'tsconfig.json', 'jsconfig.json'}
-  local paths = vim.fs.find(root_files, {stop = vim.env.HOME})
-  local root_dir = vim.fs.dirname(paths[1])
-
-  if root_dir == nil then
-    -- root directory was not found
-    return
-  end
-
-  vim.lsp.start({
-    name = 'tsserver',
-    cmd = {'typescript-language-server', '--stdio'},
-    root_dir = root_dir,
-    init_options = {hostInfo = 'neovim'},
-  })
-end
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = {'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx'},
-  desc = 'Start typescript LSP',
-  callback = start_tsserver,
-})
-```
-
-This will work exactly like a filetype plugin, except here we are executing one lua function and not an entire file. The advantage of the autocommand is we can define multipe filetypes in the `pattern` property.
-
-By the way, this doesn't have to be a global plugin, we can setup the autocommand in the `init.lua` file.
-
-### Add borders to floating windows
-
-Sadly, there is no way to add borders to all floating windows, this means we have to enable it for each feature.
-
-We can add the following to our `init.lua` file.
-
-* Diagnostic details
-
-```lua
-vim.diagnostic.config({
-  float = {
-    border = 'rounded',
-  },
-})
-```
-
-* Documentation window 
-
-The one used by the function [vim.lsp.buf.hover()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.hover()).
-
-```lua
-vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-  vim.lsp.handlers.hover,
-  {border = 'rounded'}
-)
-```
-
-* Signature help
-
-The one used by the function [vim.lsp.buf.signature_help()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.signature_help()).
-
-```lua
-vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-  vim.lsp.handlers.signature_help,
-  {border = 'rounded'}
-)
-```
-
 ### Format on save
 
-The only thing we will do here is trigger the function [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()) before Neovim saves a file. And of course, we only do it when there is an active language server.
+What we do here is trigger the function [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()) before Neovim saves a file. And of course, we only do it when there is an active language server.
 
 Important note: most language servers with formatting capabilities have their own style settings. For example, we can have 2 space indent in our Neovim config but maybe the language server formats the code with 4 space indent. So it's a good idea to check the documentation of the language server to see how to configure that.
 
@@ -560,29 +584,6 @@ vim.diagnostic.config({
       [vim.diagnostic.severity.INFO] = '»',
     },
   },
-})
-```
-
-### Disable diagnostics in insert mode
-
-This is already the default behavior but there is a problem... not really a problem, just a minor detail: the diagnostics only disappear after we start typing something.
-
-This is the code **I use** to disable diagnostics right after going into insert mode (or select mode).
-
-```lua
--- You can add this in your init.lua
--- or a global plugin
-
-vim.api.nvim_create_autocmd('ModeChanged', {
-  pattern = {'n:i', 'v:s'},
-  desc = 'Disable diagnostics in insert and select mode',
-  callback = function(e) vim.diagnostic.disable(e.buf) end
-})
-
-vim.api.nvim_create_autocmd('ModeChanged', {
-  pattern = 'i:n',
-  desc = 'Enable diagnostics when leaving insert mode',
-  callback = function(e) vim.diagnostic.enable(e.buf) end
 })
 ```
 
@@ -719,7 +720,9 @@ vim.keymap.set('i', '<S-Tab>', tab_prev, {expr = true})
 
 ### Expand snippets
 
-**Neovim v0.11** introduced a new module called [vim.lsp.completion](https://neovim.io/doc/user/lsp.html#lsp-completion), this will extend the behavior of the builtin completion so it can support "additional text edits" a language server can provide. Additional edits can be things like adding missing import statements or expanding code snippets.
+> Neovim v0.11 or greater is required.
+
+For this we use a new module called [vim.lsp.completion](https://neovim.io/doc/user/lsp.html#lsp-completion), this will extend the behavior of the builtin completion so it can support "additional text edits" a language server can provide. Additional edits can be things like adding missing import statements or expanding code snippets.
 
 Right now you have to opt-in to the features `vim.lsp.completion` provides. So, when a language server is active you have to call the [vim.lsp.completion.enable()](https://neovim.io/doc/user/lsp.html#vim.lsp.completion.enable()) function.
 
@@ -736,10 +739,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
       return
     end
 
-    -- warning: this api is unstable
     vim.lsp.completion.enable(true, client_id, event.buf, {autotrigger = false})
 
-    -- warning: this api is unstable
     -- Trigger lsp completion manually using Ctrl + Space
     vim.keymap.set('i', '<C-Space>', '<cmd>lua vim.lsp.completion.trigger()<cr>')
   end
@@ -747,96 +748,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 ```
 
 Notice in the last argument to `.enable()` there is a property called `autotrigger`. `false` is the default value so I just leave it like that. If you set it to `true` Neovim will trigger the completion menu when it finds a trigger character. Trigger characters change depending on the language server. In lua for example, the completion will be triggered automatically after a `.` or `:` character.
-
-If you are using **Neovim v0.10** you don't have access to `vim.lsp.completion` but you do have access to the module `vim.snippet`. You can use that to implement your own snippet expand autocommand.
-
-```lua
--- You can add this in your init.lua
--- or a global plugin
-
--- note: this doesn't support "additional text edits" like
--- adding missing import statements.
-local function expand_snippet(event)
-  local comp = vim.v.completed_item
-  local kind = vim.lsp.protocol.CompletionItemKind
-  local item = vim.tbl_get(comp, 'user_data', 'nvim', 'lsp', 'completion_item')
-
-  -- Check that we were given a snippet
-  if (
-    not item
-    or not item.insertTextFormat
-    or item.insertTextFormat == 1
-    or not (
-      item.kind == kind.Snippet
-      or item.kind == kind.Keyword
-    )
-  ) then
-    return
-  end
-
-  -- Remove the inserted text
-  local cursor = vim.api.nvim_win_get_cursor(0)
-  local line = vim.api.nvim_get_current_line()
-  local lnum = cursor[1] - 1
-  local start_col = cursor[2] - #comp.word
-
-  if start_col < 0 then
-    return
-  end
-
-  local set_text = vim.api.nvim_buf_set_text
-  local ok = pcall(set_text, bufnr, lnum, start_col, lnum, #line, {''})
-
-  if not ok then
-    return
-  end
-
-  -- Insert snippet
-  local snip_text = vim.tbl_get(item, 'textEdit', 'newText') or item.insertText
-  assert(snip_text, "Language server indicated it had a snippet, but no snippet text could be found!")
-  vim.snippet.expand(snip_text)
-end
-
-vim.api.nvim_create_autocmd('CompleteDone', {
-  desc = 'Expand LSP snippet',
-  callback = expand_snippet
-})
-```
-
-`vim.snippet` also supports snippet placeholders. This means we can jump to different places in the current active snippet. In **Neovim v0.11** the default keybindings to navigate between snippets are `Tab` and `Shift + Tab`.
-
-If you are using **Neovim v0.10**, here are some keybindings that you can use.
-
-```lua
--- You can add this in your init.lua
-
--- Control + f: Jump to next snippet placeholder
-vim.keymap.set({'i', 's'}, '<C-f>', function()
-  if vim.snippet.active({direction = 1}) then
-    return '<cmd>lua vim.snippet.jump(1)<cr>'
-  else
-    return '<C-f>'
-  end
-end, {expr = true})
-
--- Control + b: Jump to previous snippet placeholder
-vim.keymap.set({'i', 's'}, '<C-b>', function()
-  if vim.snippet.active({direction = -1}) then
-    return '<cmd>lua vim.snippet.jump(-1)<cr>'
-  else
-    return '<C-b>'
-  end
-end, {expr = true})
-
--- Control + l: Exit current snippet
-vim.keymap.set({'i', 's'}, '<C-l>', function()
-  if vim.snippet.active() then
-    return '<cmd>lua vim.snippet.stop()<cr>'
-  else
-    return '<C-l>'
-  end
-end, {expr = true})
-```
 
 ### Enable inlay hints
 
@@ -866,9 +777,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 ## Conclusion
 
-Hopefully I showed is not difficult to "connect" a language server with Neovim. Think about it, 1 shell commmand and 9 lines of lua code is all it takes to get intelephense working in Neovim.
-
-The hard part is gathering all the context inside your head. What does LSP even mean? What's a language server? Filetype plugin? hardly know her. But once you know about the moving pieces and where to find the information you need, it gets easier.
+Hopefully I showed is not difficult to "connect" a language server with Neovim. The hard part is gathering all the context inside your head. What does LSP even mean? What's a language server? Filetype plugin? I hardly know her. But once you know about the moving pieces and where to find the information you need, it gets easier.
 
 One last thing, don't ignore the basics. Take your time and learn lua, read [Neovim's lua guide](https://neovim.io/doc/user/lua-guide.html) and learn how to navigate Neovim's documentation with the `:help` command.
 
