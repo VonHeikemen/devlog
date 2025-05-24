@@ -2,7 +2,7 @@
 title = "A guide on Neovim's LSP client" 
 description = "Enable IDE-like features in Neovim without installing any additional plugins"
 date = 2023-12-25
-updated = 2025-05-19
+updated = 2025-05-23
 lang = "en"
 [taxonomies]
 tags = ["neovim", "shell"]
@@ -164,7 +164,7 @@ set exrc
 lua vim.lsp.enable('gleam')
 ```
 
-*But why init.vim? What year is it, 2010?!*
+*But why init.vim?*
 
 I just wanted an excuse to show is possible to execute lua code inside vimscript. Some Vim users think they have to delete their vimscript config to use lua. That's just not true.
 
@@ -224,6 +224,12 @@ If you want the logs to have more details, increase the log level using this fun
 
 ```lua
 vim.lsp.set_log_level('debug')
+```
+
+And since **Neovim v0.10** you can do a "health check" with this command:
+
+```vim
+:checkhealth lsp
 ```
 
 ## Execute on filetype
