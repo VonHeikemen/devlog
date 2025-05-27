@@ -166,7 +166,7 @@ lua vim.lsp.enable('gleam')
 
 *But why init.vim?*
 
-I just wanted an excuse to show is possible to execute lua code inside vimscript. Some Vim users think they have to delete their vimscript config to use lua. That's just not true.
+I just wanted an excuse to show is possible to execute lua code inside vimscript. Some Vim users think they have to delete their vimscript config to use lua. That's just not true. Notice the `lua` command there, that allows you to execute a line of lua code.
 
 Anyway, next time we open Neovim it will look for a file that matches the pattern `lsp/gleam.lua` inside the `runtimepath`. Then it will create an autocommand using the list we provided in the `filetypes` property. So whenever we open a file with the type `gleam` Neovim will try to enable the language server.
 
