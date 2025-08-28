@@ -223,12 +223,12 @@ git clone https://github.com/neovim/nvim-lspconfig
 git switch --detach v1.8.0
 ```
 
-* Instalar [mini.nvim](https://github.com/echasnovski/mini.nvim)
+* Instalar [mini.nvim](https://github.com/nvim-mini/mini.nvim)
 
 `mini.nvim` es una colección de módulos de lua. Cada módulo es independiente y funciona como un plugin. La idea de esto es resolver problemas comunes y mejorar donde sea posible las capacidades nativas de Neovim.
 
 ```
-git clone --filter=blob:none https://github.com/echasnovski/mini.nvim
+git clone --filter=blob:none https://github.com/nvim-mini/mini.nvim
 ```
 
 Luego de instalar los plugins debemos generar los tags para la documentación.
@@ -251,7 +251,7 @@ nvim
 
 ## Explorador de archivos
 
-Neovim ya tiene un explorador archivos, se [llama netrw](@/tools/using-netrw-vim-builtin-file-explorer.es.md). Yo no lo uso porque tiene algunas peculiaridades que no me agradan. Aquí voy a recomendarles [mini.files](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-files.md), el explorador de archivos de `mini.nvim`.
+Neovim ya tiene un explorador archivos, se [llama netrw](@/tools/using-netrw-vim-builtin-file-explorer.es.md). Yo no lo uso porque tiene algunas peculiaridades que no me agradan. Aquí voy a recomendarles [mini.files](https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-files.md), el explorador de archivos de `mini.nvim`.
 
 Para usar `mini.files` debemos invocar la función `setup()` del módulo correspondiente.
 
@@ -295,11 +295,11 @@ Podemos navegar a la documentación "offline" de un plugin usando el comando `:h
 :help mini.files
 ```
 
-Ese comando los llevará a [la página de ayuda de mini.files](https://github.com/echasnovski/mini.nvim/blob/main/doc/mini-files.txt).
+Ese comando los llevará a [la página de ayuda de mini.files](https://github.com/nvim-mini/mini.nvim/blob/main/doc/mini-files.txt).
 
 Vale la pena mencionar que pueden usar la tecla `Tab` para autocompletar el argumento del comando `:help`. Por ejemplo, si escriben `:help mini` y luego presionan `Tab` aparecerá una lista de todos los tags que contienen la palabra `mini`. 
 
-Si la fuente (tipo de letra) que tienen configurada en su terminal no contiene "íconos" pueden usar el módulo [mini.icons](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-icons.md). En la propiedad `style` colocan el valor `ascii`.
+Si la fuente (tipo de letra) que tienen configurada en su terminal no contiene "íconos" pueden usar el módulo [mini.icons](https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-icons.md). En la propiedad `style` colocan el valor `ascii`.
 
 ```lua
 require('mini.icons').setup({style = 'ascii'})
@@ -317,9 +317,9 @@ vim.keymap.set('n', '<leader><space>', '<cmd>files<cr>:buffer ', {desc = 'Listar
 
 El comando `:buffer` acepta como argumento el nombre del archivo o el "id" del buffer. También pueden autocompletar el nombre usando la tecla `Tab`, así que no tienen escribir el nombre completo del archivo.
 
-Pero ya que tenemos `mini.nvim` instalado podemos usar el módulo [mini.pick](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-pick.md), este provee una especie de buscador interactivo que hace este proceso aún más cómodo.
+Pero ya que tenemos `mini.nvim` instalado podemos usar el módulo [mini.pick](https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-pick.md), este provee una especie de buscador interactivo que hace este proceso aún más cómodo.
 
-También tienen la opción de usar el módulo [mini.extra](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-extra.md) para expandir las capacidades de `mini.pick`.
+También tienen la opción de usar el módulo [mini.extra](https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-extra.md) para expandir las capacidades de `mini.pick`.
 
 En fin, vamos a habilitar `mini.pick`.
 
@@ -337,7 +337,7 @@ vim.keymap.set('n', '<leader>fh', '<cmd>Pick help<cr>', {desc = 'Listar help tag
 
 ## Autocompletado de código
 
-Para esto podemos usar [mini.completion](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-completion.md) y [mini.snippets](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-snippets.md). 
+Para esto podemos usar [mini.completion](https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-completion.md) y [mini.snippets](https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-snippets.md). 
 
 ```lua
 require('mini.snippets').setup({})

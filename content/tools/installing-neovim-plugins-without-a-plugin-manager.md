@@ -80,10 +80,10 @@ Example time:
 
 By default Neovim's configuration directory is a part of the packpath, so that's a perfectly valid place to create a `pack` directory.
 
-Let's pretend we are using linux and want to download [mini.nvim](https://github.com/echasnovski/mini.nvim). We could execute this command the terminal.
+Let's pretend we are using linux and want to download [mini.nvim](https://github.com/nvim-mini/mini.nvim). We could execute this command the terminal.
 
 ```
-git clone https://github.com/echasnovski/mini.nvim \
+git clone https://github.com/nvim-mini/mini.nvim \
   ~/.config/nvim/pack/vendor/start/mini.nvim
 ```
 

@@ -80,10 +80,10 @@ Un ejemplo concreto:
 
 Por defecto el directorio de configuración de Neovim se encuentra en el `packpath`. Entonces el directorio donde tienen su `init.lua` o `init.vim` es un lugar válido para crear el directorio `pack`.
 
-Vamos a fingir que ustedes usan linux y quieren descargar el plugin [mini.nvim](https://github.com/echasnovski/mini.nvim). Para instalarlo pueden ejecutar este comando en su terminal.
+Vamos a fingir que ustedes usan linux y quieren descargar el plugin [mini.nvim](https://github.com/nvim-mini/mini.nvim). Para instalarlo pueden ejecutar este comando en su terminal.
 
 ```
-git clone https://github.com/echasnovski/mini.nvim \
+git clone https://github.com/nvim-mini/mini.nvim \
   ~/.config/nvim/pack/vendor/start/mini.nvim
 ```
 

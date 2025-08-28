@@ -239,12 +239,12 @@ git clone https://github.com/neovim/nvim-lspconfig
 git switch --detach v1.8.0
 ```
 
-* Install [mini.nvim](https://github.com/echasnovski/mini.nvim) 
+* Install [mini.nvim](https://github.com/nvim-mini/mini.nvim) 
 
 `mini.nvim` is a collection of lua modules aim to solve common problems and enhance some of Neovim builtin features.
 
 ```
-git clone --filter=blob:none https://github.com/echasnovski/mini.nvim
+git clone --filter=blob:none https://github.com/nvim-mini/mini.nvim
 ```
 
 After we install a plugin we have to generate the help tags.
@@ -271,7 +271,7 @@ Remember to delete the `pack` folder when you start using a plugin manager. You'
 
 You should know that Neovim already has a file explorer, [it's called netrw](@/tools/using-netrw-vim-builtin-file-explorer.md). We are not going to use it here because it has a few quirks I dislike. Still, I think you should know it exists.
 
-Since we have `mini.nvim` available let's use the file explorer it provides: [mini.files](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-files.md).
+Since we have `mini.nvim` available let's use the file explorer it provides: [mini.files](https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-files.md).
 
 First, we call `mini.files` setup function.
 
@@ -315,13 +315,13 @@ In Neovim's command-line I executed this command.
 :help mini.files
 ```
 
-That took me to [the help page of mini.files](https://github.com/echasnovski/mini.nvim/blob/main/doc/mini-files.txt).
+That took me to [the help page of mini.files](https://github.com/nvim-mini/mini.nvim/blob/main/doc/mini-files.txt).
 
 Remember when we installed the plugins? We generated some called help tags. These tags allow you to navigate to the "offline" documentation of the plugin: the help page.
 
 The tab complete feature of the `:help` command is really good too. You can type `:help mini` and then press the `Tab` key, Neovim will show you all the help tags that start with `mini`.
 
-One more thing, if the font on your terminal doesn't support "icons" then you can add the [mini.icons](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-icons.md) module. Set the `style` property to `ascii`.
+One more thing, if the font on your terminal doesn't support "icons" then you can add the [mini.icons](https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-icons.md) module. Set the `style` property to `ascii`.
 
 ```lua
 require('mini.icons').setup({style = 'ascii'})
@@ -337,9 +337,9 @@ vim.keymap.set('n', '<leader><space>', '<cmd>files<cr>:buffer ', {desc = 'Search
 
 In the `:buffer` command you can tab complete the name of the file or use the "id" of the buffer.
 
-But why do that when we have `mini.nvim` installed? We can use the module [mini.pick](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-pick.md). This one provides a fancy interactive filter. And it also gives us commands we can use to search files.
+But why do that when we have `mini.nvim` installed? We can use the module [mini.pick](https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-pick.md). This one provides a fancy interactive filter. And it also gives us commands we can use to search files.
 
-If you use the module [mini.extra](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-extra.md) you will have access to more search commands in `mini.pick`.
+If you use the module [mini.extra](https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-extra.md) you will have access to more search commands in `mini.pick`.
 
 Anyway, enable `mini.pick` module.
 
@@ -357,7 +357,7 @@ vim.keymap.set('n', '<leader>fh', '<cmd>Pick help<cr>', {desc = 'Search help tag
 
 ## Code completion
 
-For this we will use [mini.completion](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-completion.md) and [mini.snippets](https://github.com/echasnovski/mini.nvim/blob/main/readmes/mini-snippets.md).
+For this we will use [mini.completion](https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-completion.md) and [mini.snippets](https://github.com/nvim-mini/mini.nvim/blob/main/readmes/mini-snippets.md).
 
 ```lua
 require('mini.snippets').setup({})

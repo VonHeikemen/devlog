@@ -613,7 +613,7 @@ Es un manejador de plugins rápido y sencillo. No es broma, tiene alrededor de 5
 
 Este se caracteriza por optimizar el tiempo de carga de nuestros plugins. Por defecto buscará cargar nuestros plugins sólo cuando sea necesario. Ofrece una interfaz agradable para actualizar, inspeccionar y eliminar plugins. También nos permite declarar nuestros plugins usando módulos de lua. Podemos especificar versión, dependencias, configuración, entre otras cosas.
 
-* [mini.deps](https://github.com/echasnovski/mini.deps)
+* [mini.deps](https://github.com/nvim-mini/mini.deps)
 
 Ofrece un punto intermedio entre `paq-nvim` y `lazy.nvim`. Tiene funcionalidades útiles que no se encuentran en `paq.nvim`, por ejemplo, la habilidad de devolver un plugin a una version anterior. Pero `mini.deps` no tiene opciones avanzadas como `lazy.nvim`.
 

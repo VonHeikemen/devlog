@@ -615,7 +615,7 @@ A plugin manager that is simple and fast. I'm serious, this thing is around 500 
 
 It advertises automatic lazy-loading that allows fast startup times. It lets you manage your plugins with a very nice interface. You can also split your plugins into modules where you can specify dependencies, configurations, version and other things.
 
-* [mini.deps](https://github.com/echasnovski/mini.deps)
+* [mini.deps](https://github.com/nvim-mini/mini.deps)
 
 This is a middle ground between `paq-nvim` and `lazy.nvim`. It has some useful features like the ability to rollback a plugin to a previous version, but it doesn't offer advanced lazy loading options like `lazy.nvim` does.
 
