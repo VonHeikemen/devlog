@@ -2,19 +2,19 @@
 title = "Una configuración simple para Neovim"
 description = "Aprende lo básico para configurar Neovim usando lua"
 date = 2024-11-23
-updated = 2025-05-15
+updated = 2025-09-09
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
 +++
 
-50 líneas de código es suficiente para tener una buena configuración en Neovim. Y puede que no me crean esto pero sólo necesitamos **1 plugin** para tener acceso a ciertas funcionalidades que generalmente encuentran en un IDE.
+40 líneas de código es suficiente para tener una buena configuración en Neovim. Y puede que no me crean esto pero sólo necesitamos **1 plugin** para tener acceso a ciertas funcionalidades que generalmente encuentran en un IDE.
 
 Pueden usar [esta configuración](#init-lua) como un punto de partida y luego van agregando cosas nuevas cuando encuentren algún problema. O, simplemente veanlo como una oportunidad para aprender los conceptos básicos de la configuración de Neovim.
 
 ## Instalando Neovim
 
-Para la configuración que les voy a mostrar necesitamos Neovim en su versión v0.9 o mayor. Pero deben tener en cuenta que muchos plugins escritos en lua sólo garantizan soporte para la versión estable actual. En este momento sería v0.11.1, que fue publicada el `26 de abril del 2025`.
+Para la configuración que les voy a mostrar necesitamos Neovim en su versión v0.9 o mayor. Pero deben tener en cuenta que muchos plugins escritos en lua sólo garantizan soporte para la versión estable actual. En este momento sería v0.11.4, que fue publicada el `31 de agosto del 2025`.
 
 Si su sistema operativo está basado en linux deben prestar atención a la versión de Neovim que está disponible en su manejador de paquetes.
 
@@ -372,55 +372,11 @@ El cliente LSP es lo que hace posible que Neovim obtenga funcionalidades que ant
 
 Para usar el cliente LSP vamos a seguir estos pasos:
 
-* Crear atajos de teclado.
-* Instalar un servidor LSP.
-* Configurar el servidor LSP.
+* Instalar un servidor LSP
+* Configurar el servidor LSP
+* Crear atajos de teclado (opcional)
 
-### Paso 1: los atajos
-
-Algunos de estos atajos están basados en funcionalidades que trae Neovim por defecto, la diferencia es que estos utilizan el cliente LSP. En este caso se reemplaza el atajo original con el nuestro. El resto utilizará el prefijo `<leader>l`.
-
-La convención que se aplica para estos atajos es crearlos si existe un servidor LSP activo en el archivo que estamos editando. Entonces lo que hacemos es crear un autocomando en el evento `LspAttach`.
-
-```lua
-vim.api.nvim_create_autocmd('LspAttach', {
-  callback = function(event)
-    local opts = {buffer = event.buf}
-
-    -- Muestra información sobre símbolo debajo del cursor
-    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-
-    -- Saltar a definición
-    vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-
-    -- Formatear código
-    vim.keymap.set({'n', 'x'}, 'gq', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-
-    -- Mostrar argumentos de función
-    vim.keymap.set('i', '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-
-    -- Saltar a declaración
-    vim.keymap.set('n', '<leader>ld', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-
-    -- Mostrar implementaciones
-    vim.keymap.set('n', '<leader>li', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-
-    -- Saltar a definición de tipo
-    vim.keymap.set('n', '<leader>lt', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-
-    -- Listar referencias
-    vim.keymap.set('n', '<leader>lr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-
-    -- Renombrar símbolo
-    vim.keymap.set('n', '<leader>ln', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-
-    -- Listar "code actions" disponibles en la posición del cursor
-    vim.keymap.set('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-  end,
-})
-```
-
-### Paso 2: Instalar un servidor LSP
+### Paso 1: Instalar un servidor LSP
 
 La comunidad de Neovim ha creado un recurso donde podemos encontrar una lista de servidores LSP. Esta se encuentra en la documentación del plugin `nvim-lspconfig`, en el archivo [doc/configs.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md).
 
@@ -438,7 +394,7 @@ Para `rust`, si ya tienen [rustup](https://rust-lang.github.io/rustup/) pueden i
 rustup component add rust-analyzer
 ```
 
-### Paso 3: Configurar un servidor LSP
+### Paso 2: Configurar un servidor LSP
 
 Ahora deben "habilitar" cada servidor LSP instalado en el sistema.
 
@@ -497,6 +453,57 @@ lsp_setup('rust_analyzer', {})
 
 Bien. Por los momentos hay un puñado de servidores LSP que no pueden ser habilitados usando `vim.lsp.enable()`. La lista de servidores que aún no pueden usar el nuevo método está aquí: [nvim-lspconfig/issues/3705](https://github.com/neovim/nvim-lspconfig/issues/3705).
 
+### Paso 3: los atajos
+
+Una vez que tenemos un servidor LSP activo en el archivo que estamos editando podremos utilizar las funciones que se encuentran en el módulo [vim.lsp.buf](https://neovim.io/doc/user/lsp.html#lsp-buf). En Neovim v0.11 ya tenemos disponible una serie de atajos de teclado para ciertas funcionalidades pero en versiones anteriores debemos crear los atajos nosotros mismos. En ese caso podemos usar este código:
+
+```lua
+-- NOTE: Estos atajos de teclado forman parte de Neovim v0.11.
+-- No hay necesidad de agregarlos en su configuración personal si ya
+-- están usando una versión de Neovim mayor a v0.11.
+
+-- Mostrar argumentos de función
+vim.keymap.set('i', '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+
+-- Listar todos los símbolos en el archivo actual
+vim.keymap.set('n', 'gO', '<cmd>lua vim.lsp.buf.document_symbol()<cr>')
+
+-- Mostrar implementaciones
+vim.keymap.set('n', 'gri', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+
+-- Saltar a definición de tipo
+vim.keymap.set('n', 'grt', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
+
+-- Listar referencias
+vim.keymap.set('n', 'grr', '<cmd>lua vim.lsp.buf.references()<cr>')
+
+-- Renombrar símbolo
+vim.keymap.set('n', 'grn', '<cmd>lua vim.lsp.buf.rename()<cr>')
+
+-- Listar "code actions" disponibles en la posición del cursor
+vim.keymap.set('n', 'gra', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+
+-- Mostrar "diagnósticos" de la línea actual
+vim.keymap.set('n', '<C-w>d', '<cmd>lua vim.diagnostic.open_float()<cr>')
+vim.keymap.set('n', '<C-w><C-d>', '<cmd>lua vim.diagnostic.open_float()<cr>')
+
+-- Saltar al diagnóstico anterior
+vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+
+-- Saltar al siguiente diagnóstico
+vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(event)
+    -- NOTE: `K` por defecto utiliza el programa configurado en la opción
+    -- 'keywordprg' y aquí lo forzamos a usar el cliente LSP
+
+    -- Muestra información sobre símbolo debajo del cursor
+    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', {buffer = event.buf})
+  end,
+})
+```
+
 ### Deben tener en cuenta...
 
 Cada servidor LSP es parte de un proyecto independiente. Es decir, un servidor LSP tiene su propio equipo de desarrollo que no está relacionado con Neovim. Tienen sus propios defectos (bugs), limitaciones y en ocasiones tienen sus propios archivos de configuración.
@@ -532,7 +539,62 @@ require('nvim-treesitter.configs').setup({
 
 ## init.lua
 
+Si tienen la posibilidad de instalar Neovim v0.11 esto es todo lo que necesitan para empezar. Si necesitan una configuración compatible con Neovim v0.9 usen [el código de la siguiente sección](#configuracion-para-versiones-anteriores).
+
 ```lua
+-- NOTE: Esta configuración es para Neovim v0.11 o mayor
+
+-- Guia oficial de lua en Neovim:
+-- https://neovim.io/doc/user/lua-guide.html
+
+vim.o.number = true
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
+vim.o.smartcase = true
+vim.o.ignorecase = true
+vim.o.wrap = false
+vim.o.hlsearch = false
+vim.o.signcolumn = 'yes'
+
+-- Tecla Espacio como <leader>
+vim.g.mapleader = vim.keycode('<Space>')
+
+-- Interación con el portapapeles
+vim.keymap.set({'n', 'x'}, 'gy', '"+y', {desc = 'Copiar al portapapel'})
+vim.keymap.set({'n', 'x'}, 'gp', '"+p', {desc = 'Pegar del portapapel'})
+
+-- Comandos
+vim.keymap.set('n', '<leader>w', '<cmd>write<cr>', {desc = 'Guardar'})
+vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Salir de vim'})
+
+-- Tema del editor
+vim.cmd.colorscheme('retrobox')
+
+require('mini.snippets').setup({})
+require('mini.completion').setup({})
+
+require('mini.files').setup({})
+vim.keymap.set('n', '<leader>e', '<cmd>lua MiniFiles.open()<cr>', {desc = 'Explorador de archivos'})
+
+require('mini.pick').setup({})
+vim.keymap.set('n', '<leader><space>', '<cmd>Pick buffers<cr>', {desc = 'Listar archivos abiertos'})
+vim.keymap.set('n', '<leader>ff', '<cmd>Pick files<cr>', {desc = 'Listar todos los archivos'})
+vim.keymap.set('n', '<leader>fh', '<cmd>Pick help<cr>', {desc = 'Listar help tags'})
+
+-- Lista de servidores LSP:
+-- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+vim.lsp.enable({'gopls', 'rust_analyzer'})
+```
+
+## Configuración para versiones anteriores
+
+Si están usando un sistema operativo basado en Ubuntu o Debian deben estar conscientes de la versión de Neovim que se encuentra en los repositorios oficiales. En Ubuntu 24.04 tienen disponible Neovim v0.9.5. Y en Debian 13 se encuentra disponible Neovim v0.10.
+
+Aún pueden tener una buena experiencia usando Neovim en sus versiones anteriores pero el código que necesitan será un poco más complejo.
+
+```lua
+-- NOTE: Esta configuración es compatible con Neovim v0.9.5
+
 -- Guia oficial de lua en Neovim:
 -- https://neovim.io/doc/user/lua-guide.html
 
@@ -549,8 +611,8 @@ vim.o.signcolumn = 'yes'
 vim.g.mapleader = ' '
 
 -- Interación con el portapapeles
-vim.keymap.set({'n', 'x', 'o'}, 'gy', '"+y', {desc = 'Copiar al portapapel'})
-vim.keymap.set({'n', 'x', 'o'}, 'gp', '"+p', {desc = 'Pegar del portapapel'})
+vim.keymap.set({'n', 'x'}, 'gy', '"+y', {desc = 'Copiar al portapapel'})
+vim.keymap.set({'n', 'x'}, 'gp', '"+p', {desc = 'Pegar del portapapel'})
 
 -- Comandos
 vim.keymap.set('n', '<leader>w', '<cmd>write<cr>', {desc = 'Guardar'})
@@ -573,39 +635,44 @@ vim.keymap.set('n', '<leader><space>', '<cmd>Pick buffers<cr>', {desc = 'Listar 
 vim.keymap.set('n', '<leader>ff', '<cmd>Pick files<cr>', {desc = 'Listar todos los archivos'})
 vim.keymap.set('n', '<leader>fh', '<cmd>Pick help<cr>', {desc = 'Listar help tags'})
 
+-- Mostrar argumentos de función
+vim.keymap.set('i', '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+
+-- Listar todos los símbolos en el archivo actual
+vim.keymap.set('n', 'gO', '<cmd>lua vim.lsp.buf.document_symbol()<cr>')
+
+-- Mostrar implementaciones
+vim.keymap.set('n', 'gri', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+
+-- Saltar a definición de tipo
+vim.keymap.set('n', 'grt', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
+
+-- Listar referencias
+vim.keymap.set('n', 'grr', '<cmd>lua vim.lsp.buf.references()<cr>')
+
+-- Renombrar símbolo
+vim.keymap.set('n', 'grn', '<cmd>lua vim.lsp.buf.rename()<cr>')
+
+-- Listar "code actions" disponibles en la posición del cursor
+vim.keymap.set('n', 'gra', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+
+-- Mostrar "diagnósticos" de la línea actual
+vim.keymap.set('n', '<C-w>d', '<cmd>lua vim.diagnostic.open_float()<cr>')
+vim.keymap.set('n', '<C-w><C-d>', '<cmd>lua vim.diagnostic.open_float()<cr>')
+
+-- Saltar al diagnóstico anterior
+vim.keymap.set('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+
+-- Saltar al siguiente diagnóstico
+vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(event)
-    local opts = {buffer = event.buf}
+    -- NOTE: `K` por defecto utiliza el programa configurado en la opción
+    -- 'keywordprg' y aquí lo forzamos a usar el cliente LSP
 
     -- Muestra información sobre símbolo debajo del cursor
-    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-
-    -- Saltar a definición
-    vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-
-    -- Formatear código
-    vim.keymap.set({'n', 'x'}, 'gq', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-
-    -- Mostrar argumentos de función
-    vim.keymap.set('i', '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-
-    -- Saltar a declaración
-    vim.keymap.set('n', '<leader>ld', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-
-    -- Mostrar implementaciones
-    vim.keymap.set('n', '<leader>li', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-
-    -- Saltar a definición de tipo
-    vim.keymap.set('n', '<leader>lt', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-
-    -- Listar referencias
-    vim.keymap.set('n', '<leader>lr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-
-    -- Renombrar símbolo
-    vim.keymap.set('n', '<leader>ln', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-
-    -- Listar "code actions" disponibles en la posición del cursor
-    vim.keymap.set('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', {buffer = event.buf})
   end,
 })
 
