@@ -1,8 +1,8 @@
 +++
 title = "Build your first Neovim configuration in lua"
 description = "The one where we learn how to customize Neovim and add plugins"
-date = 2022-07-04
-updated = 2024-03-20
+date = 2022-07-07
+updated = 2025-10-09
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -21,7 +21,7 @@ This tutorial is meant for people totally new to Neovim. If you already have a c
 
 ## Some advice
 
-Before we start, I suggest you install the latest stable version of Neovim. You can go to the [release page](https://github.com/neovim/neovim/releases) in the github repository and download it from there. From now on I will assume you are using version 0.8 or greater.
+Before we start, I suggest you install the latest stable version of Neovim. You can go to the [release page](https://github.com/neovim/neovim/releases) in the github repository and download it from there. From now on I will assume you are using version 0.9.5 or greater.
 
 If you don't feel comfortable using Neovim as an editor, follow the tutorial that comes bundled with it. You can start it using this command in the terminal.
 
@@ -77,12 +77,12 @@ nvim --headless -c 'call mkdir(stdpath("config"), "p") | exe "edit" stdpath("con
 
 ## Editor settings
 
-To access the editor's setting we need to use the global variable `vim`. Okay, more than a variable this thing is a module, you'll find all sorts of utilities in there. Right now we are going to focus on the `opt` property, with it we can modify all 351 options Neovim has (in version 0.7).
+To access the editor's setting we need to use the global variable `vim`. Okay, more than a variable this thing is a module, you'll find all sorts of utilities in there. Right now we are going to focus on the `o` property, with it we can modify all 350+ options Neovim has.
 
 This is the syntax you should follow.
 
 ```lua
-vim.opt.option_name = value
+vim.o.option_name = value
 ```
 
 Where `option_name` can be anything in [this list](https://neovim.io/doc/user/quickref.html#option-list). And `value` must be whatever that option expects.
@@ -104,15 +104,7 @@ This option expects a boolean value. This means it can only have two possible va
 When we enable `number` Neovim starts showing the line number in the gutter.
 
 ```lua
-vim.opt.number = true
-```
-
-* `mouse`
-
-Neovim (and Vim) can let you use the mouse for some things, like select text or change the size of window. `mouse` expects a data type called a string (a piece of text wrapped in quotes) with a combination of modes. We are not going to worry about those modes now, we can just enable it for every mode.
-
-```lua
-vim.opt.mouse = 'a'
+vim.o.number = true
 ```
 
 * `ignorecase`
@@ -120,7 +112,7 @@ vim.opt.mouse = 'a'
 With this we can tell Neovim to ignore uppercase letters when executing a search. For example, if we search the word `two` the results can contain any variations like `Two`, `tWo` or `two`.
 
 ```lua
-vim.opt.ignorecase = true
+vim.o.ignorecase = true
 ```
 
 * `smartcase`
@@ -128,7 +120,7 @@ vim.opt.ignorecase = true
 Makes our search ignore uppercase letters unless the search term has an uppercase letter. Most of the time this is used in combination with `ignorecase`.
 
 ```lua
-vim.opt.smartcase = true
+vim.o.smartcase = true
 ```
 
 * `hlsearch`
@@ -136,7 +128,7 @@ vim.opt.smartcase = true
 Highlights the results of the previous search. It can get annoying really fast, this is how we disable it.
 
 ```lua
-vim.opt.hlsearch = false
+vim.o.hlsearch = false
 ```
 
 * `wrap`
@@ -144,7 +136,7 @@ vim.opt.hlsearch = false
 Makes the text of long lines always visible. Long lines are those that exceed the width of the screen. The default value is `true`.
 
 ```lua
-vim.opt.wrap = true
+vim.o.wrap = true
 ```
 
 * `breakindent`
@@ -152,7 +144,7 @@ vim.opt.wrap = true
 Preserve the indentation of a virtual line. These "virtual lines" are the ones only visible when `wrap` is enabled.
 
 ```lua
-vim.opt.breakindent = true
+vim.o.breakindent = true
 ```
 
 * `tabstop`
@@ -160,7 +152,7 @@ vim.opt.breakindent = true
 The amount of space on screen a `Tab` character can occupy. The default value is 8. I think 2 is fine.
 
 ```lua
-vim.opt.tabstop = 2
+vim.o.tabstop = 2
 ```
 
 * `shiftwidth`
@@ -168,7 +160,7 @@ vim.opt.tabstop = 2
 Amount of characters Neovim will use to indent a line. This option influences the keybindings `<<` and `>>`. The default value is 8. Most of the time we want to set this with same value as `tabstop`.
 
 ```lua
-vim.opt.shiftwidth = 2
+vim.o.shiftwidth = 2
 ```
 
 * `expandtab`
@@ -176,7 +168,7 @@ vim.opt.shiftwidth = 2
 Controls whether or not Neovim should transform a `Tab` character to spaces. The default value is `false`.
 
 ```lua
-vim.opt.expandtab = false
+vim.o.expandtab = false
 ```
 
 There are a few other things in the `vim` module we can use to modify variables, but we have other things to do right now. I talk about this topic in more detail here: [Configuring Neovim - Editor Settings](@/tools/configuring-neovim-using-lua.md#editor-settings).
@@ -189,7 +181,7 @@ Because Neovim clearly doesn't have enough, we need to create more. To do it we 
 vim.keymap.set('n', '<space>w', '<cmd>write<cr>', {desc = 'Save'})
 ```
 
-After executing this, the sequence `Space` + `w` will call the `write` command. Basically, we can save changes made to a file with `Space` + `w`.
+After executing this the sequence `Space` + `w` will call the `write` command.
 
 Now let me explain `vim.keymap.set` parameters.
 
@@ -197,7 +189,7 @@ Now let me explain `vim.keymap.set` parameters.
 vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 ```
 
-* `{mode}` mode where the keybinding should execute. It can be a list of modes. We need to specify the mode's short name. Here are some of the most common.
+* `{mode}` the mode where the keybinding can be executed. It can be a list of modes. We need to specify the mode's short name. Here are some of the most common.
 
   - `n`: Normal mode.
   - `i`: Insert mode.
@@ -212,7 +204,7 @@ vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 
 * `{rhs}` is the action we want to execute. It can be a string with a command or an expression. You can also provide a lua function.
 
-* `{opts}` this must be a lua table. If you don't know what is a "lua table" just think is a way of storing several values in one place. Anyway, it can have these properties.
+* `{opts}` this must be a lua table. If you don't know what is, just think of it as a way to store several values in one place. It can have these properties.
 
   - `desc`: A string that describes what the keybinding does. You can write anything you want.
   
@@ -222,7 +214,7 @@ vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 
   - `silent`: A boolean. Determines whether or not the keybindings can show a message. The default value is `false`.
 
-  - `expr`: A boolean. If enabled it gives the chance to use vimscript or lua to calculate the value of `{rhs}`. The default value is `false`.
+  - `expr`: A boolean. When enabled we can use vimscript or lua to calculate the value of `{rhs}`. The default value is `false`.
 
 ### The leader key
 
@@ -242,7 +234,7 @@ vim.keymap.set('n', '<leader>w', '<cmd>write<cr>')
 
 This will make `,` + `w` save the current file.
 
-What happens if we don't define it? The default value is `\`, clearly not the best choice. I can recommend using the space key as leader. Like this.
+What happens if we don't define it? The default value is `\`. I can recommend using the space key as leader. Like this.
 
 ```lua
 vim.g.mapleader = ' '
@@ -277,7 +269,7 @@ vim.keymap.set({'n', 'x'}, 'x', '"_x')
 vim.keymap.set({'n', 'x'}, 'X', '"_d')
 ```
 
-The lower case `x` will delete one character in normal mode, in visual mode it will delete the current selection. Upper case `X` will act like `d`.
+The lower case `x` will delete one character in normal mode. In visual mode it will delete the current selection. Upper case `X` will just act like `d`.
 
 * Select all text in current buffer
 
@@ -287,90 +279,102 @@ vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>')
 
 ## Plugin manager
 
-We are going to use [lazy.nvim](https://github.com/folke/lazy.nvim). This plugin manager allows for "simple" configurations but also supports splitting your plugin config in modules. Today I'll just show some basic usage examples.
+We are going to use [mini.nvim](https://nvim-mini.org/mini.nvim/) for this. 
 
-First step is to install it from github. It just so happens we can do this using lua. In lazy.nvim's documentation they show us how to do it.
+mini.nvim is actually a collection of lua modules. One of those modules has the plugin manager we are going to use, [mini.deps](https://nvim-mini.org/mini.nvim/doc/mini-deps.html). I recommend this because Neovim it's close to have [its own plugin manager](https://neovim.io/doc/user/pack.html#_plugin-manager) and at the surface level is almost identical to `mini.deps`. It'll take a few years for the built-in plugin manager to be available to everyone. Right now only those who are willing to compile Neovim from source or use a nightly build have access to it. But while we wait we can start using `mini.deps`.
+
+Now, *how does one install a plugin without a plugin manager?*
+
+That's been possible for quite a while now. Neovim (and Vim) can load a plugin if it's located in the correct directory. The trick is to know a [valid path for a plugin](@/tools/installing-neovim-plugins-without-a-plugin-manager.md) and download it there. And that's exactly what we are going to do with some lua code.
 
 ```lua
-local lazy = {}
+local mini = {}
 
-function lazy.install(path)
-  if not vim.loop.fs_stat(path) then
-    print('Installing lazy.nvim....')
+mini.branch = 'main'
+mini.packpath = vim.fn.stdpath('data') .. '/site'
+
+function mini.require_deps()
+  local uv = vim.uv or vim.loop
+  local mini_path = mini.packpath .. '/pack/deps/start/mini.nvim'
+
+  if not uv.fs_stat(mini_path) then
+    print('Installing mini.nvim....')
     vim.fn.system({
       'git',
       'clone',
       '--filter=blob:none',
-      'https://github.com/folke/lazy.nvim.git',
-      '--branch=stable', -- latest stable release
-      path,
+      'https://github.com/nvim-mini/mini.nvim',
+      string.format('--branch=%s', mini.branch),
+      mini_path
     })
-  end
-end
 
-function lazy.setup(plugins)
-  if vim.g.plugins_ready then
-    return
+    vim.cmd('packadd mini.nvim | helptags ALL')
   end
 
-  -- You can "comment out" the line below after lazy.nvim is installed
-  lazy.install(lazy.path)
+  local ok, deps = pcall(require, 'mini.deps')
+  if not ok then
+    return {}
+  end
 
-  vim.opt.rtp:prepend(lazy.path)
-
-  require('lazy').setup(plugins, lazy.opts)
-  vim.g.plugins_ready = true
+  return deps
 end
 ```
 
-For the moment this piece of code doesn't do anything. They are functions waiting to be called. Why do this? Is my personal preference. This way I can isolate the boilerplate needed to get the plugin manager working.
+Here we have a lua table called `mini`, in it we have a couple of options and a function.
 
-Now we are free to place our configuration. We need to specify the path where our plugins are going to live, that is `lazy.path`. If you want to configure lazy.nvim itself, use the variable `lazy.opts` (I don't do anything with it so for me is an empty table). Finally we add the list of plugins as an argument to `lazy.setup`.
+Our function `.require_deps()` will download mini.nvim automatically if it's missing. Then it'll try to load the `mini.deps` module in safe way and return it back to us. If it fails it'll give us an empty lua table. Of course, this is just a function definition. In order for it to do anything we have to execute it.
 
 ```lua
-lazy.path = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-lazy.opts = {}
+local MiniDeps = mini.require_deps()
 
-lazy.setup({
-  ---
-  -- List of plugins
-  ---
+if not MiniDeps.setup then
+  return
+end
+```
+
+If everything goes according to plan the variable `MiniDeps` will have all the functions of the `mini.deps` lua module. If it turns out that `MiniDeps` doesn't have a `.setup` property we know something went wrong and stop the execution. So no matter what happens Neovim will always be in a working state.
+
+All the features in mini.nvim are opt-in, meaning we have to enable the modules we want to use. So after we load the module with `require` we need to execute a function called `.setup()`.
+
+```lua
+MiniDeps.setup({
+  path = {
+    package = mini.packpath,
+  },
 })
 ```
 
-Notice in `lazy.path` we use `stdpath('data')`, this will return the path to Neovim's data folder. So now we don't need to worry changing our paths depending on the operating system, Neovim will do that for us. If you want to inspect the path, use this command.
+The `.setup()` function is where we place our custom configuration, if we need one. In this case is not strictly necessary. The variable `mini.packpath` already uses the default value `mini.deps` is expecting. But if we were to change the value of `mini.packpath` then `mini.deps` should be aware of that.
 
-```vim
-:echo stdpath('data') . '/lazy/lazy.nvim'
-```
-
-Now let's download a plugin, a colorscheme to make Neovim look better. We are going to add this in `lazy.setup`.
+Let's download another plugin, a color scheme to make Neovim look better. Now we get to use the `.add()` function of `mini.deps`.
 
 ```lua
-{'folke/tokyonight.nvim'},
+MiniDeps.add('folke/tokyonight.nvim')
 ```
 
-This is the minimum data lazy.nvim needs to download a plugin from github. Which is just the name of the user in github and the name of the repository.
+This is the minimum amount of data `mini.deps` needs to download a plugin from github. Which is just the name of the user in github and the name of the repository. And funny enough this works like our custom function `.require_deps()`. It'll install the plugin automatically if it's missing and then it will add it to Neovim's `runtimepath`.
 
-Your configuration should look like this.
+`mini.deps` also has this idea of a "plugin specification" which is a way for us to add more information about the plugin we want to download. For example, we can change the default branch we want to use. It looks a little bit like this.
 
 ```lua
-lazy.path = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-lazy.opts = {}
-
-lazy.setup({
-  {'folke/tokyonight.nvim'},
+MiniDeps.add({
+  source = 'nvim-mini/mini.nvim',
+  checkout = mini.branch,
 })
 ```
 
-Now let's add the code to apply the theme. Add the end of the file put this.
+Here instead of just providing a piece of text we use a lua table. The `source` property is mandatory, this should be the URL of the plugin. But since github is so popular `mini.deps` allows us to just specify the shorthand. In the `checkout` property we can provide a branch, a commit or tag. You can find more [details about the plugin specification](https://nvim-mini.org/mini.nvim/doc/mini-deps.html#minideps-plugin-specification) in the documentation.
+
+We already downloaded mini.nvim in a path where `mini.deps` can track it. So having this `MiniDeps.add()` call is optional. Unless of course we want to deviate from the defaults, like changing the branch.
+
+Now let's add the code to apply the new color scheme. After the call to `MiniDeps.add()` we write this.
 
 ```lua
-vim.opt.termguicolors = true
+vim.o.termguicolors = true
 vim.cmd.colorscheme('tokyonight')
 ```
 
-We enable `termguicolors` so Neovim can show the "best" version of the colorscheme. Each colorscheme can have two versions: one that works for terminals which only support 256 colors and another that specifies colors in hexadecimal code (has way more colors).
+Here we enable `termguicolors` so Neovim can show the "best" version of the color scheme. Each color scheme can have two versions: one that works for terminals which only support 256 colors and another that specifies colors in hexadecimal notation (has way more colors).
 
 We tell Neovim which theme we want using the `colorscheme` command. And yes, it looks like a lua function (it is). But under the hood is executing this vim command.
 
@@ -378,7 +382,7 @@ We tell Neovim which theme we want using the `colorscheme` command. And yes, it 
 colorscheme tokyonight
 ```
 
-We save these changes and restart Neovim, to trigger the download of lazy.nvim. When Neovim starts it should show a message telling us is cloning the plugin manager. After it's done another window will show up, it'll tell us the progress of the plugins download. After plugins are installed they will be loaded.
+We save these changes and restart Neovim, to trigger the download of mini.nvim. When Neovim starts it should show a message telling us is installing mini.nvim. After it's done `mini.deps` will make sure the rest of our plugins are installed and loaded.
 
 ## Plugin configuration
 
@@ -390,72 +394,41 @@ If for some reason the README doesn't have the information we are after, look fo
 
 ### Conventions of lua plugins
 
-Lucky for us a huge amount of plugins written in lua follow a certain pattern. They use a function called `.setup`, and that function expects a lua table with some options. If there is something you should learn about the syntax of lua is how to create tables.
+Lucky for us a huge amount of plugins written in lua follow a certain pattern. They use a function called `.setup()`, and that function expects a lua table with some options. If there is something you should learn about the syntax of lua is how to create tables.
 
-Let's configure a plugin. For this example I'll use [lualine](https://github.com/nvim-lualine/lualine.nvim), a plugin that can give us a good looking statusline. First step, add `nvim-lualine/lualine.nvim` to the list of plugins.
+Our very own `tokyonight.nvim` follows this setup convention. So let's use it as an example.
 
-```lua
-lazy.setup({
-  {'folke/tokyonight.nvim'},
-  {'nvim-lualine/lualine.nvim'},
-})
-```
-
-In lualine's repository we can find a `doc` folder and inside there is a file called `lualine.txt`. We can read it in Neovim using this.
+In tokyonight's repository we can find a `doc` folder and inside there is a file called `tokyonight.nvim.txt`. We can read it in Neovim using this.
 
 ```vim
-:help lualine
+:help tokyonight.nvim.txt
 ```
 
-This documentation shows we can make the plugin work just by calling `setup` on the lualine module. Like this.
+This documentation shows we can customize the color scheme using a `.setup()` function. So let's say we want to disable the italics it has enabled by default. We would do something like this:
 
 ```lua
-require('lualine').setup()
-```
-
-Add that to the end of your configuration.
-
-If we save the changes and restart Neovim, lazy.nvim will install the plugin and apply the default configuration.
-
-But now lets pretend we want to change some options. For example, say we hate icons, we want them gone. In the documentation there is a section called `lualine-Default-configuration`, in there I can see some code that says `icon_enabled = true`. Great, let's copy all the necessary properties to modify that.
-
-```lua
-require('lualine').setup({
-  options = {
-    icons_enabled = false,
-  }
+-- See :help tokyonight.nvim-tokyo-night-configuration
+require('tokyonight').setup({
+  styles = {
+    comments = {italic = false},
+    keywords = {italic = false},
+  },
 })
 ```
 
-We can save the changes and reload the config using `:source $MYVIMRC`.
+For this to be effective we need to add it before calling the `colorscheme` command.
 
-Now we don't like "component separators", how do we get rid of them? Check the docs again, there is a section `lualine-Disabling-separators`, it shows this.
+How did I know that was going to work? First, knowing how lua tables work is a huge part of it. Second, the documentation shows all the default settings in the section `tokyonight.nvim-tokyo-night-configuration`. And the last thing to know is that most lua plugins will do their best to merge the default settings with our custom settings. This means we only have to specify the things we want to change.
 
-```lua
-options = { section_separators = '', component_separators = '' }
-```
+We can save the changes and reload the config using the command `:source $MYVIMRC`.
 
-Looks promising but we should not copy/paste that code as is. We need to really read it. It shows an `options` property, we already have one of those, what we should do is add the new properties to the thing we have.
-
-```lua
-require('lualine').setup({
-  options = {
-    icons_enabled = false,
-    section_separators = '',
-    component_separators = ''
-  }
-})
-```
-
-Save and reload to verify the changes.
-
-So... what did we learned? To configure some plugins we need know: how to navigate to the documentation and the syntax used to create lua tables.
+Is worth mention that calling the `.setup()` function in tokyonight is optional. Is not like `mini.deps` where `.setup()` actually enables the plugin. This highlights the fact that lua plugins can do whatever they want. There isn't a fixed behavior or rules attached to this convention.
 
 ### Vimscript plugins
 
 There are a lot of useful plugins written in vimscript. Most of them we can configure modifying global variables. In lua we change global variables of vimscript using `vim.g`.
 
-Did you know Neovim has a file explorer? Yeah, it's a plugin that comes bundled in Neovim. We can use it with the command `:Lexplore`. It is written in vimscript, so there is no `.setup` function. To know how to configure it we need to check the documentation.
+Did you know Neovim has a file explorer? Yeah, it's a plugin that comes bundled in Neovim. We can use it with the command `:Lexplore`. It is written in vimscript, so there is no `.setup()` function. To know how to configure it we need to check the documentation.
 
 ```vim
 :help netrw
@@ -646,7 +619,7 @@ load('user.keymaps')
 
 If we do this in `init.lua` the `source` command will be able to execute all the files in our config.
 
-**WARNING**. Be careful with this. Some plugins might act weird if you configure them twice. What do I mean? If we use `source` and call the `.setup` function of a plugin a second time it might have unexpected effects.
+**WARNING**. Be careful with this. Some plugins might act weird if you configure them twice. What do I mean? If we use `source` and call the `.setup()` function of a plugin a second time it might have unexpected effects.
 
 ## init.lua
 
@@ -662,17 +635,11 @@ I know is difficult to start from scratch so here is a "starter template" you ca
 
 * nvim-light: [init.lua](https://github.com/VonHeikemen/nvim-light/blob/main/init.lua) | [github link](https://github.com/VonHeikemen/nvim-light)
 
-Another great option is [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). The author of this configuration has a video that explain every line of code in it. It's a good resource to learn about popular plugins and how to configure them.
-
-* [Complete Neovim setup guide](https://www.youtube.com/watch?v=m8C0Cq9Uv9o)
-
-And if you want, you can check my personal configuration.
-
-* [neovim config](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim)
+Another great option is [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). It's a good resource to learn about popular plugins and how to configure them.
 
 ## Conclusion
 
 Now we know how to configure some basic options in Neovim. We learned how to create our very own keybindings. We know how to get plugins from github. We manage to configure a couple of plugins, a lua plugin and one written in vimscript. We took a brief look at some advance topics like recursive mappings, user commands, autocommands and lua modules.
 
-I'd say you have everything you need to start exploring plugins, check other people's config and learn from them.
+I'd say you have everything you need to start exploring plugins, read other people's config and learn from them.
 
