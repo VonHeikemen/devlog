@@ -627,10 +627,6 @@ Esta es una "plantilla" que pueden copiar y modificar a su gusto:
 
 * nvim-light: [init.lua](https://github.com/VonHeikemen/nvim-light/blob/main/init.lua) | [github link](https://github.com/VonHeikemen/nvim-light)
 
-Y esta es mi configuración personal en github:
-
-* [neovim (v0.10)](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim)
-
 ## Fuentes
 
 * [learn x in y minutes: where X=lua](https://learnxinyminutes.com/docs/lua/)
