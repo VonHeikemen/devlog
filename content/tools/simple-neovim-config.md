@@ -2,7 +2,7 @@
 title = "Simple Neovim config"
 description = "Learn the basics of Neovim configuration in lua"
 date = 2024-09-12
-updated = 2025-09-08
+updated = 2025-11-01
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -12,7 +12,7 @@ Can I offer you a nice Neovim configuration in this trying time?
 
 40 lines of code. That's all you need to have a solid starting point. Believe it or not, even those IDE-like features people talk about online can be enabled using just **1 plugin** and a few keymaps.
 
-You can try [this simple config](#init-lua) and then add new things to it based on the problems you encounter along the way. Or just take this as an oportunity to learn about the basics of Neovim configuration.
+You can try [this simple config](#init-lua) and then add new things to it based on the problems you encounter along the way. Or just take this as an opportunity to learn about the basics of Neovim configuration.
 
 ## Installing Neovim
 
@@ -201,71 +201,94 @@ vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Exit vim'})
 
 ## Installing plugins
 
-In Neovim there is something called [vim packages](@/tools/installing-neovim-plugins-without-a-plugin-manager.md). Long story short, we can put plugins in a folder in they should work.
+So Neovim is very close to have [its own plugin manager](https://neovim.io/doc/user/pack.html#_plugin-manager). But, it will take a few years before is included in a stable release available in every operating system. Right now only those who download Neovim's "nightly version" will be able to use it in its current state.
 
-We are going to keep it simple here. 2 plugins is all we want to get started. And because of this I will say we can download the plugins manually.
+Interestingly enough, Neovim's plugin manager is based on a plugin called [mini.deps](https://nvim-mini.org/mini.nvim/doc/mini-deps.html). So while the Neovim team works on the new plugin manager, we can use `mini.deps`. In the future it should be fairly simple to migrate from `mini.deps` to the native solution.
 
-I going to recommend that you `git clone` plugins in your Neovim config folder (for now). Of course, this means **you** will be in charge of updating and removing plugins manually. But at this point I think the focus should be using Neovim for coding. If you decide that you actually like Neovim then you search for a plugin manager.
+The question is, *how does one install a plugin without a plugin manager?*
 
-Okay. Where exactly do we download plugins?
+There is a feature in **Vim** called [packages](@/tools/installing-neovim-plugins-without-a-plugin-manager.md). Long story short, we can put plugins in a specific location in they should work.
 
-Let's use Neovim in headless mode again, this time to create the folder were we can download plugins.
-
-This command will create the folder we need.
+Let's use Neovim in headless mode again, this time to create the directory were `mini.deps` should be.
 
 ```sh
-nvim --headless -c 'call mkdir(stdpath("config") . "/pack/vendor/start/", "p")' -c 'quit'
+nvim --headless -c 'call mkdir(stdpath("data") . "/site/pack/deps/start/", "p")' -c 'quit'
 ```
 
-And this other command will show the location.
+This other command will show the full path of the directory we just created.
 
 ```sh
-nvim --headless -c 'echo stdpath("config") . "/pack/vendor/start/"' -c 'quit'
+nvim --headless -c 'echo stdpath("data") . "/site/pack/deps/start/"' -c 'quit'
 ```
 
-Now navigate to that location using your terminal. You will want to execute the command `git clone` inside that folder.
-
-* Install [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
-
-We will use this plugin to help us enable IDE-like features.
-
-```
-git clone https://github.com/neovim/nvim-lspconfig
-```
-
-**Important**: `nvim-lspconfig` no longer supports older versions of Neovim. If you need support for Neovim v0.9 use the [tag v1.8.0](https://github.com/neovim/nvim-lspconfig/releases/tag/v1.8.0).
-
-```
-git switch --detach v1.8.0
-```
+Now navigate to that location using your terminal. You will want to execute the command `git clone` inside that directory.
 
 * Install [mini.nvim](https://github.com/nvim-mini/mini.nvim) 
 
-`mini.nvim` is a collection of lua modules aim to solve common problems and enhance some of Neovim builtin features.
+`mini.deps` is part of a project called `mini.nvim`, which is a collection of lua modules aimed to solve common problems and enhance some of Neovim builtin features. So we want to download `mini.nvim` using this command.
 
 ```
 git clone --filter=blob:none https://github.com/nvim-mini/mini.nvim
 ```
 
-After we install a plugin we have to generate the help tags.
+After the install is complete we should generate the help tags.
 
 ```sh
 nvim --headless -c 'helptags ALL' -c 'quit'
 ```
 
-Now Neovim's config folder should have this structure.
+To use the plugin we must load the module `mini.deps`. But here we want to use in a way that is "safe." Because what if we copy our configuration to a new machine but we forget to download `mini.nvim`? If we do it the normal way we get hit by a scary wall of red text. We can make the experience less jarring by adding a few lines code.
 
-```
-nvim
-├── init.lua
-└── pack
-    └── vendor
-        └── start
-            ├── mini.nvim
-            └── nvim-lspconfig
+```lua
+local ok, MiniDeps = pcall(require, 'mini.deps')
+if not ok then
+  vim.notify('[WARN] mini.deps module not found', vim.log.levels.WARN)
+  return
+end
 ```
 
-Remember to delete the `pack` folder when you start using a plugin manager. You'll want to re-install those plugins with the plugin manager.
+Here if something goes wrong Neovim will output a single line message then it will stop the execution of the script.
+
+If everything goes according to plan every function of the `mini.deps` module will be inside the variable `MiniDeps`.
+
+Is important to note all features of `mini.nvim` are opt-in, meaning we have to do something in our configuration to enable a module. For `mini.deps` we have to use a function called `.setup()`. So we add this after we load the module.
+
+```lua
+MiniDeps.setup({})
+```
+
+* Install [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
+
+We will use this plugin to help us enable IDE-like features.
+
+At this point we have `mini.deps` available so is easier to install a new plugin. This is the minimum amount of code we need.
+
+```lua
+MiniDeps.add('neovim/nvim-lspconfig')
+```
+
+The `.add()` function will make sure the plugin is installed and loaded. And is also the reason I recommend using `mini.deps` while we wait for Neovim's plugin manager. In the future we will be able to add plugins like this:
+
+```lua
+vim.pack.add({'https://github.com/neovim/nvim-lspconfig'})
+```
+
+There are some sutle differences between `mini.deps` and `vim.pack` but for the most part those two functions do the same thing.
+
+For now let's focus on `mini.deps` because that's the thing we are going to use.
+
+The moment we need to add more information about the plugin we want to download we should replace the string with a lua table. For example, let's say we want to download a previous version of `nvim-lspconfig`. This is what we do.
+
+```lua
+MiniDeps.add({
+  source = 'neovim/nvim-lspconfig',
+  checkout = 'v1.8.0'
+})
+```
+
+Now the first argument to `.add()` is a lua table with some properties. `source` would be the link to the plugin. In `mini.deps` github links get a special treatment because is very popular, so here we can just specify the github user and the name of the repository. `checkout` can be a commit hash, tag or branch name. In this case [v1.8.0](https://github.com/neovim/nvim-lspconfig/releases/tag/v1.8.0) is a tag on the `nvim-lspconfig` repository, it is the last version that supports **Neovim v0.9**.
+
+To know more details about `mini.deps` read the official documentation: [mini.nvim/doc/mini-deps.html](https://nvim-mini.org/mini.nvim/doc/mini-deps.html).
 
 ## File explorer
 
@@ -289,11 +312,11 @@ We make a keymap to open the file explorer.
 vim.keymap.set('n', '<leader>e', '<cmd>lua MiniFiles.open()<cr>', {desc = 'File explorer'})
 ```
 
-After you open the file explorer press `g` then `?`, this will show the keymaps you can use.
+After we open the file explorer press `g` then `?`, this will show the keymaps available.
 
 What if we want to change the settings in `mini.files`?
 
-You'll want to add your custom settings inside the `{}` of the setup function. Here's an example.
+Any custom setting should be inside the `{}` of the setup function. Here's an example.
 
 ```lua
 require('mini.files').setup({
@@ -317,7 +340,7 @@ In Neovim's command-line I executed this command.
 
 That took me to [the help page of mini.files](https://github.com/nvim-mini/mini.nvim/blob/main/doc/mini-files.txt).
 
-Remember when we installed the plugins? We generated some called help tags. These tags allow you to navigate to the "offline" documentation of the plugin: the help page.
+Remember when we installed `mini.nvim`? We generated some called help tags. These tags allow you to navigate to the "offline" documentation of the plugin: the help page.
 
 The tab complete feature of the `:help` command is really good too. You can type `:help mini` and then press the `Tab` key, Neovim will show you all the help tags that start with `mini`.
 
@@ -585,6 +608,15 @@ vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Exit vim'})
 
 vim.cmd.colorscheme('retrobox')
 
+local ok, MiniDeps = pcall(require, 'mini.deps')
+if not ok then
+  vim.notify('[WARN] mini.deps module not found', vim.log.levels.WARN)
+  return
+end
+
+MiniDeps.setup({})
+MiniDeps.add('neovim/nvim-lspconfig')
+
 require('mini.snippets').setup({})
 require('mini.completion').setup({})
 
@@ -636,6 +668,23 @@ vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Exit vim'})
 local ok_theme = pcall(vim.cmd.colorscheme, 'retrobox')
 if not ok_theme then
   vim.cmd.colorscheme('habamax')
+end
+
+local ok, MiniDeps = pcall(require, 'mini.deps')
+if not ok then
+  vim.notify('[WARN] mini.deps module not found', vim.log.levels.WARN)
+  return
+end
+
+MiniDeps.setup({})
+
+if vim.fn.has('nvim-0.11') == 1 then
+  MiniDeps.add('neovim/nvim-lspconfig')
+else
+  MiniDeps.add({
+    source = 'neovim/nvim-lspconfig',
+    checkout = 'v1.8.0'
+  })
 end
 
 require('mini.snippets').setup({})
