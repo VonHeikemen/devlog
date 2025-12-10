@@ -372,7 +372,7 @@ Vale la pena mencionar que ya instalamos mini.nvim en una ubicación donde `mini
 Ahora vamos a agregar el código para aplicar el nuevo tema para el editor.
 
 ```lua
-vim.opt.termguicolors = true
+vim.o.termguicolors = true
 vim.cmd.colorscheme('tokyonight')
 ```
 
