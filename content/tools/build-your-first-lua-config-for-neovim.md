@@ -635,8 +635,6 @@ I know is difficult to start from scratch so here is a "starter template" you ca
 
 * nvim-light: [github link](https://github.com/VonHeikemen/nvim-light)
 
-Another great option is [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). It's a good resource to learn about popular plugins and how to configure them.
-
 ## Conclusion
 
 Now we know how to configure some basic options in Neovim. We learned how to create our very own keybindings. We know how to get plugins from github. We manage to configure a couple of plugins, a lua plugin and one written in vimscript. We took a brief look at some advance topics like recursive mappings, user commands, autocommands and lua modules.
