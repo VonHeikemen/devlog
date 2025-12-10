@@ -2,7 +2,7 @@
 title = "Cómo crear tu primera configuración de Neovim usando lua"
 description = "Donde aprendemos cómo personalizar Neovim y agregar plugins"
 date = 2022-07-02
-updated = 2024-03-20
+updated = 2025-12-10
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -13,27 +13,27 @@ shared = [
 ]
 +++
 
-Neovim es un editor que se caracteriza por ser extensible, con suficiente esfuerzo podemos convertirlo en algo más que un editor de texto. Hoy espero poder enseñarles suficiente sobre `lua` y la api de Neovim para poder construir una configuración que se adapte a sus necesidades.
+Aquí espero poder enseñarles suficiente sobre `lua` y la api de Neovim para poder construir una configuración que se adapte a sus necesidades.
 
 Lo que haremos será crear un archivo de configuración que llamaremos `init.lua`, agregaremos un par de plugins y les diré cómo crear sus propios comandos.
 
-Este tutorial está pensado para aquellos que son totalmente nuevos en Neovim. Si ustedes ya tienen una configuración escrita en vimscript y desean migrarla a lua, encontrarán todo lo que necesitan aquí: [Todo lo que necesitan saber para configurar neovim usando lua](@/tools/configuring-neovim-using-lua.es.md).
+Este tutorial está pensado para aquellos que son totalmente nuevos en Neovim. Si ya tienen una configuración escrita en vimscript y desean migrarla a lua, les recomiendo leer esto: [Todo lo que necesitan saber para configurar neovim usando lua](@/tools/configuring-neovim-using-lua.es.md).
 
 ## Recomendaciones
 
-Antes de empezar, les aconsejo que instalen la versión de Neovim estable más reciente. Pueden visitar la [sección releases](https://github.com/neovim/neovim/releases) del repositorio en github y descargarla de ahí. De aquí en adelante voy a asumir que están usando la version 0.8 o mayor.
+Antes de empezar, les aconsejo que instalen la versión estable de Neovim más reciente. Pueden visitar la [sección releases](https://github.com/neovim/neovim/releases) del repositorio en github y descargarla de ahí. En esta ocasión necesitaremos una versión de Neovim que sea igual o mayor a v0.9.5.
 
-Si aún no se sienten cómodos usando Neovim para editar texto, hagan el tutorial interactivo que viene incluido. Pueden acceder a él ejecutando este comando en su terminal.
+Y si aún no se sienten cómodos usando Neovim para editar texto, hagan el tutorial interactivo que viene incluido. Pueden acceder a él ejecutando este comando en su terminal.
 
 ```sh
 nvim +Tutor
 ```
 
-El tutorial está inglés. Si no tienen un buen dominio del idioma pueden [descargar la versión en español](https://raw.githubusercontent.com/vim/vim/d899e51120798d3fb5420abb1f19dddf3f014d05/runtime/tutor/tutor.es). Guardan ese archivo en algún lugar de su sistema y lo abren con Neovim. Voy a asumir que ya conocen todas las funcionalidades que enseña el tutor.
+El tutorial está inglés. Si no tienen un buen dominio del idioma pueden hacer el tutorial de **Vim**, que es un simple archivo de texto. Está disponible en repositorio de Vim: [vim/runtime/tutor/tutor.es](https://raw.githubusercontent.com/vim/vim/d899e51120798d3fb5420abb1f19dddf3f014d05/runtime/tutor/tutor.es). Guardan ese archivo en algún lugar de su sistema y lo abren con Neovim. Voy a asumir que ya conocen todas las funcionalidades que enseña el tutor.
 
 ## El Inicio
 
-Lo primero que debemos hacer es crear nuestro archivo de configuración, el famoso `init.lua`. ¿Dónde? Depende de su sistema operativo, y también de sus variables de entorno. Pero puedo enseñarles cómo crearlo desde Neovim, así no tenemos que preocuparnos por esos detalles.
+Lo primero que debemos hacer es crear nuestro archivo de configuración, el famoso `init.lua`. ¿Dónde? Depende de su sistema operativo y sus variables de entorno. Pero puedo enseñarles cómo crearlo desde Neovim, así no tenemos que preocuparnos por esos detalles.
 
 > Dato curioso: En algunos tutoriales se refieren al archivo de configuración como `vimrc`, porque ese es el nombre que tiene el archivo en Vim.
 
@@ -45,7 +45,7 @@ Vamos a abrir Neovim y luego ejecutamos este comando.
 :call mkdir(stdpath("config"), "p")
 ```
 
-Con esto crearemos la carpeta donde vivirá nuestra configuración. Si quieren saber qué carpeta fue creada ejecuten esto.
+Con esto crearemos la carpeta donde vivirá nuestra configuración. Si quieren conocer la ubicación exacta usen este comando.
 
 ```vim
 :echo stdpath("config")
@@ -57,7 +57,7 @@ Ahora vamos con el comando para editar la configuración.
 :exe "edit" stdpath("config") . "/init.lua"
 ```
 
-Después de ejecutarlo tendremos una página en blanco, pero el archivo aún no existe en el sistema. Para crearlo debemos guardarlo. Ejecuten esto.
+Después de ejecutarlo tendremos una "página" en blanco, pero el archivo aún no existe en el sistema. Para crearlo debemos guardarlo. Ejecuten esto.
 
 ```vim
 :write
@@ -77,19 +77,19 @@ nvim --headless -c 'call mkdir(stdpath("config"), "p") | exe "edit" stdpath("con
 
 ## Opciones del editor
 
-Para acceder a las opciones de Neovim debemos usar la variable global `vim`. Bueno, más que una variable, es un módulo donde podemos encontrar cualquier tipo de utilidades. Pero ahora lo que nos interesa es una propiedad llamada `opt`, con eso podremos modificar cualquiera de las 351 opciones que ofrece Neovim (en su versión 0.7).
+Para acceder a las opciones de Neovim debemos usar la variable global `vim`. Bueno, esto es más que una variable, es un módulo donde podemos encontrar cualquier tipo de utilidades. Pero ahora lo que nos interesa es una propiedad llamada `o`, con eso podremos modificar cualquiera de las 351 opciones que ofrece Neovim.
 
 Esta es la sintaxis que deben seguir.
 
 ```lua
-vim.opt.nombre_opcion = valor
+vim.o.nombre_opcion = valor
 ```
 
 Donde `nombre_opcion` puede ser cualquiera de [esta lista](https://neovim.io/doc/user/quickref.html#option-list). Y `valor` debe concordar con el tipo de dato que espera la opción.
 
 > Pueden ver la lista de opciones desde Neovim con el comando `:help option-list`.
 
-Deben tener en cuenta que cada opción tiene un "ámbito". Algunas opciones son globales, otras se limitan a la ventana o archivo que están manipulando en su momento. Para conocer estos detalles revisen la documentación de esta manera.
+Deben tener en cuenta que cada opción tiene un "ámbito." Algunas opciones son globales, otras se limitan a la ventana o archivo que están manipulando en su momento. Para conocer estos detalles revisen la documentación de esta manera.
 
 ```vim
 :help 'nombre_opcion'
@@ -104,15 +104,7 @@ Esta opción es de tipo booleano, quiere decir que sólo tiene dos posibles valo
 Al habilitar `number` Neovim nos muestra los números de cada línea en pantalla.
 
 ```lua
-vim.opt.number = true
-```
-
-* `mouse`
-
-Neovim (y Vim) puede utilizar el ratón para algunas operaciones, cosas como seleccionar texto o cambiar el tamaño de una ventana. `mouse` acepta una cadena de texto (carácteres rodeados por comillas) que contiene una combinación de modos. No vamos a preocuparnos por los modos, podemos habilitarlo para todos así:
-
-```lua
-vim.opt.mouse = 'a'
+vim.o.number = true
 ```
 
 * `ignorecase`
@@ -120,7 +112,7 @@ vim.opt.mouse = 'a'
 Con esto le decimos a Neovim si debe ignorar las letrás mayúsculas cuando realizamos una búsqueda. Por ejemplo, si buscamos la palabra `dos` nuestros resultados pueden incluir diferentes variaciones como `Dos`, `DOS` o `dos`.
 
 ```lua
-vim.opt.ignorecase = true
+vim.o.ignorecase = true
 ```
 
 * `smartcase`
@@ -128,7 +120,7 @@ vim.opt.ignorecase = true
 Hace que nuestra búsqueda ignore las letrás mayúsculas a menos que el término que estamos buscando tenga una letra mayúscula. Generalmente se usa en conjunto con `ignorecase`.
 
 ```lua
-vim.opt.smartcase = true
+vim.o.smartcase = true
 ```
 
 * `hlsearch`
@@ -136,7 +128,7 @@ vim.opt.smartcase = true
 Resalta los resultados de una búsqueda anterior. La mayor parte del tiempo no queremos esto, así que lo deshabilitamos.
 
 ```lua
-vim.opt.hlsearch = false
+vim.o.hlsearch = false
 ```
 
 * `wrap`
@@ -144,7 +136,7 @@ vim.opt.hlsearch = false
 Hace que el texto de las líneas largas (las que sobrepasan el ancho de la pantalla) siempre esté visible. Su valor defecto es `true`.
 
 ```lua
-vim.opt.wrap = true
+vim.o.wrap = true
 ```
 
 * `breakindent`
@@ -152,7 +144,7 @@ vim.opt.wrap = true
 Conserva la indentación de las líneas que sólo son visibles cuando `wrap` es `true`.
 
 ```lua
-vim.opt.breakindent = true
+vim.o.breakindent = true
 ```
 
 * `tabstop`
@@ -160,7 +152,7 @@ vim.opt.breakindent = true
 La cantidad de carácteres que ocupa `Tab`. El valor por defecto es 8. Yo prefiero 2.
 
 ```lua
-vim.opt.tabstop = 2
+vim.o.tabstop = 2
 ```
 
 * `shiftwidth`
@@ -168,7 +160,7 @@ vim.opt.tabstop = 2
 El espacio que Neovim usará para indentar una línea. Esta opción afecta los atajos `<<` y `>>`. Su valor por defecto es 8. La convención es tener el mismo valor que `tabstop`.
 
 ```lua
-vim.opt.shiftwidth = 2
+vim.o.shiftwidth = 2
 ```
 
 * `expandtab`
@@ -176,14 +168,14 @@ vim.opt.shiftwidth = 2
 Determina si Neovim debe transformar el carácter `Tab` en espacios. Su valor por defecto es `false`.
 
 ```lua
-vim.opt.expandtab = false
+vim.o.expandtab = false
 ```
 
 En lo que se refiere a configuración de variables hay más características que podría mencionar, pero tenemos otras cosas qué hacer. Pueden encontrar más detalles del tema aquí: [Configurando neovim - Opciones del editor](@/tools/configuring-neovim-using-lua.es.md#opciones-del-editor).
 
 ## Atajos de teclado
 
-Neovim no tiene suficientes, tenemos que crear más. Para esto debemos aprender a usar la función `vim.keymap.set`. Les mostraré un ejemplo.
+Para esto debemos aprender a usar la función `vim.keymap.set`. Les mostraré un ejemplo.
 
 ```lua
 vim.keymap.set('n', '<space>w', '<cmd>write<cr>', {desc = 'Guardar'})
@@ -212,11 +204,11 @@ vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 
 * `{rhs}` es la acción que queremos ejecutar. Puede ser un comando, una expresión o una función de lua.
 
-* `{opts}` este parámetro debe ser una tabla de lua. Si no saben qué es una tabla, sólo piensen que es una manera albergar varios tipos de datos en un lugar. En fin, estas son las propiedades de uso común.
+* `{opts}` este parámetro debe ser una tabla de lua. Si no saben qué es una tabla, sólo piensen que es una manera albergar varios tipos de datos en un lugar. Estas son las propiedades de uso común.
 
   - `desc`: Cadena de texto que describe qué hace el comando. Aquí podemos escribir cualquier cosa.
 
-  - `remap`: Booleano que controla si nuestro atajo debe ser recursivo. Su valor por defecto es `false`. Los atajos recursivos pueden crear conflictos, así que no lo habiliten si no saben todos los detalles de lo que quieren lograr. Luego les explico con más detalle.
+  - `remap`: Booleano que controla si nuestro atajo debe ser recursivo. Su valor por defecto es `false`. Los atajos recursivos pueden crear conflictos, así que no lo habiliten si no tienen idea de lo que están haciendo. Luego les explico con más detalle.
 
   - `buffer`: Puede ser un Booleano o un número. Si el valor es el booleano `true` quiere decir que al atajo sólo tendrá efecto en el archivo actual. Si es un número deberá ser el "id" de un archivo que tenemos abierto.
 
@@ -270,7 +262,7 @@ vim.keymap.set({'n', 'x'}, 'gp', '"+p')
 
 * Borrar texto sin alterar el registro
 
-Cuando borramos algo en modo normal o visual usando `c`, `d` o `x` ese texto se va un registro. Esto afecta el texto que podemos pegar con la tecla `p`. Lo que quiero hacer es modificar `x` y `X` para poder borrar texto sin afectar el "historial" de copias.
+Cuando borramos algo en modo normal o visual usando `c`, `d` o `x` ese texto se va un registro. Esto afecta el texto que podemos pegar con la tecla `p`. Lo que quiero hacer es modificar `x` y `X` para poder borrar texto sin afectar el historial de copias.
 
 ```lua
 vim.keymap.set({'n', 'x'}, 'x', '"_x')
@@ -287,85 +279,97 @@ vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<CR>')
 
 ## Plugin manager
 
-Vamos a usar [lazy.nvim](https://github.com/folke/lazy.nvim). Me agrada porque podemos crear una configuración simple donde solamente escribimos una lista de plugins, pero también podemos crear módulos para la configuración de plugins. Por el momento mostraré el uso más simple.
+Aquí vamos a usar [mini.nvim](https://nvim-mini.org/mini.nvim/).
 
-Nuestro primer paso será instalar lazy.nvim. En la documentación nos muestran cómo hacerlo usando lua. Vamos a agregar esto.
+mini.nvim es una colección de módulos escritos en lua. Uno de esos módulos es el manejador de plugins que vamos a usar, `mini.deps`.
+
+Deben saber el equipo de Neovim está trabajando en un [manejador de plugins](https://neovim.io/doc/user/pack.html#_plugin-manager) que estará en incluido en Neovim `v0.12`. Este manejador de plugins estará basado en `mini.deps`.
+
+Ahora bien, *¿cómo se instala un plugin sin un manejador de plugins?*
+
+En Vim (y Neovim) es posible instalar un plugin si lo descargamos en una ubicación especial. El truco está en saber dónde. Lo que haremos será escribir una función (en lua) para descargar mini.nvim.
 
 ```lua
-local lazy = {}
+local mini = {}
 
-function lazy.install(path)
-  if not vim.loop.fs_stat(path) then
-    print('Installing lazy.nvim....')
+mini.branch = 'main'
+mini.packpath = vim.fn.stdpath('data') .. '/site'
+
+function mini.require_deps()
+  local uv = vim.uv or vim.loop
+  local mini_path = mini.packpath .. '/pack/deps/start/mini.nvim'
+
+  if not uv.fs_stat(mini_path) then
+    print('Installing mini.nvim....')
     vim.fn.system({
       'git',
       'clone',
       '--filter=blob:none',
-      'https://github.com/folke/lazy.nvim.git',
-      '--branch=stable', -- latest stable release
-      path,
+      'https://github.com/nvim-mini/mini.nvim',
+      string.format('--branch=%s', mini.branch),
+      mini_path
     })
-  end
-end
 
-function lazy.setup(plugins)
-  if vim.g.plugins_ready then
-    return
+    vim.cmd('packadd mini.nvim | helptags ALL')
   end
 
-  -- Pueden comentar la siguiente línea una vez que lazy.nvim esté instalado
-  lazy.install(lazy.path)
+  local ok, deps = pcall(require, 'mini.deps')
+  if not ok then
+    return {}
+  end
 
-  vim.opt.rtp:prepend(lazy.path)
-
-  require('lazy').setup(plugins, lazy.opts)
-  vim.g.plugins_ready = true
+  return deps
 end
 ```
 
-Entonces, aquí tenemos dos funciones que están esperando para ser invocadas. Yo prefiero hacerlo de esta manera porque así puedo aislar el código que viene de la documentación.
+Aquí tenemos una tabla de lua llamada `mini`, y esta contiene un par de opciones y una función.
 
-Ahora tenemos que agregar nuestra configuración. Debemos especificar la ruta donde se instalarán los plugins, usamos la `lazy.path` para eso. Si quieren configurar lazy.nvim utilizan la variable `lazy.opts`, yo por el momento dejo la configuración vacía. Y para terminar vamos a colocar la lista de plugins en la función `lazy.setup`.
+La función `.require_deps()` usará el comando `git clone` para descargar mini.nvim si no se encuentra instalado en nuestro sistema. Luego intentará cargar el módulo `mini.deps` de manera segura. Ahora bien, este código simplemente crea la función. Para que tenga efecto debemos invocarla.
 
 ```lua
-lazy.path = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-lazy.opts = {}
+local MiniDeps = mini.require_deps()
 
-lazy.setup({
-  ---
-  -- Lista de plugins
-  ---
+if not MiniDeps.setup then
+  return
+end
+```
+
+Si todo sale bien la variable `MiniDeps` tendrá todas las funciones del módulo `mini.deps`. Si resulta que `MiniDeps` no contiene la función `.setup` debemos asumir que ocurrió algún error y se detiene la ejecución del script. De esta manera incluso si algo está mal el editor se mantendrá en un estado funcional.
+
+En mini.nvim (casi) todos los módulos deben ser activados de manera explícita. Esto quiere decir que luego de usar la función `require` para cargar un módulo debemos ejecutar la función `.setup()`.
+
+```lua
+MiniDeps.setup({
+  path = {
+    package = mini.packpath,
+  },
 })
 ```
 
-Aquí utilizamos `stdpath('data')` para que la ruta de los plugins quede en una carpeta manejada por Neovim. Ustedes pueden cambiar la ruta si quieren. Pero de esta manera no tenemos que preocuparnos por cambiar la ruta dependiendo del sistema operativo donde estamos.
+La función `.setup()` es dónde colocamos nuestra configuración, si necesitamos una. En este caso no es estrictamente necesario. La variable `mini.packpath` ya contiene el valor que `mini.deps` espera por defecto. Pero si en algún momento necesitamos cambiar su valor debemos pasar esa información a `mini.deps`.
 
-Si quieren saber donde estarán los plugins usen este comando.
-
-```vim
-:echo stdpath('data') . '/lazy/lazy.nvim'
-```
-
-Ahora vamos a descargar un plugin, un tema para que Neovim se vea mejor. Vamos a agregar esto en `lazy.setup`.
+Ahora vamos a descargar un plugin, un tema para que el editor tenga una mejor apariencia. En este caso debemos usar la función `.add()`.
 
 ```lua
-{'folke/tokyonight.nvim'},
+MiniDeps.add('folke/tokyonight.nvim')
 ```
 
-Esta es la cantidad mínima de información que lazy.nvim necesita para descargar un plugin de github. Solamente especificamos el usuario de github y el nombre del repositorio.
+Esta es la cantidad mínima de información que `mini.deps` necesita para descargar un plugin de github. Basta con especificar el nombre del usuario (u organización) y el nombre del repositorio. Y curiosamente `.add()` funciona de manera similar a nuestra función `.require_deps()`, se asegura que el plugin esté instalado en nuestro sistema, de no ser así lo descarga, y finalmente lo añade al "runtimepath" de Neovim.
 
-Su configuración va a quedar de esta manera.
+`mini.deps` también tiene el concepto de una "especificación," que en inglés lo llaman "plugin spec." En este contexto una especificación es simplemente una tabla de lua que debe tener ciertas propiedades. Así es cómo agregamos más información del plugin que queremos instalar. Podemos por ejemplo decir qué versión queremos instalar o qué rama debe usar para descargar actualizaciones. Este es un ejemplo:
 
 ```lua
-lazy.path = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-lazy.opts = {}
-
-lazy.setup({
-  {'folke/tokyonight.nvim'},
+MiniDeps.add({
+  source = 'nvim-mini/mini.nvim',
+  checkout = mini.branch,
 })
 ```
 
-Ahora vamos a agregar el código para aplicar el tema.
+Noten que reemplazamos la cadena de texto con una tabla de lua. La propiedad `source` es obligatoria, esta debe ser la URL del plugin. En este caso si sólo especificamos los últimos componentes `mini.deps` asume que el plugin está alojado en github. La propiedad `checkout` es donde le decimos qué versión queremos instalar, aquí podemos colocar el nombre de una rama, un tag, o un commit. 
+
+Vale la pena mencionar que ya instalamos mini.nvim en una ubicación donde `mini.deps` puede manejarlo. Añadir mini.nvim con `MiniDeps.add()` es opcional. A menos claro que quieran cambiar algo como la versión o la rama.
+
+Ahora vamos a agregar el código para aplicar el nuevo tema para el editor.
 
 ```lua
 vim.opt.termguicolors = true
@@ -376,11 +380,11 @@ Aquí habilitamos la opción `termguicolors` de Neovim para asegurarnos de tener
 
 Para decirle a Neovim qué tema queremos usamos el comando `colorscheme`. Okey... técnicamente estamos usando una función de lua, pero esa función esta ejecutando un comando de vim.
 
-```lua
+```vim
 colorscheme tokyonight
 ```
 
-Si guardamos los cambios y reiniciamos Neovim deberá aparecer un mensaje que nos muestra que se está clonando el repositorio de lazy.nvim. Una vez que lazy.nvim lea nuestra lista de plugins deberá aparecer una ventana extra, esta nos muestra la descarga de los plugins. Deberíamos ver los cambios de manera inmediata luego de que lazy.nvim termine la descarga del tema.
+Ahora guardamos los cambios y reiniciamos Neovim. Al abrir Neovim nuevamente deberá aparecer un mensaje que nos muestra que se está clonando el repositorio de mini.nvim. Una vez que termine el proceso de descarga entonces `mini.deps` empezará a instalar el resto de los plugins.
 
 ## Configuración de plugins
 
@@ -388,72 +392,45 @@ Cada autor puede crear el método de configuración que mejor le parezca. ¿Cóm
 
 Cada plugin como mínimo debe tener un archivo llamado `README.md`. Este es el archivo que github nos muestra en la página principal del repositorio. Ahí debemos buscar las instrucciones de configuración.
 
-Si el archivo `README.md` no tiene la información que nos interesa busquen una carpeta llamada `doc`. Por lo general ahí se encuentra un archivo `txt`, esa es la página de ayuda. Podemos lear ese archivo desde github o desde Neovim si usamos el comando `:help nombre-archivo`.
+Si el archivo `README.md` no tiene la información que nos interesa busquen una carpeta llamada `doc`. Por lo general ahí se encuentra un archivo `txt`, esa es la página de ayuda. Podemos leer ese archivo desde github o desde Neovim si usamos el comando `:help nombre-archivo`.
 
 ### Convenciones de plugins escritos en lua
 
-Por suerte para nosotros muchos de los plugins escritos en lua siguen un patrón, usan una función llamada `setup` que acepta una tabla de lua como argumento. Si hay algo que deben aprender para configurar plugins en lua es cómo crear tablas.
+Por suerte para nosotros muchos de los plugins escritos en lua siguen un patrón, usan una función llamada `.setup()` que acepta una tabla de lua como argumento. Si hay algo que deben aprender para configurar plugins en lua es cómo crear tablas.
 
-Vamos a configurar un plugin. Para este ejemplo voy a usar [lualine](https://github.com/nvim-lualine/lualine.nvim), un plugin que modifica la "línea de estado" que se encuentra en el fondo de la pantalla. Para descargarlo agregamos `nvim-lualine/lualine.nvim` a la lista de plugins.
+`tokyonight.nvim`, el tema que acabamos de descargar, es uno de esos plugins que tiene una función `.setup()`. Usaremos eso como ejemplo.
 
-```lua
-lazy.setup({
-  {'folke/tokyonight.nvim'},
-  {'nvim-lualine/lualine.nvim'},
-})
-```
-
-Podemos empezar la configuración. Si revisan en github notarán que hay un archivo llamado `lualine.txt` en la carpeta `doc`. Podemos leerlo desde Neovim usando.
+En el repositorio de tokyonight contiene una carpeta llamada `doc` y dentro está el archivo `tokyonight.nvim.txt`. Si desean leerlo desde Neovim usen este comando.
 
 ```vim
-:help lualine
+:help tokyonight.nvim.txt
 ```
 
-La documentación nos dice que debemos llamar la función `setup` del módulo `lualine`. Así.
+Digamos que queremos deshabilitar las letras cursivas. En nuestra configuración debemos colocar algo como esto.
 
 ```lua
-require('lualine').setup()
-```
-
-Eso debería ser suficiente para que funcione. Podemos guardar los cambios y reiniciar Neovim.
-
-Luce bien y todo pero yo quiero modificar algunas opciones. Por ejemplo, no quiero usar íconos, ¿cómo los deshabilito? En la sección `lualine-Default-configuration` puedo ver algo que dice `icons_enabled = true`. Lo que voy a hacer es copiar las propiedades que necesito para desactivarlo.
-
-```lua
-require('lualine').setup({
-  options = {
-    icons_enabled = false,
-  }
+-- Ver :help tokyonight.nvim-tokyo-night-configuration
+require('tokyonight').setup({
+  styles = {
+    comments = {italic = false},
+    keywords = {italic = false},
+  },
 })
 ```
 
-Digamos que tenemos un problema con nuestra fuente, no podemos ver los "separadores de componentes". Tenemos que desactivarlos. Si nos vamos a la  sección `lualine-Disabling-separators` nos muestra esto.
+Deben tener en cuenta que esta función debe ser ejecutada antes de usar aplicar el tema.
 
-```lua
-options = { section_separators = '', component_separators = '' }
-```
+¿Cómo sabe uno qué opciones tiene disponible un plugin? Leemos la documentación. Ahí pueden encontrar la sección `tokyonight.nvim-tokyo-night-configuration`. Ya cuando tienen una referencia de las opciones a la mano, deben conocer la sintaxis que deben usar para crear una tabla de lua. Lo otro que deben tener en cuenta es que cada plugin hará su mejor esfuerzo para mezclar las opciones que trae por defecto con nuestra configuración personal. Incluso si el plugin tiene muchas opciones sólo basta con especificar las opciones que nosotros queremos cambiar.
 
-No vamos a copiar/pegar ese código como está. Tenemos que interpretarlo. Nos muestra la propiedad `options`, nosotros ya tenemos una de esas, entonces lo que hacemos es agregar las propiedades nuevas.
+En este punto podemos guardar los cambios y usar al comando `:source $MYVIMRC`.
 
-```lua
-require('lualine').setup({
-  options = {
-    icons_enabled = false,
-    section_separators = '',
-    component_separators = ''
-  }
-})
-```
-
-Ahora que tenemos lualine instalado podemos guardar el archivo y ejecutar `:source $MYVIMRC` para ver los cambios.
-
-En resumen, para configurar plugins debemos: saber cómo navegar en la documentación del plugin y también debemos conocer la sintaxis de lua para crear tablas.
+Vale la pena mencionar que invocar la función `.setup()` en tokyonight es opcional. No es como en `mini.deps` que debemos usarla para activar todas las funcionalidades del plugin. Aquí ya tenemos un ejemplo claro de que cada plugin tiene la libertad para hacer lo que quiera. No existe una regla o comportamiento fijo para la función `.setup()`.
 
 ### Plugins en vimscript
 
 Aún hay muchos plugins útiles que están escritos en vimscript. En la mayoría de los casos los configuramos usando variables globales. En lua podremos modificar variables globales de vimscript usando `vim.g`.
 
-¿Ya les conté que Neovim viene con un explorador de archivos? Podemos acceder a él con el comando `:Lexplore`. Este explorador es de hecho un plugin escrito en vimscript, entonces no tenemos una función `setup`. Para saber cómo configurarlo debemos buscar en su documentación.
+¿Ya les conté que Neovim viene con un explorador de archivos? Podemos acceder a él con el comando `:Lexplore`. Este explorador es de hecho un plugin escrito en vimscript, aquí no tenemos una función `.setup()`. Para saber cómo configurarlo debemos buscar en la documentación.
 
 ```vim
 :help netrw
@@ -461,13 +438,13 @@ Aún hay muchos plugins útiles que están escritos en vimscript. En la mayoría
 
 Si revisan la tabla de contenido de esa página de ayuda notarán una sección llamada `netrw-browser-settings`. Ahí nos muestran una lista de variables y sus descripciones. Vamos a fijarnos en las que comienzan con el prefijo `g:`.
 
-Por ejemplo si queremos ocultar el texto de ayuda usamos `netrw_banner`.
+Por ejemplo, si queremos ocultar el texto de ayuda usamos `netrw_banner`.
 
 ```lua
 vim.g.netrw_banner = 0
 ```
 
-Podríamos cambiar el tamaño de la ventana.
+También podemos cambiar el tamaño de la ventana.
 
 ```lua
 vim.g.netrw_winsize = 30
@@ -493,9 +470,9 @@ Bien, ahora vamos a crear un atajo recursivo que utilice `F2`.
 vim.keymap.set('n', '<space><space>', '<F2>', {remap = true})
 ```
 
-Si pulsan `Espacio` dos veces seguidas les aparecerá el explorador. Pero si cambian `remap` de `true` a `false`, no aparecerá nada.
+Si pulsan `Espacio` dos veces seguidas les aparecerá el explorador. Pero si cambian `remap` de `true` a `false` no aparecerá nada.
 
-Con los atajos recursivos, podremos usar otros atajos definidos por nosotros mismos o por plugins en el parámetro `{rhs}`. Con los atajos "no recursivos" sólo tendremos acceso a los atajos definidos directamente por Neovim.
+Con los atajos recursivos podremos usar atajos definidos por nosotros mismos o por plugins. Con los atajos "no recursivos" sólo tendremos acceso a los atajos definidos directamente por Neovim.
 
 Por lo general sólo queremos atajos recursivos cuando vamos a usar funcionalidades creadas por plugins.
 
@@ -509,7 +486,7 @@ Noten que estamos usando `*` en `{lhs}` y también en `{rhs}`. Si este atajo fue
 
 ### Comandos de usuario
 
-Sí, Neovim nos permite crear nuestros propios comandos. En lua usamos esta función.
+Para crear nuestros propios comandos usamos esta función:
 
 ```lua
 vim.api.nvim_create_user_command({name}, {command}, {opts})
@@ -519,7 +496,7 @@ vim.api.nvim_create_user_command({name}, {command}, {opts})
 
 * `{command}` es la acción que queremos ejecutar. Puede una cadena de texto que contiene un fragmento de vimscript o puede ser una función de lua.
 
-* `{opts}` debe ser una tabla de lua. No es opcional. Si no especifican ninguna opción deben colocar una tabla vacía.
+* `{opts}` debe ser una tabla de lua. No es opcional. Incluso si quieren utilizar todos los valores por defecto deben colocar una tabla vacía.
 
 Ejemplo, podemos crear un comando dedicado para recargar nuestra configuración.
 
@@ -642,7 +619,7 @@ load('user.keymaps')
 
 Sí hacemos esto en `init.lua` el comando `source` podrá ejecutar los módulos `settings` y `keymaps` de manera efectiva.
 
-**ADVERTENCIA**. Deben tener en cuenta que algunos plugins pueden actuar de manera extraña si los configuran más de una vez. Es decir, si ustedes usan `:source $MYVIMRC` y provocan que la función `setup` de un plugin se ejecute por segunda vez puede causar efectos inesperados.
+**ADVERTENCIA**. Deben tener en cuenta que algunos plugins pueden actuar de manera extraña si los configuran más de una vez. Es decir, si ustedes usan `:source $MYVIMRC` y provocan que la función `.setup()` de un plugin se ejecute por segunda vez puede causar efectos inesperados.
 
 ## init.lua
 
@@ -656,15 +633,7 @@ El siguiente paso es crear un ambiente de desarrollo en el que se sientan produc
 
 Este paso puede ser difícil si no saben dónde empezar, por eso he creado una "plantilla" que pueden revisar o incluso usar como base para su propia configuración personal.
 
-* nvim-light: [init.lua](https://github.com/VonHeikemen/nvim-light/blob/main/init.lua) | [github link](https://github.com/VonHeikemen/nvim-light)
-
-Otra buena opción sería ir al proyecto [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). El autor de esta configuración tiene un video donde explica cada línea de código. Es un buen recurso para aprender sobre cómo configurar plugins populares.
-
-* [Complete Neovim setup guide](https://www.youtube.com/watch?v=m8C0Cq9Uv9o)
-
-Si quieren, también pueden revisar mi configuración personal.
-
-* [neovim config](https://github.com/VonHeikemen/dotfiles/tree/master/my-configs/neovim)
+* nvim-light: [github link](https://github.com/VonHeikemen/nvim-light)
 
 ## Conclusión
 
