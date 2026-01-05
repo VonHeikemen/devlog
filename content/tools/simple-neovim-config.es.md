@@ -541,7 +541,7 @@ Algunos servidores LSP fueron creados exclusivamente para VS Code. El hecho de q
 
 ## Mención honorífica
 
-[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) es un plugin que fue creado en 2020. Mucha gente en la comunidad de Neovim dirá que es indispensable, y yo concuerdo hasta cierto punto. Es un plugin increíble... cuando otro plugin lo utiliza como dependencia. Verán, `tree-sitter` le permite a Neovim recopilar información sobre el archivo actual, y los autores de plugins pueden hacer cosas grandiosas con esa información. Para los "usuarios casuales" como nosotros existen algunos módulos que podemos habilitar. Uno de esos módulos puede mejorar el resaltado de código de muchos lenguajes de programación. Esa es la característica principal por la que `nvim-treesitter` se volvió famoso.
+[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) es un plugin que fue creado en 2020. Mucha gente en la comunidad de Neovim dirá que es indispensable, y yo concuerdo hasta cierto punto. Es un plugin increíble... cuando otro plugin lo utiliza como dependencia. Verán, `tree-sitter` le permite a Neovim recopilar información sobre el archivo actual, y los autores de plugins pueden hacer cosas grandiosas con esa información. Probablemente la funcionalidad que más destaca es el resaltado de código. Si `treesitter` está configurado correctamente puede mejorar el resaltado de código de muchos lenguajes.
 
 Pero hay cosas que deben saber:
 
@@ -555,14 +555,22 @@ Pero hay cosas que deben saber:
 
 Para conocer más detalles de `tree-sitter` pueden ver este video: [tree-sitter explained (15 min)](https://www.youtube.com/watch?v=09-9LltqWLY).
 
-Si quieren probar nvim-treesitter, este es el código para habilitar el módulo de resaltado de código.
+Si quieren probar nvim-treesitter, pueden usar el comando `:TSInstall` para descargar el "treesitter parser" de uno de los lenguajes que soporta nvim-treesitter. Después de eso podrán habilitar el resaltado de sintaxis mejorado basado en treesitter.
+
+Por ejemplo, pueden descargar el treesitter parser de javascript usando este comando.
+
+```vim
+:TSInstall javascript
+```
+
+Luego deben crear un autocomando donde deben ejecutar la función `vim.treesitter.start()`.
 
 ```lua
-require('nvim-treesitter.configs').setup({
-  auto_install = true,
-  highlight = {
-    enable = true,
-  },
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {'javascript', 'javascriptreact', 'js', 'jsx'},
+  callback = function()
+    vim.treesitter.start()
+  end,
 })
 ```
 

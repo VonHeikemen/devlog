@@ -551,7 +551,7 @@ Some language servers were created for VS Code, the fact that Neovim and other e
 
 ## Honorable mention
 
-[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is a plugin that has been around since 2020. A lot of people will say it's essential to your Neovim experience, and I do agree to some extend. It is incredibly useful... as a dependency for other plugins. It allows Neovim to gather more information about source code of the current file, and plugin authors can do really cool things with that. For "regular users" like you and me there are [some modules](https://github.com/nvim-treesitter/nvim-treesitter?tab=readme-ov-file#available-modules) we can enable. One of them can be used to enhance the syntax highlight of many programming languages. That I think **the** feature `nvim-treesitter` is known for.
+[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is a plugin that has been around since 2020. A lot of people will say it's essential to your Neovim experience, and I do agree to some extend. It is incredibly useful... as a dependency for other plugins. It allows Neovim to gather more information about source code of the current file, and plugin authors can do really cool things with that. Treesitter became known in the community because it could be used to enhance the syntax highlight of many programming languages.
 
 There are things you need to be aware of:
 
@@ -565,14 +565,22 @@ There are things you need to be aware of:
 
 To know more about `tree-sitter` watch this video: [tree-sitter explained (15 min)](https://www.youtube.com/watch?v=09-9LltqWLY).
 
-If you decide to try it, here's how you use it to enable the enhanced syntax highlight.
+If you decide to try it, you can use the command `:TSInstall` to download a treesitter parser for the language you want, and then you can enable the enhanced syntax highlight using an autocommand.
+
+For example, you can download the treesitter parser for javascript using this command.
+
+```vim
+:TSInstall javascript
+```
+
+And then create an autocommand that will call the function `vim.treesitter.start()` in any filetype that uses javascript syntax. Like this.
 
 ```lua
-require('nvim-treesitter.configs').setup({
-  auto_install = true,
-  highlight = {
-    enable = true,
-  },
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = {'javascript', 'javascriptreact', 'js', 'jsx'},
+  callback = function()
+    vim.treesitter.start()
+  end,
 })
 ```
 
