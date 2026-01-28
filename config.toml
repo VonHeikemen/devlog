@@ -30,15 +30,14 @@ generate_feeds = true
 author = "Heiker Curiel"
 
 [markdown]
-# Whether to do syntax highlighting
-# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
-highlight_code = true
-
-# The theme to use for code highlighting.
-highlight_theme = "charcoal"
-
 # Whether external links are to be opened in a new tab
 external_links_target_blank = true
+
+[markdown.highlighting]
+# The theme to use for code highlighting.
+theme = "kanagawa-wave"
+# When set to "true", missing highlight languages are treated as errors.
+error_on_missing_language = true
 
 [translations]
 min_read = "min read"
