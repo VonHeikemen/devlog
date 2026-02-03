@@ -210,7 +210,7 @@ By default `mini.statusline` will show the current git branch if we enable `mini
 require('mini.git').setup({})
 ```
 
-The `:Git` provided by this plugin will try integrate Neovim whenever possible. For example, `:Git diff` will show the output of the diff in a Neovim buffer. `:Git commit` will use the current Neovim instance as the editor for the commit message. To know more details read the documentation.
+The `:Git` command provided by this plugin will try integrate Neovim whenever possible. For example, `:Git diff` will show the output of the diff in a Neovim buffer. `:Git commit` will use the current Neovim instance as the editor for the commit message. To know more details read the documentation.
 
 ```
 :help mini.git
@@ -384,7 +384,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 Github: [VonHeikemen/ts-enable.nvim](https://github.com/VonHeikemen/ts-enable.nvim)
 
-Using `nvim-treesitter` now requires some knowledge about how Neovim works. You do have to write some amount of work to enable some feature. Is not that bad if you are willing to install treesitter parsers manually. But it does get complicated when you want nice quality of life features, like installing parsers on demand. `ts-enable.nvim` is just an abstraction layer, it implements the boilerplate code needed to enable syntax highlight, code folding and indentation based on treesitter.
+Using `nvim-treesitter` now requires some knowledge about how Neovim works. You have to do some amount of work to enable features. Is not that bad if you are willing to install treesitter parsers manually. But it does get complicated when you want nice quality of life features, like installing parsers on demand. `ts-enable.nvim` is just an abstraction layer, it implements the boilerplate code needed to enable syntax highlight, code folding and indentation based on treesitter.
 
 A basic configuration can look like this:
 
