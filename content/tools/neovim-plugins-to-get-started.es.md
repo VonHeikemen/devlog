@@ -15,7 +15,7 @@ shared = [
 
 Suele pasar que una persona quiere usar Neovim para escribir código pero hay ciertas funcionalidades de otros editores que extrañan. Como por ejemplo tener la lista de archivos abiertos en pestañas, un explorador de archivos con una estructura de árbol, un indicador que muestre la rama de git, entre otras cosas. Bueno, aquí quiero mostrarles algunos plugins que pueden usar para implementar esas funcionalidades en Neovim.
 
-Lo único que no cubriré será el autocompletado de código. Configurar un autocompletado inteligente involucra instalar herramientas externas. Esto conlleva una buena cantidad de detalles que deben ser explicados. Para eso les recomiendo leer esto: [Getting started with Neovim's LSP client](https://dev.to/vonheikemen/getting-started-with-neovims-native-lsp-client-in-the-year-of-2022-the-easy-way-bp3).
+Lo único que no cubriré será el autocompletado de código. Configurar un autocompletado inteligente involucra instalar herramientas externas. Esto conlleva una buena cantidad de detalles que deben ser explicados. Para eso les recomiendo leer esto: [Configurando el cliente LSP de neovim](https://dev.to/vonheikemen/configurando-el-cliente-lsp-nativo-de-neovim-en-2022-la-manera-facil-3c17).
 
 Todo el código de configuración que mostraré en esta guía estará este repositorio: [nvim-starter - branch: 02-opinionated](https://github.com/VonHeikemen/nvim-starter/tree/02-opinionated).
 
@@ -662,5 +662,5 @@ vim.keymap.set('n', '<leader>?', function() Snacks.picker('keymaps') end, {})
 
 El siguiente paso sería lograr que Neovim entienda el código de nuestro proyecto: que autocomplete variables, nos permita saltar a la definición de una función, que pueda renombrar una variable, cosas así. Para esto recomiendo el plugin [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig). Como hay muchos detalles que necesitan explicación les recomiendo leer este post:
 
-* [Getting started with neovim's native LSP client](https://dev.to/vonheikemen/getting-started-with-neovims-native-lsp-client-in-the-year-of-2022-the-easy-way-bp3)
+* [Configurando el cliente LSP de Neovim](https://dev.to/vonheikemen/configurando-el-cliente-lsp-nativo-de-neovim-en-2022-la-manera-facil-3c17)
 
