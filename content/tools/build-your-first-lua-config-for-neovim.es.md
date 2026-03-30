@@ -2,7 +2,7 @@
 title = "Cómo crear tu primera configuración de Neovim usando lua"
 description = "Donde aprendemos cómo personalizar Neovim y agregar plugins"
 date = 2022-07-02
-updated = 2025-12-10
+updated = 2026-03-30
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -281,9 +281,9 @@ vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<CR>')
 
 Aquí vamos a usar [mini.nvim](https://nvim-mini.org/mini.nvim/).
 
-mini.nvim es una colección de módulos escritos en lua. Uno de esos módulos es el manejador de plugins que vamos a usar, `mini.deps`.
+Vale la pena mencionar que en Neovim `v0.12` tenemos un módulo llamado [vim.pack](https://neovim.io/doc/user/pack.html#_plugin-manager), este es un manejador de plugins incorporado dentro del editor. Desafortunadamente no está disponible en todos los sistemas operativos. Pero si tienen la oportunidad de descargar Neovim v0.12 y usar `vim.pack`, lean esta guía: [A guide to vim.pack](https://echasnovski.com/blog/2026-03-13-a-guide-to-vim-pack.html).
 
-Deben saber el equipo de Neovim está trabajando en un [manejador de plugins](https://neovim.io/doc/user/pack.html#_plugin-manager) que estará en incluido en Neovim `v0.12`. Este manejador de plugins estará basado en `mini.deps`.
+Para mantener compatibilidad con versiones anteriores de Neovim les recomiendo usar [mini.deps](https://nvim-mini.org/mini.nvim/doc/mini-deps.html), que es parte del proyecto `mini.nvim`. Este manejador de plugins es similar a `vim.pack` así que es una buena solución temporal. En el futuro, cuando tengan la posibilidad, podrán migrar facilmente de `mini.deps` a `vim.pack`.
 
 Ahora bien, *¿cómo se instala un plugin sin un manejador de plugins?*
 

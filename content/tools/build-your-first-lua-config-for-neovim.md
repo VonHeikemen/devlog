@@ -2,7 +2,7 @@
 title = "Build your first Neovim configuration in lua"
 description = "The one where we learn how to customize Neovim and add plugins"
 date = 2022-07-07
-updated = 2025-10-09
+updated = 2026-03-30
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -279,9 +279,11 @@ vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>')
 
 ## Plugin manager
 
-We are going to use [mini.nvim](https://nvim-mini.org/mini.nvim/) for this. 
+We are going to use [mini.nvim](https://nvim-mini.org/mini.nvim/) for this.
 
-mini.nvim is actually a collection of lua modules. One of those modules has the plugin manager we are going to use, [mini.deps](https://nvim-mini.org/mini.nvim/doc/mini-deps.html). I recommend this because Neovim it's close to have [its own plugin manager](https://neovim.io/doc/user/pack.html#_plugin-manager) and at the surface level is almost identical to `mini.deps`. It'll take a few years for the built-in plugin manager to be available to everyone. Right now only those who are willing to compile Neovim from source or use a nightly build have access to it. But while we wait we can start using `mini.deps`.
+Is worth noting Neovim `v0.12` has added a feature called [vim.pack](https://neovim.io/doc/user/pack.html#_plugin-manager), this is a fully functional plugin manager built into the editor. Unfortunately it'll take a few years before this version of Neovim is available in every operating system. If you are one of the lucky ones and have access to `vim.pack`, you can learn more about it here: [A guide to vim.pack](https://echasnovski.com/blog/2026-03-13-a-guide-to-vim-pack).
+
+For the sake of backwards compatibility I will recommend [mini.deps](https://nvim-mini.org/mini.nvim/doc/mini-deps.html). At the surface level `mini.deps` is very similar to `vim.pack` so it should be fairly easy to migrate from one to the other in the future.
 
 Now, *how does one install a plugin without a plugin manager?*
 
