@@ -201,7 +201,7 @@ vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Exit vim'})
 
 ## Installing plugins
 
-There is a new feature called [vim.pack](https://neovim.io/doc/user/pack.html#_plugin-manager). This is a fully functional plugin manager built into Neovim. But only those who have access to Neovim `v0.12` can use it. If you are one of the lucky ones you can learn more about here: [A guide to vim.pack](https://echasnovski.com/blog/2026-03-13-a-guide-to-vim-pack.html).
+There is a new feature called [vim.pack](https://neovim.io/doc/user/pack.html#_plugin-manager). This is a fully functional plugin manager built into Neovim. But only those who have access to Neovim `v0.12` can use it. If you are one of the lucky ones you can learn more about it here: [A guide to vim.pack](https://echasnovski.com/blog/2026-03-13-a-guide-to-vim-pack.html).
 
 Because I aim for backwards compatibility with Neovim `v0.9.5` I will show you how to use [mini.deps](https://nvim-mini.org/mini.nvim/doc/mini-deps.html). Is worth noting `vim.pack`'s design was based on `mini.deps`, so it should be fairly easy to migrate from one to the other.
 
