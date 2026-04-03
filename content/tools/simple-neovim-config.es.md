@@ -690,16 +690,16 @@ if not ok then
 end
 
 MiniDeps.setup({})
-MiniDeps.add('nvim-mini/mini.nvim')
 
-if vim.fn.has('nvim-0.11') == 1 then
-  MiniDeps.add('neovim/nvim-lspconfig')
-else
-  MiniDeps.add({
-    source = 'neovim/nvim-lspconfig',
-    checkout = 'v1.8.0'
-  })
-end
+MiniDeps.add({
+  source = 'nvim-mini/mini.nvim',
+  checkout = '3923662bf3d6ca49a9503f8d7196ea0450983e6a',
+})
+
+MiniDeps.add({
+  source = 'neovim/nvim-lspconfig',
+  checkout = vim.fn.has('nvim-0.10') == 1 and 'v2.5.0' or 'v1.8.0'
+})
 
 require('mini.snippets').setup({})
 require('mini.completion').setup({})
