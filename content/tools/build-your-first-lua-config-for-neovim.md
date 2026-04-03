@@ -2,7 +2,7 @@
 title = "Build your first Neovim configuration in lua"
 description = "The one where we learn how to customize Neovim and add plugins"
 date = 2022-07-07
-updated = 2026-03-30
+updated = 2026-04-03
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -291,9 +291,13 @@ That's been possible for quite a while now. Neovim (and Vim) can load a plugin i
 
 ```lua
 local mini = {}
+local nvim_10 = vim.fn.has('nvim-0.10') == 1
 
 mini.branch = 'main'
 mini.packpath = vim.fn.stdpath('data') .. '/site'
+
+-- Last version that supports Neovim v0.9
+mini.revision = '3923662bf3d6ca49a9503f8d7196ea0450983e6a'
 
 function mini.require_deps()
   local uv = vim.uv or vim.loop
@@ -309,6 +313,12 @@ function mini.require_deps()
       string.format('--branch=%s', mini.branch),
       mini_path
     })
+
+    if not nvim_10 then
+      local switch_cmd = {'git', 'switch', '--detach', mini.revision}
+      local job_opts = {cwd = mini_path}
+      vim.fn.jobwait({vim.fn.jobstart(switch_cmd, job_opts)})
+    end
 
     vim.cmd('packadd mini.nvim | helptags ALL')
   end
@@ -361,13 +371,13 @@ This is the minimum amount of data `mini.deps` needs to download a plugin from g
 ```lua
 MiniDeps.add({
   source = 'nvim-mini/mini.nvim',
-  checkout = mini.branch,
+  checkout = nvim_10 and mini.branch or mini.revision,
 })
 ```
 
 Here instead of just providing a piece of text we use a lua table. The `source` property is mandatory, this should be the URL of the plugin. But since github is so popular `mini.deps` allows us to just specify the shorthand. In the `checkout` property we can provide a branch, a commit or tag. You can find more [details about the plugin specification](https://nvim-mini.org/mini.nvim/doc/mini-deps.html#minideps-plugin-specification) in the documentation.
 
-We already downloaded mini.nvim in a path where `mini.deps` can track it. So having this `MiniDeps.add()` call is optional. Unless of course we want to deviate from the defaults, like changing the branch.
+If we are Neovim v0.9 then `checkout` will be pinned to a specific commit and the plugin will not receive updates. Otherwise `checkout` will point to the `main` branch and it'll receive update like any other plugin.
 
 Now let's add the code to apply the new color scheme. After the call to `MiniDeps.add()` we write this.
 

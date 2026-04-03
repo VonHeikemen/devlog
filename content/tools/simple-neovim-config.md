@@ -2,7 +2,7 @@
 title = "Simple Neovim config"
 description = "Learn the basics of Neovim configuration in lua"
 date = 2024-09-12
-updated = 2026-03-29
+updated = 2026-04-03
 lang = "en"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -201,7 +201,7 @@ vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Exit vim'})
 
 ## Installing plugins
 
-There is a new feature called [vim.pack](https://neovim.io/doc/user/pack.html#_plugin-manager). This is a fully functional plugin manager built into Neovim. But only those who have access to Neovim `v0.12` can use it. If you are one of the lucky ones you can learn more about it here: [A guide to vim.pack](https://echasnovski.com/blog/2026-03-13-a-guide-to-vim-pack.html).
+There is a new feature called [vim.pack](https://neovim.io/doc/user/pack.html#_plugin-manager). This is a fully functional plugin manager built into Neovim. But only those who have access to **Neovim v0.12** can use it. If you are one of the lucky ones you can learn more about it here: [A guide to vim.pack](https://echasnovski.com/blog/2026-03-13-a-guide-to-vim-pack.html).
 
 Because I aim for backwards compatibility with Neovim `v0.9.5` I will show you how to use [mini.deps](https://nvim-mini.org/mini.nvim/doc/mini-deps.html). Is worth noting `vim.pack`'s design was based on `mini.deps`, so it should be fairly easy to migrate from one to the other.
 
@@ -229,6 +229,12 @@ Now navigate to that location using your terminal. You will want to execute the 
 
 ```
 git clone --filter=blob:none https://github.com/nvim-mini/mini.nvim
+```
+
+If you are using **Neovim v0.9** make sure to pin to the commit [3923662](https://github.com/nvim-mini/mini.nvim/tree/3923662bf3d6ca49a9503f8d7196ea0450983e6a) since that's the last version that supports v0.9.
+
+```
+git switch --detach 3923662bf3d6ca49a9503f8d7196ea0450983e6a
 ```
 
 After the install is complete we should generate the help tags.

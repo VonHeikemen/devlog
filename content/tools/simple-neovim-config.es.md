@@ -2,7 +2,7 @@
 title = "Una configuración simple para Neovim"
 description = "Aprende lo básico para configurar Neovim usando lua"
 date = 2024-11-23
-updated = 2026-03-29
+updated = 2026-04-03
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -217,6 +217,12 @@ Para descargar `mini.nvim` ejecuten este comando.
 
 ```
 git clone --filter=blob:none https://github.com/nvim-mini/mini.nvim
+```
+
+Si están usando **Neovim v0.9** asegúrense de cambiar al commit [3923662](https://github.com/nvim-mini/mini.nvim/tree/3923662bf3d6ca49a9503f8d7196ea0450983e6a) ya que es la última versión con soporte para Neovim v0.9.
+
+```
+git switch --detach 3923662bf3d6ca49a9503f8d7196ea0450983e6a
 ```
 
 Luego de instalar el plugin debemos generar los tags para la documentación.

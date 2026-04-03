@@ -2,7 +2,7 @@
 title = "Cómo crear tu primera configuración de Neovim usando lua"
 description = "Donde aprendemos cómo personalizar Neovim y agregar plugins"
 date = 2022-07-02
-updated = 2026-03-30
+updated = 2026-04-03
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -291,9 +291,13 @@ En Vim (y Neovim) es posible instalar un plugin si lo descargamos en una ubicaci
 
 ```lua
 local mini = {}
+local nvim_10 = vim.fn.has('nvim-0.10') == 1
 
 mini.branch = 'main'
 mini.packpath = vim.fn.stdpath('data') .. '/site'
+
+-- Última versión con soporte para Neovim v0.9
+mini.revision = '3923662bf3d6ca49a9503f8d7196ea0450983e6a'
 
 function mini.require_deps()
   local uv = vim.uv or vim.loop
@@ -309,6 +313,12 @@ function mini.require_deps()
       string.format('--branch=%s', mini.branch),
       mini_path
     })
+
+    if not nvim_10 then
+      local switch_cmd = {'git', 'switch', '--detach', mini.revision}
+      local job_opts = {cwd = mini_path}
+      vim.fn.jobwait({vim.fn.jobstart(switch_cmd, job_opts)})
+    end
 
     vim.cmd('packadd mini.nvim | helptags ALL')
   end
@@ -361,13 +371,13 @@ Esta es la cantidad mínima de información que `mini.deps` necesita para descar
 ```lua
 MiniDeps.add({
   source = 'nvim-mini/mini.nvim',
-  checkout = mini.branch,
+  checkout = nvim_10 and mini.branch or mini.revision,
 })
 ```
 
 Noten que reemplazamos la cadena de texto con una tabla de lua. La propiedad `source` es obligatoria, esta debe ser la URL del plugin. En este caso si sólo especificamos los últimos componentes `mini.deps` asume que el plugin está alojado en github. La propiedad `checkout` es donde le decimos qué versión queremos instalar, aquí podemos colocar el nombre de una rama, un tag, o un commit. 
 
-Vale la pena mencionar que ya instalamos mini.nvim en una ubicación donde `mini.deps` puede manejarlo. Añadir mini.nvim con `MiniDeps.add()` es opcional. A menos claro que quieran cambiar algo como la versión o la rama.
+Si estamos usando Neovim v0.9 `checkout` tendrá el valor del commit en `mini.revision`, esto hará que el plugin no reciba actualizaciones. En versiones mayores tendrá el valor de `mini.branch` y podrá recibir actualizaciones.
 
 Ahora vamos a agregar el código para aplicar el nuevo tema para el editor.
 
