@@ -2,7 +2,7 @@
 title = "Neovim: Plugins to get started"
 description = "Turn Neovim into a fancy editor with these plugins"
 date = 2022-09-03
-updated = 2026-01-05
+updated = 2026-05-16
 lang = "en"
 [taxonomies]
 tags = ["neovim", "vim", "shell"]
@@ -351,55 +351,29 @@ Github: [tpope/vim-repeat](https://github.com/tpope/vim-repeat)
 
 Adds "dot repeat" support for other plugins. If you don't know, when we press the dot key (`.`) Neovim tries to repeat the last action we did. For example, if we delete a word using `diw` we can repeat that just by pressing `.`. With `vim-repeat` we can repeat actions made by plugins.
 
-### Treesitter
-
-Github: [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
-
-So treesitter is a library that was added to Neovim, with it Neovim can read your code in the same way a compiler does, it scans the code and creates an abstract syntax tree. In other words, it turns your code into a data structure Neovim can query.
-
-By itself treesitter doesn't do anything useful, is more like a tool for Neovim mantainers and plugin authors, they will use treesitter to implement the features everyone else will interact with. For example, inside Neovim there is an alternative mechanism to do syntax highlight, it uses treesitter to assign the highlight groups to the text of a buffer.
-
-Now, for treesitter to actually work we need a treesitter parser. The parser is the thing that reads the code. To install a parser we use the command `:TSInstall` followed by the name of the language.
-
-So to install a javascript parser we use this command.
-
-```vim
-:TSInstall javascript
-```
-
-When it comes to features there isn't a unified interface we can use to "enable treesitter." We have to look up the documentation of the feature we want to use and follow the instructions.
-
-To enable the syntax highlight based on treesitter the documentation recommends using a filetype plugin or an autocommand on the `FileType` event. And then we call the function `vim.treesitter.start()`. Here's an example using an autocommand to enable the syntax highlight in javascript related filetypes.
-
-```lua
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = {'javascript', 'javascriptreact', 'js', 'jsx'},
-  callback = function()
-    vim.treesitter.start()
-  end,
-})
-```
-
 ### ts-enable.nvim
 
 Github: [VonHeikemen/ts-enable.nvim](https://github.com/VonHeikemen/ts-enable.nvim)
 
-Using `nvim-treesitter` now requires some knowledge about how Neovim works. You have to do some amount of work to enable features. Is not that bad if you are willing to install treesitter parsers manually. But it does get complicated when you want nice quality of life features, like installing parsers on demand. `ts-enable.nvim` is just an abstraction layer, it implements the boilerplate code needed to enable syntax highlight, code folding and indentation based on treesitter.
+There is this thing called **treesitter**, which is a library that was added to Neovim, with it Neovim can read your code in the same way a compiler does, it scans the code and creates an abstract syntax tree. In other words, it turns your code into a data structure Neovim can query.
+
+By itself treesitter doesn't do anything useful, is more like a tool for Neovim maintainers and plugin authors, they will use treesitter to implement the features everyone else will interact with. For example, inside Neovim there is an alternative mechanism to do syntax highlight, it uses treesitter to assign the highlight groups to the text of a buffer.
+
+Now, for treesitter to actually work we need a treesitter parser. The parser is the thing that reads the code. The process of installing a parser is quite involved so `ts-enable.nvim` makes it easier.
 
 A basic configuration can look like this:
 
 ```lua
 -- See :help ts-enable-config
 vim.g.ts_enable = {
-  parsers = {'lua', 'vim', 'vimdoc', 'c', 'query'},
+  auto_init = true,
   auto_install = true,
   highlights = true,
-  indents = false,
   folds = false,
 }
 ```
 
-The idea here is that you just specify the names of the treesitter parsers you want to use and the features you want to enable. So you don't have to write any autocommands, `ts-enable.nvim` will take care of the details of each feature and can also install missing parsers using `nvim-treesitter`.
+The idea here is that you don't have to write any autocommands, `ts-enable.nvim` will take care of the details of each feature and can also install missing parsers when needed.
 
 ### Snacks.nvim
 

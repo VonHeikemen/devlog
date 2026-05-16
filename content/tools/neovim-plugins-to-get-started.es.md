@@ -2,7 +2,7 @@
 title = "Neovim: Plugins para empezar"
 description = "Explorando plugins para mejorar nuestra experiencia en Neovim"
 date = 2022-09-03
-updated = 2026-02-02
+updated = 2026-05-16
 lang = "es"
 [taxonomies]
 tags = ["neovim", "vim", "shell"]
@@ -366,13 +366,10 @@ Agrega soporte para repeticiones a comandos creados por plugins. Si no lo saben,
 
 Github: [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 
-Treesitter es un componente que se encuentra dentro de Neovim, este le permite a Neovim leer código de la misma manera que un compilador. ¿Cómo es eso? Escanea el código, va recolectando información de cada símbolo y al final genera un árbol de sintaxis. En otras palabras, convierte tu código en una estructura de datos que Neovim puede consultar.
 
-Por sí solo treesitter no nos trae ningún beneficio, es más una herramienta para los desarrolladores de Neovim y los autores de plugins. Son ellos los que usan treesitter para crear las funcionalidades con las que nosotros interactuamos.
 
-Por ejemplo, dentro de Neovim existe un mecanismo alternativo para el resaltado de sintaxis. En ese caso se utiliza treesitter para asignar los "highlight groups" que serán utilizados por el tema del editor.
 
-Ahora bien, para que treesitter funcione necesitamos algo llamado "treesitter parser." Este es el componente que se encarga de leer el código del archivo actual. Cada lenguaje de programación tiene su propio treesitter parser. Para instalar un parser podemos usar el comando `:TSInstall` seguido del nombre del lenguaje.
+ Para instalar un parser podemos usar el comando `:TSInstall` seguido del nombre del lenguaje.
 
 Si queremos instalar el parser para javascript utilizamos este comando.
 
@@ -397,22 +394,27 @@ vim.api.nvim_create_autocmd('FileType', {
 
 Github: [VonHeikemen/ts-enable.nvim](https://github.com/VonHeikemen/ts-enable.nvim)
 
-`nvim-treesitter` requiere de cierta cantidad de conocimiento sobre Neovim. Ciertamente no es nada del otro mundo si estamos dispuestos a instalar los parsers manualmente. Pero la cosa se pone complicada si queremos automatizar todo el proceso. Por eso existe `ts-enable.nvim`, este plugin implementa el código necesario para habilitar algunas funcionalidades basadas en treesitter y también puede instalar parsers cuando es necesario.
+Dentro de Neovim hay algo llamado **Treesitter**, este le permite a Neovim leer código de la misma manera que un compilador. ¿Cómo es eso? Escanea el código, va recolectando información de cada símbolo y al final genera un árbol de sintaxis. En otras palabras, convierte tu código en una estructura de datos que Neovim puede consultar.
+
+Por sí solo treesitter no nos trae ningún beneficio, es más como una herramienta para los desarrolladores de Neovim y los autores de plugins. Son ellos los que usan treesitter para crear las funcionalidades con las que nosotros interactuamos.
+
+Por ejemplo, dentro de Neovim existe un mecanismo alternativo para el resaltado de sintaxis. En ese caso se utiliza treesitter para asignar los "highlight groups" que serán utilizados por el tema del editor.
+
+Ahora bien, para que treesitter funcione necesitamos algo llamado "treesitter parser." Este es el componente que se encarga de leer el código del archivo actual. Cada lenguaje de programación tiene su propio treesitter parser. Por eso existe `ts-enable.nvim`, este plugin implementa el código necesario para habilitar algunas funcionalidades basadas en treesitter y también puede instalar parsers cuando es necesario.
 
 La configuración básica puede ser tan simple como esto:
 
 ```lua
 -- See :help ts-enable-config
 vim.g.ts_enable = {
-  parsers = {'lua', 'vim', 'vimdoc', 'c', 'query'},
+  auto_init = true,
   auto_install = true,
   highlights = true,
-  indents = false,
   folds = false,
 }
 ```
 
-La idea aquí es poder especificar los nombres de los parsers que queremos usar y las funcionalidades que queremos habilitar. `ts-enable.nvim` se encarga de crear los autocomandos e invocar las funciones necesarias, para que nosotros no tengamos que preocuparnos por los detalles técnicos.
+`ts-enable.nvim` se encarga de crear los autocomandos e invocar las funciones necesarias, para que nosotros no tengamos que preocuparnos por los detalles técnicos.
 
 ### Snacks.nvim
 
