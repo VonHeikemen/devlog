@@ -362,34 +362,6 @@ Github: [tpope/vim-repeat](https://github.com/tpope/vim-repeat)
 
 Agrega soporte para repeticiones a comandos creados por plugins. Si no lo saben, si presionamos `.` Neovim repite la última acción que hicimos. Por ejemplo, si borramos una palabra usando `diw` podemos repetir esta acción simplemente presionando `.`. `vim-repeat` permite que las acciones de los plugins también pueda repetirse con `.`.
 
-### Treesitter
-
-Github: [nvim-treesitter/nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
-
-
-
-
- Para instalar un parser podemos usar el comando `:TSInstall` seguido del nombre del lenguaje.
-
-Si queremos instalar el parser para javascript utilizamos este comando.
-
-```vim
-:TSInstall javascript
-```
-
-Para funcionalidades como tal, en la actualidad no tenemos una interfaz para "habilitar treesitter." Lo que hacemos es revisar la documentación de la funcionalidad que queremos usar y seguimos las instrucciones.
-
-Si queremos utilizar el resaltado de sintaxis basado en treesitter tenemos la opción de crear un autocomando o un "filetype plugin." Luego debemos invocar la función `vim.treesitter.start()`. Este es un ejemplo que usa un autocomando en los tipos de archivos relacionados con javascript.
-
-```lua
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = {'javascript', 'javascriptreact', 'js', 'jsx'},
-  callback = function()
-    vim.treesitter.start()
-  end,
-})
-```
-
 ### ts-enable.nvim
 
 Github: [VonHeikemen/ts-enable.nvim](https://github.com/VonHeikemen/ts-enable.nvim)

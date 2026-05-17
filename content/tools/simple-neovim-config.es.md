@@ -2,7 +2,7 @@
 title = "Una configuración simple para Neovim"
 description = "Aprende lo básico para configurar Neovim usando lua"
 date = 2024-11-23
-updated = 2026-04-03
+updated = 2026-05-17
 lang = "es"
 [taxonomies]
 tags = ["vim", "neovim", "shell"]
@@ -556,40 +556,27 @@ Cada servidor LSP es parte de un proyecto independiente. Es decir, un servidor L
 
 Algunos servidores LSP fueron creados exclusivamente para VS Code. El hecho de que Neovim (u otros editores) puedan usarlos es mera coincidencia. Tengo entendido que los servidores LSP para `html` y `css` entran en esta categoría. Estos pueden tener funcionalidades que sólo VS Code puede usar, o que tienen mejor desempeño en VS Code.
 
-## Mención honorífica
+## Treesitter
 
-[nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) es un plugin que fue creado en 2020. Mucha gente en la comunidad de Neovim dirá que es indispensable, y yo concuerdo hasta cierto punto. Es un plugin increíble... cuando otro plugin lo utiliza como dependencia. Verán, `tree-sitter` le permite a Neovim recopilar información sobre el archivo actual, y los autores de plugins pueden hacer cosas grandiosas con esa información. Probablemente la funcionalidad que más destaca es el resaltado de código. Si `treesitter` está configurado correctamente puede mejorar el resaltado de código de muchos lenguajes.
+Dentro de Neovim hay algo llamado `treesitter`, este le permite a Neovim escanear el código de un archivo, recolectar información de cada símbolo y al final genera un árbol de sintaxis. Una vez que Neovim genera esta estructura de datos puede empezar a utilizarla para implementar otras funcionalidades. Por ahora treesitter puede usarse para mejorar el resaltado de sintaxis y el plegamiento de código. Además de eso tenemos acceso a un módulo llamado [vim.treesitter](https://neovim.io/doc/user/treesitter/#treesitter), el cual puede ser usado en plugins. Lo que quiere decir que treesitter no es sólo una herramienta para los desarrolladores de Neovim, otros usuarios también pueden crear plugins que utilicen treesitter.
 
-Pero hay cosas que deben saber:
+Pero la historia se pone complicada cuando empezamos a hablar sobre lenguajes. Por defecto treesitter no incluye soporte para ningún lenguaje de programación. Se debe instalar un componente extra que llamamos "treesitter parser," este es el componente que se encarga de leer la sintaxis de un lenguaje. En otras palabras, cada lenguaje de programación tiene su propio treesitter parser. Entonces si queremos habilitar alguna funcionalidad que necesita de treesitter debemos instalar un parser.
 
-* Necesita un compilador de `C`.
-  - Por lo general no es problema en `linux` o `mac` pero en `windows` es un tema complicado.
-* Sólo garantiza soporte para la versión estable actual de Neovim.
-  - Puede dejar el soporte para versiones previas en cualquier momento.
-* Se considera como un plugin experimental.
-  - Puede introducir cambios drásticos en cualquier momento.
-  - Usan `git tags` por si necesitan descargar una [versión previa](https://github.com/nvim-treesitter/nvim-treesitter/tags).
-
-Para conocer más detalles de `tree-sitter` pueden ver este video: [tree-sitter explained (15 min)](https://www.youtube.com/watch?v=09-9LltqWLY).
-
-Si quieren probar nvim-treesitter, pueden usar el comando `:TSInstall` para descargar el "treesitter parser" de uno de los lenguajes que soporta nvim-treesitter. Después de eso podrán habilitar el resaltado de sintaxis mejorado basado en treesitter.
-
-Por ejemplo, pueden descargar el treesitter parser de javascript usando este comando.
-
-```vim
-:TSInstall javascript
-```
-
-Luego deben crear un autocomando donde deben ejecutar la función `vim.treesitter.start()`.
+Configurar treesitter desafortunadamente requiere de un conocimiento considerable, es por eso que creé un plugin para facilitar el proceso: [ts-enable.nvim](https://github.com/VonHeikemen/ts-enable.nvim). Si quieren probarlo, pueden instalarlo y agregar esto a su configuración personal:
 
 ```lua
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = {'javascript', 'javascriptreact', 'js', 'jsx'},
-  callback = function()
-    vim.treesitter.start()
-  end,
-})
+vim.g.ts_enable = {
+  auto_init = true,
+  auto_install = true,
+  highlights = true,
+}
 ```
+
+Con esta configuración `ts-enable.nvim` generará un archivo que contiene información de 26 treesitter parsers. Entre los cuales se incluyen algunos lenguajes de programación populares. Y cuando abran un archivo que sea compatible con uno de esos parsers `ts-enable.nvim` lo instalará automáticamente, y luego habilitará el resaltado de sintaxis con treesitter.
+
+Deben tener en cuenta que para instalar un treesitter parser deben tener la herramienta [tree-sitter CLI](https://github.com/tree-sitter/tree-sitter) y un compilador de lenguaje C.
+
+Ahora bien, por muy maravilloso que sea treesitter este hace que la configuración de Neovim se vuelva un poco más complicada. Entonces si ustedes apenas están empezando a usar Neovim, les recomiendo que dejen treesitter para después. Neovim funciona perfectamente bien sin treesitter.
 
 ## init.lua
 
