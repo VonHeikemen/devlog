@@ -572,7 +572,7 @@ Inside Neovim there is a thing called `treesitter`. It's main job is to read the
 
 The story gets complicated when we start talking about language support. Treesitter does not support any language out of the box. We need to install something called a treesitter parser. This is the component that deals with the specific syntax of a language. So if we want to have this treesitter based syntax highlights, we need to know [how to install a treesitter parser](https://github.com/VonHeikemen/ts-enable.nvim#ts-enablenvim-is-not-strictly-needed).
 
-Setting up treesitter unfortunately does requires a fair amount of knowledge about Neovim, that's why I made a plugin that would make the process easier: [ts-enable.nvim](https://github.com/VonHeikemen/ts-enable.nvim). If you want to try it out, download it and add this to your personal configuration.
+Setting up treesitter unfortunately does requires a fair amount of knowledge about Neovim, that's why I made a plugin that would make the process easier: [ts-enable.nvim](https://vonheikemen.github.io/learn-nvim/feature/treesitter.html#treesitter-without-plugins). If you want to try it out, download it and add this to your personal configuration.
 
 ```lua
 vim.g.ts_enable = {
